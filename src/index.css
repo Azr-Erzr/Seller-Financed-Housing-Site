@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -----------------------------
+   Custom global styles
+   ----------------------------- */
+
+/* Base reset for fonts, colors */
+body {
+  @apply bg-gray-50 text-gray-800 antialiased;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold text-gray-900;
+}
+
+/* Links */
+a {
+  @apply text-blue-600 hover:text-blue-800 transition-colors;
+}
+
+/* Buttons */
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium shadow-sm;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+}
+
+.btn-accent {
+  @apply bg-orange-500 text-white hover:bg-orange-600;
+}
+
+/* Cards */
+.card {
+  @apply bg-white rounded-xl shadow-md p-4 border border-gray-100;
+}
+
+.card-hover {
+  @apply transition-transform transform hover:scale-105 hover:shadow-lg;
+}
+
+/* Navbar */
+.navbar {
+  @apply bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between;
+}
+
+/* Inputs */
+.input {
+  @apply w-full rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Container */
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Sections */
+.section {
+  @apply py-12;
+}
