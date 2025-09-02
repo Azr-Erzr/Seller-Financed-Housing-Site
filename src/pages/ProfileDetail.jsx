@@ -1,55 +1,95 @@
-import React, { useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { PROFILES, LISTINGS } from "../data/seed";
-import { Card, Btn, Badge, money } from "../ui/UIComponents.jsx";
+// src/pages/ProfileDetail.jsx
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { PROFILES } from "../data/seed";
 import { scoreMatch } from "../lib/match";
-import ListingCard from "../components/ListingCard";
 
-export default function ProfileDetail() {
+const ProfileDetail = () => {
   const { id } = useParams();
-  const profile = PROFILES.find(p => p.id === id) || PROFILES[0];
+  const profile = PROFILES.find((p) => p.id.toString() === id);
 
-  const matches = useMemo(() => {
-    const scored = LISTINGS.map(l => ({ l, score: scoreMatch({ listing: l, profile }) }));
-    return scored.sort((a,b)=>b.score - a.score).slice(0,4);
-  }, [profile]);
+  if (!profile) {
+    return <div className="p-8 text-gray-500">Profile not found.</div>;
+  }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 grid lg:grid-cols-[0.8fr,1.2fr] gap-6">
-      <aside className="space-y-4">
-        <Card>
-          <div className="flex items-center gap-3">
-            <div className="h-14 w-14 rounded-full bg-gradient-to-br from-brand-blue/20 to-brand-orange/20 flex items-center justify-center">
-              <span className="font-semibold">{profile.name.split(" ").map(s=>s[0]).join("").slice(0,2)}</span>
-            </div>
-            <div>
-              <div className="text-lg font-semibold">{profile.name}</div>
-              <div className="text-xs text-neutral-600">{profile.location}</div>
-            </div>
+    <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
+      {/* Hero Section */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden p-6 text-center">
+        {profile.avatar ? (
+          <img
+            src={profile.avatar}
+            alt={profile.name}
+            className="w-32 h-32 rounded-full mx-auto mb-4"
+          />
+        ) : (
+          <div className="w-32 h-32 flex items-center justify-center rounded-full bg-blue-200 text-blue-800 text-3xl font-bold mx-auto mb-4">
+            {profile.name?.charAt(0) || "?"}
           </div>
-          <p className="mt-3 text-sm text-neutral-700">{profile.bio}</p>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            <Badge>Down {money(profile.downBudget)}</Badge>
-            <Badge>Interest ≤ {(profile.interestMax*100).toFixed(1)}%</Badge>
-            <Badge>Budget {money(profile.paymentBudget)}</Badge>
-            {profile.dealPreference?.includes("rent-to-own") && <Badge color="#FFF7ED" text="#C2410C">RTO</Badge>}
-            {profile.dealPreference?.includes("seller-finance") && <Badge color="#ECFDF5" text="#065F46">SF</Badge>}
-          </div>
-          <div className="mt-4 flex gap-2">
-            <Btn tone="accent">Invite to listing</Btn>
-            <Btn className="border">Message</Btn>
-          </div>
-        </Card>
-      </aside>
+        )}
+        <h1 className="text-2xl font-bold">{profile.name}</h1>
+        <p className="text-gray-500">{profile.city}</p>
 
-      <main className="space-y-4">
-        <Card>
-          <div className="font-semibold mb-3">Suggested listings</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {matches.map(({l}) => <ListingCard key={l.id} listing={l} profileForMatch={profile} />)}
-          </div>
-        </Card>
-      </main>
+        {/* Badges */}
+        <div className="flex justify-center flex-wrap gap-2 mt-2">
+          {profile.badges?.map((b, i) => (
+            <span
+              key={i}
+              className="bg-green-100 text-green-700 px-2 py-1 text-xs rounded-full"
+            >
+              {b}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Buyer Details */}
+      <div className="bg-white rounded-xl shadow-md p-6 space-y-3">
+        <h2 className="text-xl font-semibold">Financial Goals</h2>
+        <p>
+          <span className="font-semibold">Budget:</span>{" "}
+          {profile.budget
+            ? `$${profile.budget.toLocaleString()}`
+            : "Not specified"}
+        </p>
+        <p>
+          <span className="font-semibold">Down Payment Capacity:</span>{" "}
+          {profile.downPayment
+            ? `$${profile.downPayment.toLocaleString()}`
+            : "N/A"}
+        </p>
+        <p>
+          <span className="font-semibold">Interest Range:</span>{" "}
+          {profile.interestRange || "N/A"}
+        </p>
+        <p>
+          <span className="font-semibold">Deal Preference:</span>{" "}
+          {profile.dealPreference || "Any"}
+        </p>
+      </div>
+
+      {/* Description */}
+      {profile.bio && (
+        <div className="bg-white rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-2">About</h2>
+          <p className="text-gray-600">{profile.bio}</p>
+        </div>
+      )}
+
+      {/* CTA Buttons */}
+      <div className="flex gap-4">
+        <Link
+          to={`/invite/${profile.id}`}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Invite to Deal
+        </Link>
+        <button className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+          Save Profile
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default ProfileDetail;

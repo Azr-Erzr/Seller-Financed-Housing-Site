@@ -1,50 +1,179 @@
-import React, { useMemo, useState } from "react";
-import { Input, Select, Card, Btn } from "../ui/UIComponents.jsx";
+// src/pages/Listings.jsx
+import React, { useState } from "react";
 import ListingCard from "../components/ListingCard";
-import { LISTINGS, PROFILES } from "../data/seed";
+import { LISTINGS } from "../data/seed";
 
 export default function Listings() {
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [deal, setDeal] = useState("any");
-  const [q, setQ] = useState("");
+  const [filters, setFilters] = useState({
+    minPrice: "",
+    maxPrice: "",
+    location: "",
+    dealTypes: [],
+    propertyTypes: [],
+    badges: [],
+    matchMin: 0,
+  });
 
-  const homes = useMemo(() => {
-    return LISTINGS.filter(l => {
-      if (q && ![l.title, l.city, l.state].join(" ").toLowerCase().includes(q.toLowerCase())) return false;
-      if (deal !== "any" && !l.dealTypes?.includes(deal)) return false;
-      if (minPrice && l.price < Number(minPrice)) return false;
-      if (maxPrice && l.price > Number(maxPrice)) return false;
-      return true;
-    });
-  }, [q, deal, minPrice, maxPrice]);
+  const updateFilter = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
 
-  const demoMatchProfile = PROFILES[0]; // to show "match" pill on cards
+  const filteredListings = LISTINGS.filter((listing) => {
+    const price = listing.price || 0;
+    const match = listing.match || 0;
+
+    if (filters.minPrice && price < filters.minPrice) return false;
+    if (filters.maxPrice && price > filters.maxPrice) return false;
+    if (
+      filters.location &&
+      !listing.city.toLowerCase().includes(filters.location.toLowerCase())
+    )
+      return false;
+    if (
+      filters.dealTypes.length > 0 &&
+      !filters.dealTypes.includes(listing.dealType)
+    )
+      return false;
+    if (match < filters.matchMin) return false;
+    if (
+      filters.propertyTypes.length > 0 &&
+      !filters.propertyTypes.includes(listing.propertyType)
+    )
+      return false;
+    if (
+      filters.badges.length > 0 &&
+      !filters.badges.some((b) => listing.badges?.includes(b))
+    )
+      return false;
+
+    return true;
+  });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 grid md:grid-cols-[280px,1fr] gap-6">
-      <aside className="space-y-4">
-        <Card>
-          <div className="text-sm font-semibold mb-2">Filters</div>
-          <div className="space-y-3">
-            <Input label="Search" value={q} onChange={(e)=>setQ(e.target.value)} placeholder="City, address…" />
-            <div className="grid grid-cols-2 gap-3">
-              <Input label="Min price" value={minPrice} onChange={e=>setMinPrice(e.target.value)} placeholder="250000" />
-              <Input label="Max price" value={maxPrice} onChange={e=>setMaxPrice(e.target.value)} placeholder="900000" />
-            </div>
-            <Select label="Deal type" value={deal} onChange={(e)=>setDeal(e.target.value)} options={[
-              {value:"any",label:"Any"}, {value:"seller-finance",label:"Seller-finance"}, {value:"rent-to-own",label:"Rent-to-own"}
-            ]}/>
-            <Btn className="w-full border" onClick={() => { setQ(""); setDeal("any"); setMinPrice(""); setMaxPrice(""); }}>Reset</Btn>
-          </div>
-        </Card>
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      {/* Sidebar Filters */}
+      <aside className="w-full lg:w-1/4 bg-gray-50 p-6 border-r">
+        <h2 className="text-lg font-semibold mb-4">Filters</h2>
+
+        {/* Location */}
+        <input
+          type="text"
+          placeholder="City, ZIP..."
+          value={filters.location}
+          onChange={(e) => updateFilter("location", e.target.value)}
+          className="mb-4 w-full border rounded px-3 py-2"
+        />
+
+        {/* Price */}
+        <div className="flex space-x-2 mb-4">
+          <input
+            type="number"
+            placeholder="Min price"
+            value={filters.minPrice}
+            onChange={(e) => updateFilter("minPrice", Number(e.target.value))}
+            className="w-1/2 border rounded px-3 py-2"
+          />
+          <input
+            type="number"
+            placeholder="Max price"
+            value={filters.maxPrice}
+            onChange={(e) => updateFilter("maxPrice", Number(e.target.value))}
+            className="w-1/2 border rounded px-3 py-2"
+          />
+        </div>
+
+        {/* Deal Types */}
+        <div className="mb-4">
+          <span className="font-medium text-sm">Deal Type</span>
+          {["Seller-Finance", "Rent-to-Own", "Lease Option"].map((type) => (
+            <label key={type} className="block">
+              <input
+                type="checkbox"
+                checked={filters.dealTypes.includes(type)}
+                onChange={(e) => {
+                  const updated = e.target.checked
+                    ? [...filters.dealTypes, type]
+                    : filters.dealTypes.filter((d) => d !== type);
+                  updateFilter("dealTypes", updated);
+                }}
+                className="mr-2"
+              />
+              {type}
+            </label>
+          ))}
+        </div>
+
+        {/* Property Types */}
+        <div className="mb-4">
+          <span className="font-medium text-sm">Property Type</span>
+          {["Single-Family", "Townhouse", "Condo", "Multi-Unit"].map((type) => (
+            <label key={type} className="block">
+              <input
+                type="checkbox"
+                checked={filters.propertyTypes.includes(type)}
+                onChange={(e) => {
+                  const updated = e.target.checked
+                    ? [...filters.propertyTypes, type]
+                    : filters.propertyTypes.filter((p) => p !== type);
+                  updateFilter("propertyTypes", updated);
+                }}
+                className="mr-2"
+              />
+              {type}
+            </label>
+          ))}
+        </div>
+
+        {/* Badges */}
+        <div className="mb-4">
+          <span className="font-medium text-sm">Special Badges</span>
+          {["Verified", "Popular", "New", "Flexible"].map((badge) => (
+            <label key={badge} className="block">
+              <input
+                type="checkbox"
+                checked={filters.badges.includes(badge)}
+                onChange={(e) => {
+                  const updated = e.target.checked
+                    ? [...filters.badges, badge]
+                    : filters.badges.filter((b) => b !== badge);
+                  updateFilter("badges", updated);
+                }}
+                className="mr-2"
+              />
+              {badge}
+            </label>
+          ))}
+        </div>
+
+        {/* Match % */}
+        <div className="mb-4">
+          <span className="font-medium text-sm">
+            Minimum Match: {filters.matchMin}%
+          </span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value={filters.matchMin}
+            onChange={(e) => updateFilter("matchMin", Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
       </aside>
 
-      <main className="min-w-0">
-        <div className="mb-4 text-sm text-neutral-600">{homes.length} homes</div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-          {homes.map(l => <ListingCard key={l.id} listing={l} profileForMatch={demoMatchProfile} />)}
-        </div>
+      {/* Results */}
+      <main className="flex-1 p-6">
+        <h1 className="text-2xl font-bold mb-6">Available Homes</h1>
+        {filteredListings.length === 0 ? (
+          <p className="text-gray-500">No homes found. Try adjusting filters.</p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredListings.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

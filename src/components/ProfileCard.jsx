@@ -1,42 +1,80 @@
+// src/components/ProfileCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Badge, Btn, money } from "../ui/UIComponents.jsx";
-import { scoreMatch } from "../lib/match";
 
-const Avatar = ({ name }) => (
-  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-brand-blue/20 to-brand-orange/20 flex items-center justify-center">
-    <span className="text-sm font-semibold">{name?.split(" ").map(s=>s[0]).join("").slice(0,2)}</span>
-  </div>
-);
-
-export default function ProfileCard({ profile, listingForMatch }) {
-  const p = profile || {};
-  const match = listingForMatch ? scoreMatch({ listing: listingForMatch, profile: p }) : null;
-
+const ProfileCard = ({ profile }) => {
   return (
-    <article className="rounded-2xl bg-white ring-1 ring-black/10 p-4 hover:shadow-soft transition">
-      <div className="flex items-center gap-3">
-        <Avatar name={p.name} />
-        <div className="min-w-0">
-          <div className="font-semibold leading-tight">{p.name}</div>
-          <div className="text-xs text-neutral-600">{p.location}</div>
+    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition relative">
+      {/* Match % Badge */}
+      {profile.match && (
+        <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+          Match {profile.match}%
         </div>
-        <div className="ml-auto">{match !== null && <Badge color="#EEF2FF" text="#1D4ED8">Match {match}%</Badge>}</div>
+      )}
+
+      {/* Avatar */}
+      <div className="h-40 bg-gray-100 flex items-center justify-center">
+        {profile.avatar ? (
+          <img
+            src={profile.avatar}
+            alt={profile.name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="h-16 w-16 flex items-center justify-center rounded-full bg-blue-200 text-blue-800 text-lg font-bold">
+            {profile.name?.charAt(0) || "?"}
+          </div>
+        )}
       </div>
 
-      <div className="mt-3 text-sm text-neutral-700">{p.bio}</div>
-      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-        <Badge>Down: {money(p.downBudget)}</Badge>
-        <Badge>Interest ≤ {(p.interestMax*100).toFixed(1)}%</Badge>
-        <Badge>Budget: {money(p.paymentBudget)}</Badge>
-        {p.dealPreference?.includes("rent-to-own") && <Badge color="#FFF7ED" text="#C2410C">RTO</Badge>}
-        {p.dealPreference?.includes("seller-finance") && <Badge color="#ECFDF5" text="#065F46">SF</Badge>}
-      </div>
+      {/* Content */}
+      <div className="p-4 space-y-2">
+        <h3 className="text-lg font-semibold">{profile.name}</h3>
+        <p className="text-gray-500 text-sm">{profile.city}</p>
 
-      <div className="mt-3 flex justify-end gap-2">
-        <Btn variant="chip" className="border"><Link to={`/profile/${p.id}`}>View</Link></Btn>
-        <Btn variant="chip" tone="accent">Invite</Btn>
+        {/* Financial Preferences */}
+        <div className="text-sm text-gray-600 mt-2">
+          <p>
+            <span className="font-semibold">Down Payment Capacity:</span>{" "}
+            {profile.downPayment ? `$${profile.downPayment.toLocaleString()}` : "N/A"}
+          </p>
+          <p>
+            <span className="font-semibold">Interest Range:</span>{" "}
+            {profile.interestRange || "N/A"}
+          </p>
+          <p>
+            <span className="font-semibold">Deal Preference:</span>{" "}
+            {profile.dealPreference || "Any"}
+          </p>
+        </div>
+
+        {/* Badges */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {profile.badges?.map((badge, i) => (
+            <span
+              key={i}
+              className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full"
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-between mt-4">
+          <Link
+            to={`/profiles/${profile.id}`}
+            className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+          >
+            View Profile
+          </Link>
+          <button className="px-3 py-1 bg-gray-200 text-sm rounded hover:bg-gray-300">
+            Invite
+          </button>
+        </div>
       </div>
-    </article>
+    </div>
   );
-}
+};
+
+export default ProfileCard;

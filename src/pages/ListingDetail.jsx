@@ -1,104 +1,105 @@
-import React, { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { LISTINGS, PROFILES } from "../data/seed";
-import { Card, Btn, Badge, Img, money, Input } from "../ui/UIComponents.jsx";
-import { monthlyPayment } from "../lib/finance";
+// src/pages/ListingDetail.jsx
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { LISTINGS } from "../data/seed";
 import { scoreMatch } from "../lib/match";
-import NDA from "../components/NDA";
-import ProfileCard from "../components/ProfileCard";
 
-export default function ListingDetail() {
+const ListingDetail = () => {
   const { id } = useParams();
-  const listing = LISTINGS.find(l => l.id === id) || LISTINGS[0];
+  const listing = LISTINGS.find((l) => l.id.toString() === id);
 
-  const [down, setDown] = useState(Math.round(listing.price * (listing.downMinPct || 0.1)));
-  const [rate, setRate] = useState(((listing.interestRange?.[0] || 0.06) * 100).toFixed(2));
-  const [term, setTerm] = useState(listing.termYears || 30);
-  const [nda, setNda] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-
-  const monthly = useMemo(() =>
-    monthlyPayment({ price: listing.price, down, rateAnnual: Number(rate)/100, termYears: term }), [listing.price, down, rate, term]);
-
-  const matches = useMemo(() => {
-    const scored = PROFILES.map(p => ({ p, score: scoreMatch({ listing, profile: p }) }));
-    return scored.sort((a,b)=>b.score - a.score).slice(0,4);
-  }, [listing]);
+  if (!listing) {
+    return <div className="p-8 text-gray-500">Listing not found.</div>;
+  }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 grid lg:grid-cols-[1.05fr,0.7fr] gap-6">
-      {/* Left: gallery + description */}
-      <section className="space-y-4">
-        <Card className="p-0 overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-1">
-            <Img src={listing.images?.[0]} alt={listing.title} className="w-full h-full object-cover aspect-[4/3]" />
-            <Img src={listing.images?.[1]} alt={listing.title} className="w-full h-full object-cover aspect-[4/3]" />
-          </div>
-        </Card>
-        <Card>
-          <div className="flex items-start justify-between gap-3">
-            <h1 className="text-xl md:text-2xl font-bold">{listing.title}</h1>
-            <div className="text-lg font-semibold">{money(listing.price)}</div>
-          </div>
-          <div className="text-sm text-neutral-600">{listing.address}, {listing.city} {listing.state}</div>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-            {listing.dealTypes?.includes("rent-to-own") && <Badge color="#FFF7ED" text="#C2410C">Rent-to-Own</Badge>}
-            {listing.dealTypes?.includes("seller-finance") && <Badge color="#ECFDF5" text="#065F46">Seller-Finance</Badge>}
-            <Badge>Down ≥ {(listing.downMinPct*100).toFixed(0)}%</Badge>
-            <Badge>Rate {((listing.interestRange?.[0]||0)*100).toFixed(1)}–{((listing.interestRange?.[1]||0)*100).toFixed(1)}%</Badge>
-            <Badge>{listing.termYears}y term</Badge>
-          </div>
-
-          <p className="mt-4 text-neutral-700 text-sm leading-relaxed">{listing.description}</p>
-        </Card>
-
-        {/* Documents */}
-        <Card>
-          <div className="font-semibold mb-2">Documents</div>
-          {!unlocked ? (
-            <div className="text-sm text-neutral-600">
-              <p>Inspection, title, financial projections, and seller disclosures are gated.</p>
-              <Btn className="mt-3" tone="accent" onClick={()=>setNda(true)}>Sign NDA to unlock</Btn>
-            </div>
+    <div className="max-w-6xl mx-auto py-8 px-4 space-y-8">
+      {/* Hero Section */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="h-80 bg-gray-100 flex items-center justify-center">
+          {listing.image ? (
+            <img
+              src={listing.image}
+              alt={listing.title}
+              className="w-full h-full object-cover"
+            />
           ) : (
-            <ul className="list-disc pl-5 text-sm space-y-1">
-              <li>Inspection report (PDF)</li>
-              <li>Title search summary</li>
-              <li>Seller’s goal brief</li>
-              <li>Sample amortization table (CSV)</li>
-            </ul>
+            <span className="text-gray-400">No image available</span>
           )}
-        </Card>
+        </div>
+        <div className="p-6 space-y-3">
+          <h1 className="text-2xl font-bold">{listing.title}</h1>
+          <p className="text-lg text-blue-600 font-semibold">
+            ${listing.price.toLocaleString()}
+          </p>
+          <p className="text-gray-600">{listing.city}</p>
 
-        <NDA open={nda} onClose={()=>setNda(false)} alias="the seller" onApprove={()=>setUnlocked(true)} />
-      </section>
-
-      {/* Right: finance + matches */}
-      <aside className="space-y-4">
-        <Card>
-          <div className="font-semibold mb-2">Run your numbers</div>
-          <div className="grid grid-cols-2 gap-3">
-            <Input label="Down payment" type="number" value={down} onChange={e=>setDown(Number(e.target.value)||0)} />
-            <Input label="Rate (%)" type="number" value={rate} step="0.01" onChange={e=>setRate(e.target.value)} />
-            <Input label="Term (years)" type="number" value={term} onChange={e=>setTerm(Number(e.target.value)||30)} />
-            <div className="flex items-end"><div className="text-sm text-neutral-600">Min down: {money(listing.price*listing.downMinPct)}</div></div>
-          </div>
-          <div className="mt-3 text-lg font-semibold">Est. payment: {money(monthly, "USD", 0)}/mo</div>
-          <div className="mt-3 flex gap-2">
-            <Btn tone="accent">Chat / Apply</Btn>
-            <Btn className="border">Save</Btn>
-          </div>
-        </Card>
-
-        <Card>
-          <div className="font-semibold mb-3">Top buyer matches</div>
-          <div className="space-y-3">
-            {matches.map(({p, score}) => (
-              <ProfileCard key={p.id} profile={p} listingForMatch={listing} />
+          {/* Badges */}
+          <div className="flex gap-2 mt-2">
+            {listing.badges?.map((b, i) => (
+              <span
+                key={i}
+                className="bg-purple-100 text-purple-700 px-2 py-1 text-xs rounded-full"
+              >
+                {b}
+              </span>
             ))}
           </div>
-        </Card>
-      </aside>
+        </div>
+      </div>
+
+      {/* Property Details */}
+      <div className="bg-white rounded-xl shadow-md p-6 space-y-4">
+        <h2 className="text-xl font-semibold">Property Details</h2>
+        <ul className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+          <li>
+            <span className="font-semibold">Bedrooms:</span> {listing.bedrooms}
+          </li>
+          <li>
+            <span className="font-semibold">Bathrooms:</span> {listing.bathrooms}
+          </li>
+          <li>
+            <span className="font-semibold">Square Feet:</span>{" "}
+            {listing.sqft.toLocaleString()}
+          </li>
+          <li>
+            <span className="font-semibold">Deal Type:</span>{" "}
+            {listing.dealType}
+          </li>
+        </ul>
+      </div>
+
+      {/* Financing Terms */}
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-3">Financing Terms</h2>
+        <p className="text-gray-600">
+          Down payment requirement:{" "}
+          <span className="font-semibold">
+            ${listing.downPayment.toLocaleString()}
+          </span>
+        </p>
+        <p className="text-gray-600">
+          Interest Rate: <span className="font-semibold">{listing.interest}%</span>
+        </p>
+        <p className="text-gray-600">
+          Term: <span className="font-semibold">{listing.term} years</span>
+        </p>
+      </div>
+
+      {/* CTA Buttons */}
+      <div className="flex gap-4">
+        <Link
+          to={`/chat/${listing.id}`}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Chat with Seller
+        </Link>
+        <button className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+          Save Listing
+        </button>
+      </div>
     </div>
   );
-}
+};
+
+export default ListingDetail;

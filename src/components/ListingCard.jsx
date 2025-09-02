@@ -1,49 +1,77 @@
+// src/components/ListingCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Img, Badge, Btn, money } from "../ui/UIComponents.jsx";
-import { scoreMatch } from "../lib/match";
 
-export default function ListingCard({ listing, profileForMatch }) {
-  const l = listing || {};
-  const match = profileForMatch ? scoreMatch({ listing: l, profile: profileForMatch }) : null;
+// Utility to display money nicely
+const money = (val) =>
+  val ? `$${val.toLocaleString("en-US")}` : "Contact for price";
 
+const ListingCard = ({ listing }) => {
   return (
-    <article className="rounded-2xl overflow-hidden bg-white ring-1 ring-black/10 hover:shadow-soft transition">
-      <Link to={`/listing/${l.id}`} className="block">
-        <div className="aspect-[4/3] overflow-hidden">
-          <Img src={l.images?.[0]} alt={l.title} className="h-full w-full object-cover" />
+    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition relative">
+      {/* Match % Badge */}
+      {listing.match && (
+        <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+          Match {listing.match}%
         </div>
-      </Link>
+      )}
 
+      {/* Image */}
+      <div className="h-48 bg-gray-100 flex items-center justify-center">
+        {listing.image ? (
+          <img
+            src={listing.image}
+            alt={listing.title}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <span className="text-gray-400 text-sm">No image</span>
+        )}
+      </div>
+
+      {/* Content */}
       <div className="p-4 space-y-2">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-base md:text-lg font-semibold leading-snug line-clamp-2">{l.title}</h3>
-          {match !== null && (
-            <Badge color="#EEF2FF" text="#1D4ED8" className="shrink-0">Match {match}%</Badge>
+        <h3 className="text-lg font-semibold">{listing.title}</h3>
+        <p className="text-blue-700 font-bold">{money(listing.price)}</p>
+        <p className="text-gray-500 text-sm">
+          {listing.city}, {listing.state}
+        </p>
+        <p className="text-gray-500 text-sm">
+          {listing.beds} bd • {listing.baths} ba • {listing.sqft} sqft
+        </p>
+
+        {/* Badges */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {listing.dealType && (
+            <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+              {listing.dealType}
+            </span>
           )}
+          {listing.badges?.map((badge, i) => (
+            <span
+              key={i}
+              className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full"
+            >
+              {badge}
+            </span>
+          ))}
         </div>
 
-        <div className="text-sm text-neutral-700">{money(l.price, "USD", 0)}</div>
-        <div className="text-xs text-neutral-600 flex flex-wrap items-center gap-2">
-          <span>{l.city}, {l.state}</span>·
-          <span>{l.bedrooms} bd</span>·
-          <span>{l.baths} ba</span>·
-          <span>{l.sqft?.toLocaleString()} sqft</span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          {l.dealTypes?.includes("rent-to-own") && <Badge color="#FFF7ED" text="#C2410C">Rent-to-Own</Badge>}
-          {l.dealTypes?.includes("seller-finance") && <Badge color="#ECFDF5" text="#065F46">Seller-Finance</Badge>}
-          {l.badges?.map((b, i) => <Badge key={i}>{b}</Badge>)}
-        </div>
-
-        <div className="flex justify-end gap-2 pt-1">
-          <Btn variant="chip" className="border">
-            <Link to={`/listing/${l.id}`}>View</Link>
-          </Btn>
-          <Btn variant="chip" tone="accent">Chat / Apply</Btn>
+        {/* Buttons */}
+        <div className="flex justify-between mt-4">
+          <Link
+            to={`/listings/${listing.id}`}
+            className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+          >
+            View
+          </Link>
+          <button className="px-3 py-1 bg-gray-200 text-sm rounded hover:bg-gray-300">
+            Chat / Apply
+          </button>
         </div>
       </div>
-    </article>
+    </div>
   );
-}
+};
+
+export default ListingCard;
