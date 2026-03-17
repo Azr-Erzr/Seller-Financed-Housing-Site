@@ -1,7 +1,7 @@
 // src/pages/About.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Shield, Users, TrendingUp, Heart } from "lucide-react";
+import { Shield, Users, TrendingUp, Heart, Star, CheckCircle } from "lucide-react";
 
 export default function About() {
   return (
@@ -61,10 +61,10 @@ export default function About() {
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">What We Stand For</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Shield className="w-6 h-6 text-blue-600" />,   bg: "bg-blue-100",   title: "Trust & Safety",  text: "Verified profiles, NDA-protected documents, and transparent terms before any conversation happens." },
-              { icon: <Users  className="w-6 h-6 text-green-600" />,  bg: "bg-green-100",  title: "Access",          text: "Homeownership should not be gated by a bank's algorithm. We create a path for people who've been shut out." },
-              { icon: <TrendingUp className="w-6 h-6 text-orange-600" />, bg: "bg-orange-100", title: "Fairness",    text: "No realtors taking commissions on both sides. No outside investors inflating prices. Direct deals between people." },
-              { icon: <Heart  className="w-6 h-6 text-purple-600" />, bg: "bg-purple-100", title: "Community",       text: "Housing moves wealth between generations. We want that movement to stay local and benefit real people." },
+              { icon: <Shield className="w-6 h-6 text-blue-600" />,      bg: "bg-blue-100",   title: "Trust & Safety",  text: "Verified profiles, NDA-protected documents, and transparent terms before any conversation happens." },
+              { icon: <Users className="w-6 h-6 text-green-600" />,      bg: "bg-green-100",  title: "Access",          text: "Homeownership should not be gated by a bank's algorithm. We create a path for people who've been shut out." },
+              { icon: <TrendingUp className="w-6 h-6 text-orange-600" />, bg: "bg-orange-100", title: "Fairness",        text: "No realtors taking commissions on both sides. No outside investors inflating prices. Direct deals between people." },
+              { icon: <Heart className="w-6 h-6 text-purple-600" />,     bg: "bg-purple-100", title: "Community",       text: "Housing moves wealth between generations. We want that movement to stay local and benefit real people." },
             ].map(({ icon, bg, title, text }) => (
               <div key={title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
                 <div className={`w-12 h-12 ${bg} rounded-full flex items-center justify-center mx-auto mb-4`}>{icon}</div>
@@ -72,6 +72,82 @@ export default function About() {
                 <p className="text-sm text-gray-500 leading-relaxed">{text}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partner Ecosystem — NEW */}
+      <section className="py-16">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                A Complete Transaction Ecosystem
+              </h2>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Finding the right buyer or seller is only the first step. Closing a seller-financed
+                deal requires lawyers, inspectors, stagers, photographers — and someone to move your
+                belongings when it's all done.
+              </p>
+              <p className="text-gray-600 leading-relaxed mb-6">
+                HomeMatch brings all of that together. Our Partner Directory connects you with vetted
+                local professionals who understand seller-financed transactions — so you never have to
+                go searching somewhere else.
+              </p>
+              <Link
+                to="/partners"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+              >
+                Browse the Partner Directory →
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {[
+                { icon: "⚖️", title: "Real Estate Lawyers",       desc: "Essential for drafting promissory notes, title transfers, and VTB agreements." },
+                { icon: "🔍", title: "Home Inspectors",           desc: "Pre-listing inspections give sellers pricing confidence and buyers peace of mind." },
+                { icon: "🛋️", title: "Stagers & Photographers",  desc: "Professional presentation helps listings sell faster and at better prices." },
+                { icon: "🏦", title: "Mortgage Brokers",          desc: "For buyers who want to explore both seller-finance and traditional options." },
+                { icon: "🚛", title: "Verified Movers",           desc: "CVOR-registered, cargo-insured, WSIB-covered movers. No surprise charges." },
+              ].map(({ icon, title, desc }) => (
+                <div key={title} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                  <span className="text-2xl shrink-0">{icon}</span>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">{title}</p>
+                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partner program */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">The HomeMatch Partner Program</h2>
+          <p className="text-gray-500 text-center mb-10 max-w-2xl mx-auto">
+            We manually vet every professional before they appear in our directory.
+            The Partner badge means something — it's not a paid advertisement, it's earned.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {[
+              { icon: <CheckCircle className="w-5 h-5 text-green-600" />, bg: "bg-green-100", title: "Credential Verification",   text: "We check licenses, registrations, and certifications before approval. For movers, CVOR, cargo insurance, and WSIB are all verified." },
+              { icon: <Star className="w-5 h-5 text-orange-500" />,       bg: "bg-orange-100", title: "Featured Placement",       text: "Approved partners appear at the top of category searches with a visible Partner badge that signals trust to users." },
+              { icon: <Users className="w-5 h-5 text-blue-600" />,        bg: "bg-blue-100",   title: "Direct Introductions",    text: "Users contact partners directly through their profile. We facilitate the introduction — no middleman markup." },
+            ].map(({ icon, bg, title, text }) => (
+              <div key={title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
+                <div className={`w-10 h-10 ${bg} rounded-full flex items-center justify-center mx-auto mb-3`}>{icon}</div>
+                <p className="font-semibold text-gray-900 text-sm mb-2">{title}</p>
+                <p className="text-xs text-gray-500 leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link to="/partner-apply"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
+              Apply to Become a Partner
+            </Link>
           </div>
         </div>
       </section>
@@ -89,6 +165,7 @@ export default function About() {
                 <li>A safe space with NDA-protected document sharing</li>
                 <li>A tool for organizing and comparing deal terms</li>
                 <li>A home for private sales, rent-to-own, and seller-finance deals</li>
+                <li>A directory of vetted local real estate professionals</li>
               </ul>
             </div>
             <div className="bg-red-50 border border-red-200 rounded-xl p-6">
@@ -99,6 +176,7 @@ export default function About() {
                 <li>A financial advisor</li>
                 <li>A guarantor of any transaction</li>
                 <li>A title search or due diligence service</li>
+                <li>A moving company or professional service provider</li>
               </ul>
             </div>
           </div>
@@ -106,6 +184,7 @@ export default function About() {
             <strong>Important:</strong> Seller-financed real estate transactions are legally complex.
             We strongly recommend that both parties engage a real estate lawyer before signing any agreement.
             HomeMatch facilitates introductions and deal discovery — the legal and financial due diligence is yours to complete.
+            Partner listings indicate a verified, paid placement — we do not guarantee any professional's services.
           </div>
         </div>
       </section>
