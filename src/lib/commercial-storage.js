@@ -5,12 +5,42 @@ import { supabase } from "./supabase";
 const USE_SUPABASE = true;
 
 const KEYS = {
-  listings: "hm_comm_listings",
-  profiles: "hm_comm_profiles",
+  listings:       "hm_comm_listings",
+  profiles:       "hm_comm_profiles",
+  savedListings:  "hm_comm_saved_listings",
+  savedProfiles:  "hm_comm_saved_profiles",
 };
 
 const read  = (key) => { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } };
 const write = (key, data) => { try { localStorage.setItem(key, JSON.stringify(data)); return true; } catch { return false; } };
+
+// ── Save / toggle helpers ─────────────────────────────────────────────
+
+export function isListingSaved(id) {
+  const saved = read(KEYS.savedListings);
+  return saved.includes(String(id));
+}
+
+export function toggleSavedListing(id) {
+  const saved = read(KEYS.savedListings);
+  const sid = String(id);
+  const next = saved.includes(sid) ? saved.filter((v) => v !== sid) : [...saved, sid];
+  write(KEYS.savedListings, next);
+  return next.includes(sid);
+}
+
+export function isProfileSaved(id) {
+  const saved = read(KEYS.savedProfiles);
+  return saved.includes(String(id));
+}
+
+export function toggleSavedProfile(id) {
+  const saved = read(KEYS.savedProfiles);
+  const sid = String(id);
+  const next = saved.includes(sid) ? saved.filter((v) => v !== sid) : [...saved, sid];
+  write(KEYS.savedProfiles, next);
+  return next.includes(sid);
+}
 
 // ── Field mapping ─────────────────────────────────────────────────────
 
@@ -81,31 +111,31 @@ function rowToListing(r) {
 
 function profileToRow(p) {
   return {
-    name:               p.name,
-    contact:            p.contact,
-    city:               p.city,
-    state:              p.state || "ON",
-    bio:                p.bio || "",
-    avatar:             p.avatar || "",
-    budget:             Number(p.budget),
-    down_payment:       Number(p.downPayment),
-    interest_max:       Number(p.interestMax),
-    interest_range:     p.interestRange || "",
-    payment_budget:     Number(p.paymentBudget),
-    monthly_income:     Number(p.monthlyIncome),
-    monthly_debt:       Number(p.monthlyDebt) || 0,
-    deal_preference:    p.dealPreference,
-    deal_preferences:   p.dealPreferences || [],
-    risk_tolerance:     p.riskTolerance || "Moderate",
-    intended_uses:      p.intendedUses || [],
+    name:                p.name,
+    contact:             p.contact,
+    city:                p.city,
+    state:               p.state || "ON",
+    bio:                 p.bio || "",
+    avatar:              p.avatar || "",
+    budget:              Number(p.budget),
+    down_payment:        Number(p.downPayment),
+    interest_max:        Number(p.interestMax),
+    interest_range:      p.interestRange || "",
+    payment_budget:      Number(p.paymentBudget) || 0,
+    monthly_income:      Number(p.monthlyIncome) || 0,
+    monthly_debt:        Number(p.monthlyDebt) || 0,
+    deal_preference:     p.dealPreference,
+    deal_preferences:    p.dealPreferences || [],
+    risk_tolerance:      p.riskTolerance || "Moderate",
+    intended_uses:       p.intendedUses || [],
     property_categories: p.propertyCategories || [],
-    zoning_preferences: p.zoningPreferences || [],
-    utilities_required: p.utilitiesRequired || [],
-    min_acreage:        p.minAcreage ? Number(p.minAcreage) : null,
-    max_acreage:        p.maxAcreage ? Number(p.maxAcreage) : null,
-    timeline_months:    p.timelineMonths ? Number(p.timelineMonths) : null,
-    badges:             p.badges || [],
-    is_active:          true,
+    zoning_preferences:  p.zoningPreferences || [],
+    utilities_required:  p.utilitiesRequired || [],
+    min_acreage:         p.minAcreage ? Number(p.minAcreage) : null,
+    max_acreage:         p.maxAcreage ? Number(p.maxAcreage) : null,
+    timeline_months:     p.timelineMonths ? Number(p.timelineMonths) : null,
+    badges:              p.badges || [],
+    is_active:           true,
   };
 }
 
@@ -157,7 +187,11 @@ export async function getCommListingById(id) {
   const seed = SEED_LISTINGS.find((l) => l.id === id);
   if (seed) return seed;
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("commercial_listings").select("*").eq("id", id).single();
+    const { data, error } = await supabase
+      .from("commercial_listings")
+      .select("*")
+      .eq("id", id)
+      .single();
     if (!error && data) return rowToListing(data);
   }
   return read(KEYS.listings).find((l) => l.id === id) || null;
@@ -165,7 +199,11 @@ export async function getCommListingById(id) {
 
 export async function saveCommListing(listing) {
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("commercial_listings").insert(listingToRow(listing)).select().single();
+    const { data, error } = await supabase
+      .from("commercial_listings")
+      .insert(listingToRow(listing))
+      .select()
+      .single();
     if (error) { console.error("Supabase error:", error.message); return null; }
     return rowToListing(data);
   }
@@ -177,7 +215,11 @@ export async function saveCommListing(listing) {
 
 export async function getAllCommProfiles() {
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("commercial_profiles").select("*").eq("is_active", true).order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("commercial_profiles")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
     if (!error && data) return [...SEED_PROFILES, ...data.map(rowToProfile)];
   }
   return [...SEED_PROFILES, ...read(KEYS.profiles)];
@@ -187,7 +229,11 @@ export async function getCommProfileById(id) {
   const seed = SEED_PROFILES.find((p) => p.id === id);
   if (seed) return seed;
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("commercial_profiles").select("*").eq("id", id).single();
+    const { data, error } = await supabase
+      .from("commercial_profiles")
+      .select("*")
+      .eq("id", id)
+      .single();
     if (!error && data) return rowToProfile(data);
   }
   return read(KEYS.profiles).find((p) => p.id === id) || null;
@@ -195,7 +241,11 @@ export async function getCommProfileById(id) {
 
 export async function saveCommProfile(profile) {
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("commercial_profiles").insert(profileToRow(profile)).select().single();
+    const { data, error } = await supabase
+      .from("commercial_profiles")
+      .insert(profileToRow(profile))
+      .select()
+      .single();
     if (error) { console.error("Supabase error:", error.message); return null; }
     return rowToProfile(data);
   }
