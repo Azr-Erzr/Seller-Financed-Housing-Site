@@ -6,7 +6,7 @@ import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-// Homes pages
+// ── Homes ─────────────────────────────────────────────────────────────
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import Profiles from "./pages/Profiles";
@@ -22,10 +22,12 @@ import PartnerApply from "./pages/PartnerApply";
 import MapSearch from "./pages/MapSearch";
 import NotFound from "./pages/NotFound";
 
-// Business pages
+// ── Business ──────────────────────────────────────────────────────────
 import BusinessHome from "./pages/business/BusinessHome";
 import BusinessListings from "./pages/business/BusinessListings";
 import BusinessProfiles from "./pages/business/BusinessProfiles";
+import BusinessListingDetail from "./pages/business/BusinessListingDetail";
+import BusinessProfileDetail from "./pages/business/BusinessProfileDetail";
 import BusinessListHome from "./pages/business/BusinessListHome";
 import BusinessCreateProfile from "./pages/business/BusinessCreateProfile";
 
@@ -54,12 +56,15 @@ export default function App() {
                 <Route path="/map"            element={<MapSearch />} />
 
                 {/* ── Business ── */}
-                <Route path="/business"                    element={<BusinessHome />} />
-                <Route path="/business/listings"           element={<BusinessListings />} />
-                <Route path="/business/profiles"           element={<BusinessProfiles />} />
-                <Route path="/business/list-property"      element={<BusinessListHome />} />
-                <Route path="/business/create-profile"     element={<BusinessCreateProfile />} />
+                <Route path="/business"                       element={<BusinessHome />} />
+                <Route path="/business/listings"              element={<BusinessListings />} />
+                <Route path="/business/profiles"              element={<BusinessProfiles />} />
+                <Route path="/business/listings/:id"          element={<BusinessListingDetail />} />
+                <Route path="/business/profiles/:id"          element={<BusinessProfileDetail />} />
+                <Route path="/business/list-property"         element={<BusinessListHome />} />
+                <Route path="/business/create-profile"        element={<BusinessCreateProfile />} />
 
+                {/* ── Catch-all ── */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
