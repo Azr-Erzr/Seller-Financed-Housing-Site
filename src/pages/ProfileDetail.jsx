@@ -1,10 +1,12 @@
 // src/pages/ProfileDetail.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getProfileById, getAllListings } from "../lib/storage";
+import { getProfileById, getAllListings, toggleSavedProfile, isProfileSaved } from "../lib/storage";
 import { rankListingsForProfile } from "../lib/match";
 import { dti } from "../lib/finance";
 import { money, Badge, Stat } from "../ui/UIComponents";
+import { useToast } from "../components/Toast";
+import { Bookmark, BookmarkCheck, Send } from "lucide-react";
 
 const StarIcon = () => (
   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
@@ -12,16 +14,46 @@ const StarIcon = () => (
   </svg>
 );
 
-const getMatchColor = (score) => {
-  if (score >= 80) return "bg-green-500";
-  if (score >= 60) return "bg-green-400";
-  if (score >= 40) return "bg-yellow-400";
-  return "bg-orange-400";
-};
+const getMatchColor = (s) =>
+  s >= 80 ? "bg-green-500" : s >= 60 ? "bg-green-400" : s >= 40 ? "bg-yellow-400" : "bg-orange-400";
 
 export default function ProfileDetail() {
   const { id } = useParams();
-  const profile = getProfileById(id);
+  const { toast } = useToast();
+
+  const [profile, setProfile]               = useState(null);
+  const [loading, setLoading]               = useState(true);
+  const [saved, setSaved]                   = useState(false);
+  const [matchedListings, setMatchedListings] = useState([]);
+
+  useEffect(() => {
+    getProfileById(id).then((p) => {
+      setProfile(p);
+      setSaved(isProfileSaved(id));
+      setLoading(false);
+    });
+  }, [id]);
+
+  useEffect(() => {
+    if (!profile) return;
+    getAllListings().then((listings) => {
+      setMatchedListings(rankListingsForProfile(listings, profile));
+    });
+  }, [profile]);
+
+  const handleSave = () => {
+    const nowSaved = toggleSavedProfile(id);
+    setSaved(nowSaved);
+    toast[nowSaved ? "success" : "info"](
+      nowSaved ? "Buyer profile saved to bookmarks." : "Buyer profile removed from bookmarks."
+    );
+  };
+
+  const handleInvite = () => {
+    toast.info("Invite feature coming soon — create a profile to get notified when messaging launches.");
+  };
+
+  if (loading) return <div className="p-12 text-center text-gray-400">Loading...</div>;
 
   if (!profile) return (
     <div className="p-12 text-center text-gray-500">
@@ -29,12 +61,10 @@ export default function ProfileDetail() {
     </div>
   );
 
-  const allListings = getAllListings();
-  const matchedListings = rankListingsForProfile(allListings, profile);
-
   const dtiRatio = dti({ monthlyDebt: profile.monthlyDebt, monthlyIncome: profile.monthlyIncome });
   const dtiColor = dtiRatio < 0.35 ? "text-green-600" : dtiRatio < 0.45 ? "text-yellow-600" : "text-red-600";
   const dtiLabel = dtiRatio < 0.35 ? "✓ Strong" : dtiRatio < 0.45 ? "⚠ Moderate" : "✗ High";
+  const dtiBar   = dtiRatio < 0.35 ? "bg-green-400" : dtiRatio < 0.45 ? "bg-yellow-400" : "bg-red-400";
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
@@ -79,11 +109,11 @@ export default function ProfileDetail() {
           <div className="mt-5 pt-4 border-t">
             <p className="text-sm text-gray-500 mb-1">
               Debt-to-Income Ratio
-              <span className={`ml-2 font-bold ${dtiColor}`}>{(dtiRatio * 100).toFixed(1)}%</span>
+              <span className={`ml-2 font-bold ${dtiColor}`}>{(dtiRatio*100).toFixed(1)}%</span>
               <span className="text-xs text-gray-400 ml-2">{dtiLabel}</span>
             </p>
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div className={`h-full rounded-full transition-all ${dtiRatio < 0.35 ? "bg-green-400" : dtiRatio < 0.45 ? "bg-yellow-400" : "bg-red-400"}`}
+              <div className={`h-full rounded-full transition-all ${dtiBar}`}
                 style={{ width: `${Math.min(100, (dtiRatio / 0.6) * 100)}%` }} />
             </div>
             <p className="text-xs text-gray-400 mt-1">Existing monthly debt / gross monthly income. Below 35% is ideal for seller-finance deals.</p>
@@ -115,9 +145,26 @@ export default function ProfileDetail() {
 
       {/* CTAs */}
       <div className="flex flex-wrap gap-3">
-        <button className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition">Invite to Deal</button>
-        <button className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition">Save Profile</button>
-        <Link to="/profiles" className="px-5 py-2.5 text-gray-500 hover:text-gray-700 font-medium transition">← Back</Link>
+        <button
+          onClick={handleInvite}
+          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+        >
+          <Send className="w-4 h-4" /> Invite to Deal
+        </button>
+        <button
+          onClick={handleSave}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition ${
+            saved
+              ? "bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          {saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+          {saved ? "Saved" : "Save Profile"}
+        </button>
+        <Link to="/profiles" className="px-5 py-2.5 text-gray-500 hover:text-gray-700 font-medium transition">
+          ← Back
+        </Link>
       </div>
     </div>
   );

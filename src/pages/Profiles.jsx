@@ -1,5 +1,5 @@
 // src/pages/Profiles.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import ProfileCard from "../components/ProfileCard";
 import { getAllProfiles } from "../lib/storage";
@@ -9,16 +9,17 @@ const RISK_LEVELS = ["Low", "Moderate", "High"];
 const BADGES      = ["Verified", "Investor", "New", "Popular"];
 
 export default function Profiles() {
+  const [allProfiles, setAllProfiles] = useState([]);
   const [minBudget, setMinBudget]           = useState("");
   const [maxBudget, setMaxBudget]           = useState("");
   const [dealPrefs, setDealPrefs]           = useState([]);
   const [riskLevels, setRiskLevels]         = useState([]);
   const [selectedBadges, setSelectedBadges] = useState([]);
 
+  useEffect(() => { getAllProfiles().then(setAllProfiles); }, []);
+
   const toggle = (arr, setArr, val) =>
     setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
-
-  const allProfiles = getAllProfiles();
 
   const filtered = allProfiles.filter((p) => {
     if (minBudget && p.budget < Number(minBudget)) return false;
@@ -54,8 +55,10 @@ export default function Profiles() {
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Budget Range</label>
                 <div className="flex gap-2">
-                  <input type="number" placeholder="Min" value={minBudget} onChange={(e) => setMinBudget(e.target.value)} className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                  <input type="number" placeholder="Max" value={maxBudget} onChange={(e) => setMaxBudget(e.target.value)} className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="number" placeholder="Min" value={minBudget} onChange={(e) => setMinBudget(e.target.value)}
+                    className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input type="number" placeholder="Max" value={maxBudget} onChange={(e) => setMaxBudget(e.target.value)}
+                    className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
               </div>
 
@@ -64,7 +67,9 @@ export default function Profiles() {
                 <div className="space-y-2.5">
                   {DEAL_PREFS.map((pref) => (
                     <label key={pref} className="flex items-center gap-2.5 cursor-pointer">
-                      <input type="checkbox" checked={dealPrefs.includes(pref)} onChange={() => toggle(dealPrefs, setDealPrefs, pref)} className="w-4 h-4 rounded border-gray-300 accent-blue-600" />
+                      <input type="checkbox" checked={dealPrefs.includes(pref)}
+                        onChange={() => toggle(dealPrefs, setDealPrefs, pref)}
+                        className="w-4 h-4 rounded border-gray-300 accent-blue-600" />
                       <span className="text-sm text-gray-600">{pref}</span>
                     </label>
                   ))}
@@ -76,7 +81,9 @@ export default function Profiles() {
                 <div className="space-y-2.5">
                   {RISK_LEVELS.map((r) => (
                     <label key={r} className="flex items-center gap-2.5 cursor-pointer">
-                      <input type="checkbox" checked={riskLevels.includes(r)} onChange={() => toggle(riskLevels, setRiskLevels, r)} className="w-4 h-4 rounded border-gray-300 accent-blue-600" />
+                      <input type="checkbox" checked={riskLevels.includes(r)}
+                        onChange={() => toggle(riskLevels, setRiskLevels, r)}
+                        className="w-4 h-4 rounded border-gray-300 accent-blue-600" />
                       <span className="text-sm text-gray-600">{r}</span>
                     </label>
                   ))}
@@ -88,7 +95,9 @@ export default function Profiles() {
                 <div className="space-y-2.5">
                   {BADGES.map((badge) => (
                     <label key={badge} className="flex items-center gap-2.5 cursor-pointer">
-                      <input type="checkbox" checked={selectedBadges.includes(badge)} onChange={() => toggle(selectedBadges, setSelectedBadges, badge)} className="w-4 h-4 rounded border-gray-300 accent-blue-600" />
+                      <input type="checkbox" checked={selectedBadges.includes(badge)}
+                        onChange={() => toggle(selectedBadges, setSelectedBadges, badge)}
+                        className="w-4 h-4 rounded border-gray-300 accent-blue-600" />
                       <span className="text-sm text-gray-600">{badge}</span>
                     </label>
                   ))}
@@ -101,7 +110,7 @@ export default function Profiles() {
             {filtered.length === 0 ? (
               <div className="text-center py-20 text-gray-400">
                 <p className="text-lg font-medium mb-2">No buyers found</p>
-                <p className="text-sm">Try adjusting your filters</p>
+                <p className="text-sm">Try adjusting your filters or <button onClick={clearFilters} className="text-blue-500 hover:underline">clear all</button></p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

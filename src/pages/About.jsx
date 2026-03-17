@@ -1,17 +1,19 @@
 // src/pages/About.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Shield, Users, TrendingUp, Heart } from "lucide-react";
+import { Shield, Users, TrendingUp, Heart } from "lucide-react";
 
 export default function About() {
   return (
     <div className="bg-white">
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-5">About HomeMatch</h1>
-          <p className="text-lg text-blue-100 leading-relaxed max-w-2xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold mb-5" style={{ color: "#ffffff" }}>
+            About HomeMatch
+          </h1>
+          <p className="text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: "#bfdbfe" }}>
             We built HomeMatch because the traditional mortgage system locks out too many good people
             from homeownership — and leaves too many sellers with no good way to pass on property
             they've spent a lifetime building equity in.
@@ -40,9 +42,9 @@ export default function About() {
             </div>
             <div className="space-y-4">
               <p className="text-gray-600 leading-relaxed">
-                Seller financing — also called a Vendor Take-Back (VTB) mortgage — solves both of these
-                problems. The seller becomes the bank. The buyer gets a path to ownership that the
-                traditional system closed. Terms are negotiated directly, human to human.
+                Seller financing — also called a Vendor Take-Back (VTB) mortgage — solves both problems.
+                The seller becomes the bank. The buyer gets a path to ownership that the traditional
+                system closed. Terms are negotiated directly, human to human.
               </p>
               <p className="text-gray-600 leading-relaxed">
                 The problem is there's never been a dedicated, safe, organized place to make these
@@ -59,10 +61,10 @@ export default function About() {
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">What We Stand For</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Shield className="w-6 h-6 text-blue-600" />, bg: "bg-blue-100", title: "Trust & Safety", text: "Verified profiles, NDA-protected documents, and transparent terms before any conversation happens." },
-              { icon: <Users className="w-6 h-6 text-green-600" />, bg: "bg-green-100", title: "Access", text: "Homeownership should not be gated by a bank's algorithm. We create a path for people who've been shut out." },
-              { icon: <TrendingUp className="w-6 h-6 text-orange-600" />, bg: "bg-orange-100", title: "Fairness", text: "No realtors taking commissions on both sides. No outside investors inflating prices. Direct deals between people." },
-              { icon: <Heart className="w-6 h-6 text-purple-600" />, bg: "bg-purple-100", title: "Community", text: "Housing moves wealth between generations. We want that movement to stay local and benefit real people." },
+              { icon: <Shield className="w-6 h-6 text-blue-600" />,   bg: "bg-blue-100",   title: "Trust & Safety",  text: "Verified profiles, NDA-protected documents, and transparent terms before any conversation happens." },
+              { icon: <Users  className="w-6 h-6 text-green-600" />,  bg: "bg-green-100",  title: "Access",          text: "Homeownership should not be gated by a bank's algorithm. We create a path for people who've been shut out." },
+              { icon: <TrendingUp className="w-6 h-6 text-orange-600" />, bg: "bg-orange-100", title: "Fairness",    text: "No realtors taking commissions on both sides. No outside investors inflating prices. Direct deals between people." },
+              { icon: <Heart  className="w-6 h-6 text-purple-600" />, bg: "bg-purple-100", title: "Community",       text: "Housing moves wealth between generations. We want that movement to stay local and benefit real people." },
             ].map(({ icon, bg, title, text }) => (
               <div key={title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
                 <div className={`w-12 h-12 ${bg} rounded-full flex items-center justify-center mx-auto mb-4`}>{icon}</div>
@@ -101,32 +103,27 @@ export default function About() {
             </div>
           </div>
           <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5 text-sm text-amber-800 leading-relaxed">
-            <strong>Important:</strong> Seller-financed real estate transactions are legally complex. 
-            We strongly recommend that both parties engage a real estate lawyer before signing any agreement. 
+            <strong>Important:</strong> Seller-financed real estate transactions are legally complex.
+            We strongly recommend that both parties engage a real estate lawyer before signing any agreement.
             HomeMatch facilitates introductions and deal discovery — the legal and financial due diligence is yours to complete.
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-16">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-blue-100 mb-8">
+          <h2 className="text-3xl font-bold mb-4" style={{ color: "#ffffff" }}>Ready to Get Started?</h2>
+          <p className="mb-8" style={{ color: "#bfdbfe" }}>
             Whether you own a home and want to pass it on your terms, or you're a buyer who's been
             shut out by the banks — there's a place for you here.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/list-home" className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
-              List Your Home
-            </Link>
-            <Link to="/create-profile" className="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">
-              Create Buyer Profile
-            </Link>
+            <Link to="/list-home"      className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</Link>
+            <Link to="/create-profile" className="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Create Buyer Profile</Link>
           </div>
         </div>
       </section>
-
     </div>
   );
 }
