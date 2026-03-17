@@ -31,6 +31,7 @@ import BusinessListingDetail from "./pages/business/BusinessListingDetail";
 import BusinessProfileDetail from "./pages/business/BusinessProfileDetail";
 import BusinessListHome from "./pages/business/BusinessListHome";
 import BusinessCreateProfile from "./pages/business/BusinessCreateProfile";
+import BusinessMapSearch from "./pages/business/BusinessMapSearch";
 
 export default function App() {
   return (
@@ -41,14 +42,8 @@ export default function App() {
             <Navbar />
             <main className="flex-grow">
               <Routes>
-
                 {/* ── Homes ── */}
-                {/* ModeRedirect: if stored mode is "business", sends user to /business */}
-                <Route path="/" element={
-                  <ModeRedirect targetMode="homes">
-                    <Home />
-                  </ModeRedirect>
-                } />
+                <Route path="/" element={<ModeRedirect targetMode="homes"><Home /></ModeRedirect>} />
                 <Route path="/listings"       element={<Listings />} />
                 <Route path="/profiles"       element={<Profiles />} />
                 <Route path="/listings/:id"   element={<ListingDetail />} />
@@ -63,22 +58,17 @@ export default function App() {
                 <Route path="/map"            element={<MapSearch />} />
 
                 {/* ── Business ── */}
-                {/* ModeRedirect: if stored mode is "homes", sends user back to / */}
-                <Route path="/business" element={
-                  <ModeRedirect targetMode="business">
-                    <BusinessHome />
-                  </ModeRedirect>
-                } />
+                <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome /></ModeRedirect>} />
                 <Route path="/business/listings"         element={<BusinessListings />} />
                 <Route path="/business/profiles"         element={<BusinessProfiles />} />
                 <Route path="/business/listings/:id"     element={<BusinessListingDetail />} />
                 <Route path="/business/profiles/:id"     element={<BusinessProfileDetail />} />
                 <Route path="/business/list-property"    element={<BusinessListHome />} />
                 <Route path="/business/create-profile"   element={<BusinessCreateProfile />} />
+                <Route path="/business/map"              element={<BusinessMapSearch />} />
 
                 {/* ── Catch-all ── */}
                 <Route path="*" element={<NotFound />} />
-
               </Routes>
             </main>
             <Footer />
