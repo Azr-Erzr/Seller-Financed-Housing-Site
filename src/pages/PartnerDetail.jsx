@@ -3,6 +3,7 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPartnerById, PARTNER_CATEGORIES, getFeaturedPartners } from "../data/partners";
 import { MapPin, Phone, Globe, Mail, Star, ChevronRight, ArrowLeft } from "lucide-react";
+import { useSite } from "../context/SiteContext";
 
 const avatarColors = {
   lawyer:       "from-blue-500 to-blue-700",
@@ -10,61 +11,61 @@ const avatarColors = {
   photographer: "from-orange-400 to-orange-600",
   inspector:    "from-green-500 to-green-700",
   broker:       "from-yellow-500 to-yellow-600",
+  mover:        "from-teal-500 to-teal-700",
 };
-
 const categoryColors = {
   lawyer:       "bg-blue-100 text-blue-700",
   stager:       "bg-purple-100 text-purple-700",
   photographer: "bg-orange-100 text-orange-700",
   inspector:    "bg-green-100 text-green-700",
   broker:       "bg-yellow-100 text-yellow-700",
+  mover:        "bg-teal-100 text-teal-700",
 };
-
 const getInitials = (name) =>
   name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
 export default function PartnerDetail() {
   const { id } = useParams();
+  const { mode, MODES } = useSite();
+  const isBusiness = mode === MODES.business;
   const partner = getPartnerById(id);
+
+  const primaryBtn = isBusiness ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
+  const linkColor  = isBusiness ? "text-emerald-600" : "text-blue-600";
+  const contactHover = isBusiness ? "hover:bg-emerald-50 hover:border-emerald-200 group-hover:text-emerald-600" : "hover:bg-blue-50 hover:border-blue-200 group-hover:text-blue-600";
+  const iconBg     = isBusiness ? "bg-emerald-100" : "bg-blue-100";
+  const iconColor  = isBusiness ? "text-emerald-600" : "text-blue-600";
 
   if (!partner) return (
     <div className="p-12 text-center text-gray-500">
-      Partner not found. <Link to="/partners" className="text-blue-600 underline">Back to directory</Link>
+      Partner not found. <Link to="/partners" className={`${linkColor} underline`}>Back to directory</Link>
     </div>
   );
 
   const categoryLabel = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.label || "";
   const categoryIcon  = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.icon || "";
-
-  // Related partners in same category
-  const related = getFeaturedPartners()
-    .filter((p) => p.category === partner.category && p.id !== partner.id)
-    .slice(0, 2);
+  const related = getFeaturedPartners().filter((p) => p.category === partner.category && p.id !== partner.id).slice(0, 2);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
 
-        <Link to="/partners" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors">
+        <Link to="/partners" className={`inline-flex items-center gap-1.5 text-sm text-gray-500 hover:${isBusiness ? "text-emerald-600" : "text-blue-600"} transition-colors`}>
           <ArrowLeft className="w-4 h-4" /> Back to Directory
         </Link>
 
-        {/* Profile card */}
+        {/* Profile */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-
-            {/* Avatar */}
             <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${avatarColors[partner.category]} flex items-center justify-center text-white font-bold text-3xl shrink-0`}>
               {getInitials(partner.name)}
             </div>
-
-            {/* Info */}
             <div className="flex-1 text-center sm:text-left">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
                 <h1 className="text-2xl font-bold text-gray-900">{partner.name}</h1>
                 {partner.badge && (
                   <span className="flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">
-                    <Star className="w-3 h-3" /> HomeMatch Partner
+                    <Star className="w-3 h-3" /> LandMatch Partner
                   </span>
                 )}
               </div>
@@ -79,89 +80,55 @@ export default function PartnerDetail() {
               </div>
             </div>
           </div>
-
-          {/* Bio */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-gray-600 leading-relaxed">{partner.bio}</p>
-          </div>
+          {partner.bio && <p className="mt-6 pt-6 border-t border-gray-100 text-gray-600 leading-relaxed">{partner.bio}</p>}
         </div>
 
-        {/* Two-col layout */}
+        {/* Services + Contact */}
         <div className="grid md:grid-cols-3 gap-6">
-
-          {/* Services */}
           <div className="md:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="font-semibold text-gray-900 text-lg mb-4">Services Offered</h2>
             <div className="flex flex-wrap gap-2">
               {partner.services.map((s) => (
-                <span key={s} className="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-lg font-medium">
-                  {s}
-                </span>
+                <span key={s} className="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-lg font-medium">{s}</span>
               ))}
             </div>
           </div>
 
-          {/* Contact */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
             <h2 className="font-semibold text-gray-900 text-lg">Contact</h2>
-
-            <a href={`tel:${partner.phone}`}
-              className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 hover:border-blue-200 border border-transparent transition-all group">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                <Phone className="w-4 h-4 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-400">Phone</p>
-                <p className="text-sm font-medium text-gray-800 group-hover:text-blue-600">{partner.phone}</p>
-              </div>
-            </a>
-
-            <a href={`mailto:${partner.email}`}
-              className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 hover:border-blue-200 border border-transparent transition-all group">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                <Mail className="w-4 h-4 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-400">Email</p>
-                <p className="text-sm font-medium text-gray-800 group-hover:text-blue-600 truncate">{partner.email}</p>
-              </div>
-            </a>
-
-            {partner.website && (
-              <a href={partner.website} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-blue-50 hover:border-blue-200 border border-transparent transition-all group">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                  <Globe className="w-4 h-4 text-blue-600" />
+            {[
+              { href: `tel:${partner.phone}`, icon: <Phone className="w-4 h-4" />, label: "Phone", value: partner.phone },
+              { href: `mailto:${partner.email}`, icon: <Mail className="w-4 h-4" />, label: "Email", value: partner.email },
+              ...(partner.website ? [{ href: partner.website, icon: <Globe className="w-4 h-4" />, label: "Website", value: "Visit website ↗", external: true }] : []),
+            ].map(({ href, icon, label, value, external }) => (
+              <a key={label} href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className={`flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-transparent transition-all group ${contactHover}`}>
+                <div className={`w-8 h-8 ${iconBg} rounded-lg flex items-center justify-center shrink-0`}>
+                  <span className={iconColor}>{icon}</span>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400">Website</p>
-                  <p className="text-sm font-medium text-gray-800 group-hover:text-blue-600">Visit website ↗</p>
+                  <p className="text-xs text-gray-400">{label}</p>
+                  <p className="text-sm font-medium text-gray-800 truncate">{value}</p>
                 </div>
               </a>
-            )}
-
-            {/* CTA */}
-            <a href={`mailto:${partner.email}?subject=HomeMatch Inquiry`}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-colors mt-2">
+            ))}
+            <a href={`mailto:${partner.email}?subject=LandMatch Inquiry`}
+              className={`w-full flex items-center justify-center gap-2 py-3 font-semibold text-sm rounded-xl transition-colors mt-2 ${primaryBtn}`}>
               Send a Message
             </a>
           </div>
         </div>
 
-        {/* HomeMatch disclaimer */}
+        {/* Disclaimer */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
-          <strong>Note:</strong> HomeMatch lists these professionals as a convenience for users.
-          We do not endorse or guarantee any professional's services. Always verify credentials,
-          check reviews, and conduct your own due diligence before engaging any professional.
-          HomeMatch Partner status indicates a paid listing placement only.
+          <strong>Note:</strong> LandMatch lists these professionals as a convenience. We do not endorse or guarantee any professional's services.
+          Always verify credentials and conduct your own due diligence. Partner status indicates a verified, paid listing placement only.
         </div>
 
         {/* Related */}
         {related.length > 0 && (
           <div>
-            <h2 className="font-semibold text-gray-900 mb-4">
-              Other {categoryLabel} in the Area
-            </h2>
+            <h2 className="font-semibold text-gray-900 mb-4">Other {categoryLabel} in the Area</h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {related.map((p) => (
                 <Link key={p.id} to={`/partners/${p.id}`}
@@ -181,9 +148,7 @@ export default function PartnerDetail() {
         )}
 
         <div className="text-center pb-4">
-          <Link to="/partners" className="text-sm text-blue-600 hover:underline">
-            ← View all professionals
-          </Link>
+          <Link to="/partners" className={`text-sm hover:underline ${linkColor}`}>← View all professionals</Link>
         </div>
       </div>
     </div>
