@@ -1,9 +1,12 @@
 // src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { SiteProvider } from "./context/SiteContext";
 import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+
+// Homes pages
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import Profiles from "./pages/Profiles";
@@ -19,33 +22,51 @@ import PartnerApply from "./pages/PartnerApply";
 import MapSearch from "./pages/MapSearch";
 import NotFound from "./pages/NotFound";
 
+// Business pages
+import BusinessHome from "./pages/business/BusinessHome";
+import BusinessListings from "./pages/business/BusinessListings";
+import BusinessProfiles from "./pages/business/BusinessProfiles";
+import BusinessListHome from "./pages/business/BusinessListHome";
+import BusinessCreateProfile from "./pages/business/BusinessCreateProfile";
+
 export default function App() {
   return (
     <Router>
-      <ToastProvider>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/"                element={<Home />} />
-              <Route path="/listings"        element={<Listings />} />
-              <Route path="/profiles"        element={<Profiles />} />
-              <Route path="/listings/:id"    element={<ListingDetail />} />
-              <Route path="/profiles/:id"    element={<ProfileDetail />} />
-              <Route path="/list-home"       element={<ListHome />} />
-              <Route path="/create-profile"  element={<CreateProfile />} />
-              <Route path="/about"           element={<About />} />
-              <Route path="/how-it-works"    element={<HowItWorks />} />
-              <Route path="/partners"        element={<Partners />} />
-              <Route path="/partners/:id"    element={<PartnerDetail />} />
-              <Route path="/partner-apply"   element={<PartnerApply />} />
-              <Route path="/map"             element={<MapSearch />} />
-              <Route path="*"               element={<NotFound />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </ToastProvider>
+      <SiteProvider>
+        <ToastProvider>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                {/* ── Homes ── */}
+                <Route path="/"               element={<Home />} />
+                <Route path="/listings"       element={<Listings />} />
+                <Route path="/profiles"       element={<Profiles />} />
+                <Route path="/listings/:id"   element={<ListingDetail />} />
+                <Route path="/profiles/:id"   element={<ProfileDetail />} />
+                <Route path="/list-home"      element={<ListHome />} />
+                <Route path="/create-profile" element={<CreateProfile />} />
+                <Route path="/about"          element={<About />} />
+                <Route path="/how-it-works"   element={<HowItWorks />} />
+                <Route path="/partners"       element={<Partners />} />
+                <Route path="/partners/:id"   element={<PartnerDetail />} />
+                <Route path="/partner-apply"  element={<PartnerApply />} />
+                <Route path="/map"            element={<MapSearch />} />
+
+                {/* ── Business ── */}
+                <Route path="/business"                    element={<BusinessHome />} />
+                <Route path="/business/listings"           element={<BusinessListings />} />
+                <Route path="/business/profiles"           element={<BusinessProfiles />} />
+                <Route path="/business/list-property"      element={<BusinessListHome />} />
+                <Route path="/business/create-profile"     element={<BusinessCreateProfile />} />
+
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </ToastProvider>
+      </SiteProvider>
     </Router>
   );
 }
