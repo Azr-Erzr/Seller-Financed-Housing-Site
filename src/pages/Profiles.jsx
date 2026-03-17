@@ -1,184 +1,156 @@
 // src/pages/Profiles.jsx
 import React, { useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 import ProfileCard from "../components/ProfileCard";
 import { PROFILES } from "../data/seed";
 
+const DEAL_PREFS  = ["Seller-Finance", "Rent-to-Own", "Any"];
+const RISK_LEVELS = ["Low", "Moderate", "High"];
+const BADGES      = ["Verified", "Investor", "New", "Popular"];
+
 export default function Profiles() {
-  const [filters, setFilters] = useState({
-    minBudget: "",
-    maxBudget: "",
-    minDown: "",
-    maxDown: "",
-    interest: "",
-    dealPrefs: [],
-    riskTolerance: [],
-    badges: [],
-  });
+  const [minBudget, setMinBudget]         = useState("");
+  const [maxBudget, setMaxBudget]         = useState("");
+  const [dealPrefs, setDealPrefs]         = useState([]);
+  const [riskLevels, setRiskLevels]       = useState([]);
+  const [selectedBadges, setSelectedBadges] = useState([]);
 
-  const updateFilter = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
+  const toggle = (arr, setArr, val) =>
+    setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
 
-  const filteredProfiles = PROFILES.filter((p) => {
-    if (filters.minBudget && p.budget < filters.minBudget) return false;
-    if (filters.maxBudget && p.budget > filters.maxBudget) return false;
-    if (filters.minDown && p.downPayment < filters.minDown) return false;
-    if (filters.maxDown && p.downPayment > filters.maxDown) return false;
-    if (
-      filters.interest &&
-      !p.interestRange?.includes(filters.interest)
-    )
-      return false;
-    if (
-      filters.dealPrefs.length > 0 &&
-      !filters.dealPrefs.includes(p.dealPreference)
-    )
-      return false;
-    if (
-      filters.riskTolerance.length > 0 &&
-      !filters.riskTolerance.includes(p.riskTolerance)
-    )
-      return false;
-    if (
-      filters.badges.length > 0 &&
-      !filters.badges.some((b) => p.badges?.includes(b))
-    )
-      return false;
-
+  const filtered = PROFILES.filter((p) => {
+    if (minBudget && p.budget < Number(minBudget)) return false;
+    if (maxBudget && p.budget > Number(maxBudget)) return false;
+    if (dealPrefs.length && !dealPrefs.includes(p.dealPreference)) return false;
+    if (riskLevels.length && !riskLevels.includes(p.riskTolerance)) return false;
+    if (selectedBadges.length && !selectedBadges.some((b) => p.badges?.includes(b))) return false;
     return true;
   });
 
+  const clearFilters = () => {
+    setMinBudget(""); setMaxBudget(""); setDealPrefs([]);
+    setRiskLevels([]); setSelectedBadges([]);
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-full lg:w-1/4 bg-gray-50 p-6 border-r">
-        <h2 className="text-lg font-semibold mb-4">Filters</h2>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-6 py-8">
 
-        {/* Budget */}
-        <div className="flex space-x-2 mb-4">
-          <input
-            type="number"
-            placeholder="Min budget"
-            value={filters.minBudget}
-            onChange={(e) => updateFilter("minBudget", Number(e.target.value))}
-            className="w-1/2 border rounded px-3 py-2"
-          />
-          <input
-            type="number"
-            placeholder="Max budget"
-            value={filters.maxBudget}
-            onChange={(e) => updateFilter("maxBudget", Number(e.target.value))}
-            className="w-1/2 border rounded px-3 py-2"
-          />
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Active Buyers</h1>
+          <p className="text-gray-500">{filtered.length} {filtered.length === 1 ? "buyer" : "buyers"} found</p>
         </div>
 
-        {/* Down Payment */}
-        <div className="flex space-x-2 mb-4">
-          <input
-            type="number"
-            placeholder="Min down"
-            value={filters.minDown}
-            onChange={(e) => updateFilter("minDown", Number(e.target.value))}
-            className="w-1/2 border rounded px-3 py-2"
-          />
-          <input
-            type="number"
-            placeholder="Max down"
-            value={filters.maxDown}
-            onChange={(e) => updateFilter("maxDown", Number(e.target.value))}
-            className="w-1/2 border rounded px-3 py-2"
-          />
+        <div className="flex flex-col lg:flex-row gap-8">
+
+          {/* ── Sidebar ── */}
+          <aside className="lg:w-72 shrink-0">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-24">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4" /> Filters
+                </h2>
+                <button onClick={clearFilters} className="text-xs text-blue-600 hover:underline">
+                  Clear all
+                </button>
+              </div>
+
+              {/* Budget */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Budget Range</label>
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={minBudget}
+                    onChange={(e) => setMinBudget(e.target.value)}
+                    className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={maxBudget}
+                    onChange={(e) => setMaxBudget(e.target.value)}
+                    className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* Deal Preference */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">Deal Preference</label>
+                <div className="space-y-2.5">
+                  {DEAL_PREFS.map((pref) => (
+                    <label key={pref} className="flex items-center gap-2.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={dealPrefs.includes(pref)}
+                        onChange={() => toggle(dealPrefs, setDealPrefs, pref)}
+                        className="w-4 h-4 rounded border-gray-300 accent-blue-600"
+                      />
+                      <span className="text-sm text-gray-600">{pref}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Risk Tolerance */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">Risk Tolerance</label>
+                <div className="space-y-2.5">
+                  {RISK_LEVELS.map((r) => (
+                    <label key={r} className="flex items-center gap-2.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={riskLevels.includes(r)}
+                        onChange={() => toggle(riskLevels, setRiskLevels, r)}
+                        className="w-4 h-4 rounded border-gray-300 accent-blue-600"
+                      />
+                      <span className="text-sm text-gray-600">{r}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Badges */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Badges</label>
+                <div className="space-y-2.5">
+                  {BADGES.map((badge) => (
+                    <label key={badge} className="flex items-center gap-2.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedBadges.includes(badge)}
+                        onChange={() => toggle(selectedBadges, setSelectedBadges, badge)}
+                        className="w-4 h-4 rounded border-gray-300 accent-blue-600"
+                      />
+                      <span className="text-sm text-gray-600">{badge}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* ── Grid ── */}
+          <main className="flex-1">
+            {filtered.length === 0 ? (
+              <div className="text-center py-20 text-gray-400">
+                <p className="text-lg font-medium mb-2">No buyers found</p>
+                <p className="text-sm">Try adjusting your filters</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {filtered.map((profile) => (
+                  <ProfileCard key={profile.id} profile={profile} />
+                ))}
+              </div>
+            )}
+          </main>
+
         </div>
-
-        {/* Interest */}
-        <label className="block mb-4">
-          <span className="font-medium text-sm">Interest Preference</span>
-          <input
-            type="text"
-            placeholder="e.g. 5-7%"
-            value={filters.interest}
-            onChange={(e) => updateFilter("interest", e.target.value)}
-            className="mt-1 w-full border rounded px-3 py-2"
-          />
-        </label>
-
-        {/* Deal Preferences */}
-        <div className="mb-4">
-          <span className="font-medium text-sm">Deal Preference</span>
-          {["Seller-Finance", "Rent-to-Own", "Any"].map((pref) => (
-            <label key={pref} className="block">
-              <input
-                type="checkbox"
-                checked={filters.dealPrefs.includes(pref)}
-                onChange={(e) => {
-                  const updated = e.target.checked
-                    ? [...filters.dealPrefs, pref]
-                    : filters.dealPrefs.filter((d) => d !== pref);
-                  updateFilter("dealPrefs", updated);
-                }}
-                className="mr-2"
-              />
-              {pref}
-            </label>
-          ))}
-        </div>
-
-        {/* Risk Tolerance */}
-        <div className="mb-4">
-          <span className="font-medium text-sm">Risk Tolerance</span>
-          {["Low", "Moderate", "High"].map((r) => (
-            <label key={r} className="block">
-              <input
-                type="checkbox"
-                checked={filters.riskTolerance.includes(r)}
-                onChange={(e) => {
-                  const updated = e.target.checked
-                    ? [...filters.riskTolerance, r]
-                    : filters.riskTolerance.filter((x) => x !== r);
-                  updateFilter("riskTolerance", updated);
-                }}
-                className="mr-2"
-              />
-              {r}
-            </label>
-          ))}
-        </div>
-
-        {/* Badges */}
-        <div className="mb-4">
-          <span className="font-medium text-sm">Badges</span>
-          {["Verified", "Investor", "New", "Popular"].map((badge) => (
-            <label key={badge} className="block">
-              <input
-                type="checkbox"
-                checked={filters.badges.includes(badge)}
-                onChange={(e) => {
-                  const updated = e.target.checked
-                    ? [...filters.badges, badge]
-                    : filters.badges.filter((b) => b !== badge);
-                  updateFilter("badges", updated);
-                }}
-                className="mr-2"
-              />
-              {badge}
-            </label>
-          ))}
-        </div>
-      </aside>
-
-      {/* Results */}
-      <main className="flex-1 p-6">
-        <h1 className="text-2xl font-bold mb-6">Active Buyers</h1>
-        {filteredProfiles.length === 0 ? (
-          <p className="text-gray-500">No buyers found. Try adjusting filters.</p>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredProfiles.map((profile) => (
-              <ProfileCard key={profile.id} profile={profile} />
-            ))}
-          </div>
-        )}
-      </main>
+      </div>
     </div>
   );
 }
