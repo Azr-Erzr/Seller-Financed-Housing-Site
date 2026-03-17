@@ -1,13 +1,12 @@
 // src/data/partners.js
-// Seed data for the HomeMatch Partner directory.
-// Replace with real partners as they sign up.
 
 export const PARTNER_CATEGORIES = [
-  { value: "lawyer",       label: "Real Estate Lawyers",      icon: "⚖️",  desc: "Essential for closing any seller-financed deal" },
-  { value: "stager",       label: "Home Stagers",             icon: "🛋️",  desc: "Traditional and AI staging services" },
-  { value: "photographer", label: "Photographers & Video",    icon: "📸",  desc: "Photos, drone footage, virtual tours" },
-  { value: "inspector",    label: "Home Inspectors",          icon: "🔍",  desc: "Pre-sale and buyer due diligence inspections" },
-  { value: "broker",       label: "Mortgage Brokers",         icon: "🏦",  desc: "For buyers exploring all financing options" },
+  { value: "lawyer",       label: "Real Estate Lawyers",       icon: "⚖️",  desc: "Essential for closing any seller-financed deal" },
+  { value: "stager",       label: "Home Stagers",              icon: "🛋️",  desc: "Traditional and AI staging services" },
+  { value: "photographer", label: "Photographers & Video",     icon: "📸",  desc: "Photos, drone footage, virtual tours" },
+  { value: "inspector",    label: "Home Inspectors",           icon: "🔍",  desc: "Pre-sale and buyer due diligence inspections" },
+  { value: "broker",       label: "Mortgage Brokers",          icon: "🏦",  desc: "For buyers exploring all financing options" },
+  { value: "mover",        label: "Licensed & Insured Movers", icon: "🚛",  desc: "CVOR-registered movers with verified cargo insurance" },
 ];
 
 export const PARTNERS = [
@@ -179,6 +178,47 @@ export const PARTNERS = [
     badge: "HomeMatch Partner",
     featured: true,
     avatar: "",
+  },
+
+  // ── Movers ────────────────────────────────────────────────────────
+  {
+    id: "mov1",
+    category: "mover",
+    name: "Durham Pro Movers",
+    contact: "Kyle Baxter",
+    city: "Whitby",
+    region: "Durham Region",
+    phone: "(905) 555-0801",
+    email: "kyle@durhampromovers.ca",
+    website: "https://durhampromovers.ca",
+    bio: "CVOR-registered moving company serving the Durham Region since 2012. Full cargo insurance on every move. Local residential and commercial moves, packing services available.",
+    services: ["Local Residential Moves", "Commercial Moves", "Packing Services", "Piano & Specialty Items", "Storage"],
+    badge: "HomeMatch Partner",
+    featured: true,
+    avatar: "",
+    // Verified credentials
+    cvor_registered: true,
+    cargo_insured: true,
+    wsib_covered: true,
+  },
+  {
+    id: "mov2",
+    category: "mover",
+    name: "Ajax Express Moving",
+    contact: "Tony Ferreira",
+    city: "Ajax",
+    region: "Durham Region",
+    phone: "(905) 555-0802",
+    email: "tony@ajaxexpressmoving.ca",
+    website: "https://ajaxexpressmoving.ca",
+    bio: "Family-run moving company with a spotless record. CVOR-registered, fully insured, WSIB-covered. Flat-rate pricing for local moves — no surprise charges.",
+    services: ["Flat-Rate Local Moves", "Apartment Moves", "Office Relocation", "Same-Day Availability"],
+    badge: null,
+    featured: false,
+    avatar: "",
+    cvor_registered: true,
+    cargo_insured: true,
+    wsib_covered: true,
   },
 ];
 
