@@ -1,20 +1,13 @@
 // src/pages/business/BusinessProfileDetail.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getCommProfileById, getAllCommListings, toggleSavedProfile, isProfileSaved } from "../../lib/commercial-storage";
+import { getCommProfileById, toggleSavedProfile, isProfileSaved } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
-import { MapPin, DollarSign, Ruler, Target, Clock, Bookmark, BookmarkCheck, Send, ArrowLeft, ShieldCheck } from "lucide-react";
+import ContactModal from "../../components/ContactModal";
+import { MapPin, Ruler, Bookmark, BookmarkCheck, Send, ArrowLeft } from "lucide-react";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
-
-const getRiskStyle = (risk) => {
-  if (risk === "Low")      return "bg-green-100 text-green-700";
-  if (risk === "Moderate") return "bg-yellow-100 text-yellow-700";
-  return "bg-red-100 text-red-700";
-};
-
-const getInitials = (name) =>
-  name?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
+const getInitials = (name) => name?.split(" ").slice(0,2).map((w) => w[0]).join("").toUpperCase() || "?";
 
 function Stat({ label, value }) {
   return (
@@ -25,12 +18,20 @@ function Stat({ label, value }) {
   );
 }
 
+const getRisk = (risk) => {
+  if (risk === "Low")      return "bg-green-100 text-green-700";
+  if (risk === "Moderate") return "bg-yellow-100 text-yellow-700";
+  return "bg-red-100 text-red-700";
+};
+
 export default function BusinessProfileDetail() {
   const { id } = useParams();
   const { toast } = useToast();
-  const [profile, setProfile]   = useState(null);
-  const [loading, setLoading]   = useState(true);
-  const [saved, setSaved]       = useState(false);
+
+  const [profile,     setProfile]     = useState(null);
+  const [loading,     setLoading]     = useState(true);
+  const [saved,       setSaved]       = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     getCommProfileById(id).then((p) => {
@@ -43,20 +44,13 @@ export default function BusinessProfileDetail() {
   const handleSave = () => {
     const nowSaved = toggleSavedProfile(`comm_${id}`);
     setSaved(nowSaved);
-    toast[nowSaved ? "success" : "info"](
-      nowSaved ? "Buyer profile saved." : "Profile removed from bookmarks."
-    );
-  };
-
-  const handleInvite = () => {
-    toast.info("Messaging feature coming soon. Create a profile to be notified when it launches.");
+    toast[nowSaved ? "success" : "info"](nowSaved ? "Buyer profile saved." : "Profile removed from saved.");
   };
 
   if (loading) return <div className="p-12 text-center text-gray-400">Loading...</div>;
   if (!profile) return (
     <div className="p-12 text-center text-gray-500">
-      Profile not found.{" "}
-      <Link to="/business/profiles" className="text-emerald-600 underline">Back to buyers</Link>
+      Profile not found. <Link to="/business/profiles" className="text-emerald-600 underline">Back to buyers</Link>
     </div>
   );
 
@@ -83,13 +77,13 @@ export default function BusinessProfileDetail() {
                 <p className="text-gray-500 text-sm">{profile.contact}</p>
               )}
               <p className="text-gray-400 text-sm flex items-center justify-center sm:justify-start gap-1 mt-0.5">
-                <MapPin className="w-3.5 h-3.5" />{profile.city}
+                <MapPin className="w-3.5 h-3.5" /> {profile.city}
               </p>
               <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
                 {profile.badges?.map((b) => (
                   <span key={b} className="text-xs bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full font-medium">{b}</span>
                 ))}
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getRiskStyle(profile.riskTolerance)}`}>
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getRisk(profile.riskTolerance)}`}>
                   {profile.riskTolerance} risk
                 </span>
                 {profile.dealPreference && (
@@ -112,10 +106,14 @@ export default function BusinessProfileDetail() {
             <Stat label="Max Budget"         value={money(profile.budget)} />
             <Stat label="Available Down"     value={money(profile.downPayment)} />
             <Stat label="Interest Tolerance" value={profile.interestRange} />
-            <Stat label="Monthly Income"     value={money(profile.monthlyIncome)} />
-            <Stat label="Monthly Debt"       value={money(profile.monthlyDebt)} />
+            {profile.show_income && profile.monthlyIncome && (
+              <Stat label="Monthly Income"   value={money(profile.monthlyIncome)} />
+            )}
+            {profile.monthlyDebt > 0 && (
+              <Stat label="Monthly Debt"     value={money(profile.monthlyDebt)} />
+            )}
             {profile.timelineMonths > 0 && (
-              <Stat label="Timeline" value={`${profile.timelineMonths} months`} />
+              <Stat label="Timeline"         value={`${profile.timelineMonths} months`} />
             )}
           </div>
         </div>
@@ -180,25 +178,32 @@ export default function BusinessProfileDetail() {
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-wrap gap-3">
-          <button onClick={handleInvite}
-            className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition">
+        <div className="flex flex-wrap gap-3 pb-4">
+          <button onClick={() => setContactOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors">
             <Send className="w-4 h-4" /> Invite to Deal
           </button>
           <button onClick={handleSave}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition ${
-              saved
-                ? "bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-colors ${
+              saved ? "bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}>
             {saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
             {saved ? "Saved" : "Save Profile"}
           </button>
-          <Link to="/business/profiles" className="px-5 py-2.5 text-gray-500 hover:text-gray-700 font-medium transition">
+          <Link to="/business/profiles" className="px-5 py-2.5 text-gray-500 hover:text-gray-700 font-medium transition-colors">
             ← Back
           </Link>
         </div>
 
+        <ContactModal
+          open={contactOpen}
+          onClose={() => setContactOpen(false)}
+          recipientName={profile.name}
+          recipientType="buyer"
+          refType="comm_profile"
+          refId={profile.id}
+          refTitle={`Buyer Profile — ${profile.name}`}
+        />
       </div>
     </div>
   );
