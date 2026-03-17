@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -15,11 +16,11 @@ export default function App() {
         <Navbar />
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/listings" element={<Listings />} />
-            <Route path="/profiles" element={<Profiles />} />
-            <Route path="/listing/:id" element={<ListingDetail />} />
-            <Route path="/profile/:id" element={<ProfileDetail />} />
+            <Route path="/"              element={<Home />} />
+            <Route path="/listings"      element={<Listings />} />
+            <Route path="/profiles"      element={<Profiles />} />
+            <Route path="/listings/:id"  element={<ListingDetail />} />
+            <Route path="/profiles/:id"  element={<ProfileDetail />} />
           </Routes>
         </main>
         <Footer />
