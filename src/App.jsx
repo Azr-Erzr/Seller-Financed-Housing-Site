@@ -21,6 +21,8 @@ import Partners from "./pages/Partners";
 import PartnerDetail from "./pages/PartnerDetail";
 import PartnerApply from "./pages/PartnerApply";
 import MapSearch from "./pages/MapSearch";
+import Saved from "./pages/Saved";
+import Account from "./pages/Account";
 import NotFound from "./pages/NotFound";
 
 // ── Business ──────────────────────────────────────────────────────────
@@ -32,6 +34,7 @@ import BusinessProfileDetail from "./pages/business/BusinessProfileDetail";
 import BusinessListHome from "./pages/business/BusinessListHome";
 import BusinessCreateProfile from "./pages/business/BusinessCreateProfile";
 import BusinessMapSearch from "./pages/business/BusinessMapSearch";
+import BusinessSaved from "./pages/business/BusinessSaved";
 
 export default function App() {
   return (
@@ -56,6 +59,8 @@ export default function App() {
                 <Route path="/partners/:id"   element={<PartnerDetail />} />
                 <Route path="/partner-apply"  element={<PartnerApply />} />
                 <Route path="/map"            element={<MapSearch />} />
+                <Route path="/saved"          element={<Saved />} />
+                <Route path="/account"        element={<Account />} />
 
                 {/* ── Business ── */}
                 <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome /></ModeRedirect>} />
@@ -66,6 +71,7 @@ export default function App() {
                 <Route path="/business/list-property"    element={<BusinessListHome />} />
                 <Route path="/business/create-profile"   element={<BusinessCreateProfile />} />
                 <Route path="/business/map"              element={<BusinessMapSearch />} />
+                <Route path="/business/saved"            element={<BusinessSaved />} />
 
                 {/* ── Catch-all ── */}
                 <Route path="*" element={<NotFound />} />
