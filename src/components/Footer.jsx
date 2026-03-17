@@ -1,35 +1,55 @@
+// src/components/Footer.jsx
 import React from "react";
+import { Link } from "react-router-dom";
+import { Home } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="mt-12 border-t bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-8 grid md:grid-cols-4 gap-6 text-sm">
-        <div>
-          <div className="font-semibold mb-2">Marketplace</div>
-          <ul className="space-y-1 text-neutral-600">
-            <li><a className="hover:underline" href="#">Homes</a></li>
-            <li><a className="hover:underline" href="#">Buyers</a></li>
-            <li><a className="hover:underline" href="#">Pricing</a></li>
-          </ul>
+    <footer className="bg-gray-50 border-t border-gray-200 mt-20">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+          {/* Brand column */}
+          <div className="md:col-span-2">
+            <Link to="/" className="flex items-center gap-2.5 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+                <Home className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-gray-900">HomeMatch</span>
+            </Link>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
+              Connecting property sellers and buyers for seller-financed and
+              rent-to-own housing deals. Find your perfect match without
+              traditional bank financing.
+            </p>
+            <p className="text-xs text-gray-400 mt-4">
+              © {new Date().getFullYear()} HomeMatch. All rights reserved.
+            </p>
+          </div>
+
+          {/* For Buyers */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-4">For Buyers</h4>
+            <ul className="space-y-2.5 text-sm text-gray-500">
+              <li><Link to="/listings" className="hover:text-blue-600 transition-colors">Browse Homes</Link></li>
+              <li><a href="#how-it-works" className="hover:text-blue-600 transition-colors">How It Works</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Financing Options</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Resources</a></li>
+            </ul>
+          </div>
+
+          {/* For Sellers */}
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-4">For Sellers</h4>
+            <ul className="space-y-2.5 text-sm text-gray-500">
+              <li><a href="#" className="hover:text-blue-600 transition-colors">List Your Property</a></li>
+              <li><Link to="/profiles" className="hover:text-blue-600 transition-colors">Find Buyers</Link></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Safety &amp; NDAs</a></li>
+              <li><a href="#" className="hover:text-blue-600 transition-colors">Support</a></li>
+            </ul>
+          </div>
+
         </div>
-        <div>
-          <div className="font-semibold mb-2">Support</div>
-          <ul className="space-y-1 text-neutral-600">
-            <li><a className="hover:underline" href="#">Safety & NDAs</a></li>
-            <li><a className="hover:underline" href="#">Verification</a></li>
-            <li><a className="hover:underline" href="#">Contact</a></li>
-          </ul>
-        </div>
-        <div className="md:col-span-2">
-          <div className="font-semibold mb-2">About</div>
-          <p className="text-neutral-600">
-            HomeMatch connects property owners with buyers through transparent seller-finance and rent-to-own options.
-            We help both sides align on goals, risk tolerance, and terms—then facilitate a safe, simple negotiation.
-          </p>
-        </div>
-      </div>
-      <div className="border-t text-center text-xs text-neutral-500 py-3">
-        © {new Date().getFullYear()} HomeMatch
       </div>
     </footer>
   );
