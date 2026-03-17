@@ -14,7 +14,7 @@
 import { LISTINGS as SEED_LISTINGS, PROFILES as SEED_PROFILES } from "../data/seed";
 // import { supabase } from "./supabase"; // uncomment when USE_SUPABASE = true
 
-const USE_SUPABASE = false; // ← flip to true when Supabase is connected
+const USE_SUPABASE = true; // ← flip to true when Supabase is connected
 
 const KEYS = {
   listings:       "hm_listings",
