@@ -1,9 +1,10 @@
 // src/pages/CreateProfile.jsx
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { saveProfile } from "../lib/storage";
+import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
-import { Users, CheckCircle } from "lucide-react";
+import { Users, CheckCircle, Camera, X } from "lucide-react";
 
 const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white text-gray-900 placeholder-gray-400";
 
@@ -14,23 +15,15 @@ const DEAL_OPTIONS = [
   { value: "private-sale",   label: "Private Sale",   desc: "Standard sale, no bank" },
 ];
 
-// ── Currency input ────────────────────────────────────────────────────
 function CurrencyInput({ label, hint, error, value, onChange, placeholder }) {
-  const format = (n) => {
-    const raw = String(n).replace(/[^0-9]/g, "");
-    if (!raw) return "";
-    return Number(raw).toLocaleString("en-CA");
-  };
-  const handleChange = (e) => {
-    const raw = e.target.value.replace(/[^0-9]/g, "");
-    onChange(raw ? Number(raw) : "");
-  };
+  const format = (n) => { const r = String(n).replace(/[^0-9]/g,""); return r ? Number(r).toLocaleString("en-CA") : ""; };
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
       <div className="relative">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm select-none">$</span>
-        <input type="text" inputMode="numeric" value={format(value)} onChange={handleChange}
+        <input type="text" inputMode="numeric" value={format(value)}
+          onChange={(e) => { const r = e.target.value.replace(/[^0-9]/g,""); onChange(r ? Number(r) : ""); }}
           placeholder={placeholder} className={`${inputCls} pl-7`} />
       </div>
       {hint  && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
@@ -50,27 +43,85 @@ function Field({ label, hint, error, children }) {
   );
 }
 
+// ── Avatar uploader ───────────────────────────────────────────────────
+function AvatarUploader({ preview, onFile, onClear, initials }) {
+  const inputRef = useRef();
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <div className="relative group">
+        {preview ? (
+          <div className="relative">
+            <img src={preview} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md" />
+            <button type="button" onClick={onClear}
+              className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow">
+              <X className="w-3 h-3 text-white" />
+            </button>
+          </div>
+        ) : (
+          <div
+            onClick={() => inputRef.current?.click()}
+            className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-3xl font-bold cursor-pointer hover:opacity-90 transition-opacity relative border-4 border-white shadow-md"
+          >
+            {initials || "?"}
+            <div className="absolute inset-0 rounded-full bg-black/30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+              <Camera className="w-6 h-6 text-white" />
+            </div>
+          </div>
+        )}
+        {!preview && (
+          <button type="button" onClick={() => inputRef.current?.click()}
+            className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center shadow">
+            <Camera className="w-3.5 h-3.5 text-white" />
+          </button>
+        )}
+        <input ref={inputRef} type="file" accept="image/*" className="hidden"
+          onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
+      </div>
+      <p className="text-xs text-gray-400 text-center">
+        {preview ? "Click × to remove" : "Click to upload a profile photo"}
+        <br />Optional — helps sellers put a face to your name
+      </p>
+    </div>
+  );
+}
+
+async function uploadAvatar(file) {
+  if (!supabase || !file) return null;
+  const ext  = file.name.split(".").pop().toLowerCase();
+  const path = `avatars/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from("listing-images") // reuse same bucket
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+  if (error || !data) return null;
+  const { data: urlData } = supabase.storage.from("listing-images").getPublicUrl(data.path);
+  return urlData.publicUrl;
+}
+
 export default function CreateProfile() {
   const { toast } = useToast();
   const [submitted, setSubmitted]   = useState(false);
   const [newId, setNewId]           = useState(null);
   const [errors, setErrors]         = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
 
   const [form, setForm] = useState({
     name: "", city: "", bio: "",
     budget: "", downPayment: "", paymentBudget: "",
-    monthlyIncome: "", monthlyDebt: "",
-    interestMax: "",
-    dealPreferences: [],
-    riskTolerance: "Moderate",
+    monthlyIncome: "", monthlyDebt: "", interestMax: "",
+    dealPreferences: [], riskTolerance: "Moderate",
   });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
-
   const toggleDeal = (val) => {
     const curr = form.dealPreferences;
     set("dealPreferences", curr.includes(val) ? curr.filter((v) => v !== val) : [...curr, val]);
+  };
+
+  const handleAvatarFile = (file) => {
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   const validate = () => {
@@ -92,12 +143,12 @@ export default function CreateProfile() {
     if (Object.keys(errs).length) {
       setErrors(errs);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      toast.error("Please fix the errors above before submitting.");
+      toast.error("Please fix the errors above.");
       return;
     }
-
     setSubmitting(true);
     try {
+      const avatarUrl = await uploadAvatar(avatarFile);
       const primaryPref = form.dealPreferences[0] || "seller-finance";
       const dealLabel = DEAL_OPTIONS.find((d) => d.value === primaryPref)?.label || "Seller-Finance";
 
@@ -112,7 +163,8 @@ export default function CreateProfile() {
         interestRange:  `Up to ${form.interestMax}%`,
         dealPreference: dealLabel,
         badges:         ["New"],
-        avatar:         "",
+        avatar:         avatarUrl || "",
+        avatar_url:     avatarUrl || "",
       };
 
       const saved = await saveProfile(profile);
@@ -128,6 +180,8 @@ export default function CreateProfile() {
     }
   };
 
+  const initials = form.name.trim().split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
+
   if (submitted) {
     return (
       <div className="max-w-lg mx-auto py-20 px-6 text-center">
@@ -135,16 +189,10 @@ export default function CreateProfile() {
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Profile Created!</h1>
-        <p className="text-gray-500 mb-8">
-          Your buyer profile is live on HomeMatch. Sellers whose listings match your terms can find you.
-        </p>
+        <p className="text-gray-500 mb-8">Your buyer profile is live on HomeMatch. Sellers whose listings match your terms can find you.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link to={`/profiles/${newId}`} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
-            View My Profile
-          </Link>
-          <Link to="/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
-            Browse Listings
-          </Link>
+          <Link to={`/profiles/${newId}`} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">View My Profile</Link>
+          <Link to="/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">Browse Listings</Link>
         </div>
       </div>
     );
@@ -153,7 +201,6 @@ export default function CreateProfile() {
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-3xl mx-auto">
-
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
@@ -161,16 +208,22 @@ export default function CreateProfile() {
             </div>
             <h1 className="text-2xl font-bold text-gray-900">Create Buyer Profile</h1>
           </div>
-          <p className="text-gray-500 text-sm">
-            Tell sellers who you are and what you're looking for. The more detail you provide, the better your matches will be.
-          </p>
+          <p className="text-gray-500 text-sm">Tell sellers who you are and what you're looking for. The more detail you provide, the better your matches will be.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* ── About You ── */}
+          {/* About You */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
             <h2 className="font-semibold text-gray-900 text-base">About You</h2>
+
+            {/* Avatar uploader */}
+            <AvatarUploader
+              preview={avatarPreview}
+              onFile={handleAvatarFile}
+              onClear={() => { setAvatarFile(null); setAvatarPreview(null); }}
+              initials={initials}
+            />
 
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="Your Name" error={errors.name} hint="First name and last initial is fine for privacy.">
@@ -190,12 +243,10 @@ export default function CreateProfile() {
             </Field>
           </div>
 
-          {/* ── Financial Profile ── */}
+          {/* Financial Profile */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
             <h2 className="font-semibold text-gray-900 text-base">Financial Profile</h2>
-            <p className="text-sm text-gray-500">
-              Used for matching — be as accurate as you can. This helps surface listings where the numbers actually work for you.
-            </p>
+            <p className="text-sm text-gray-500">Used for matching — be as accurate as you can.</p>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <CurrencyInput label="Max Purchase Budget" value={form.budget}
@@ -203,12 +254,11 @@ export default function CreateProfile() {
               <CurrencyInput label="Available Down Payment" value={form.downPayment}
                 onChange={(v) => set("downPayment", v)} placeholder="60,000" error={errors.downPayment} />
             </div>
-
             <div className="grid sm:grid-cols-2 gap-4">
               <CurrencyInput label="Max Monthly Payment" value={form.paymentBudget}
                 onChange={(v) => set("paymentBudget", v)} placeholder="3,400"
                 hint="How much can you comfortably pay per month?" error={errors.paymentBudget} />
-              <Field label="Max Interest Rate You'd Accept (%)" error={errors.interestMax} hint="e.g. 8.5 for 8.5%">
+              <Field label="Max Interest Rate (%)" error={errors.interestMax} hint="e.g. 8.5 for 8.5%">
                 <div className="relative">
                   <input type="text" inputMode="decimal" value={form.interestMax}
                     onChange={(e) => set("interestMax", e.target.value)}
@@ -217,18 +267,17 @@ export default function CreateProfile() {
                 </div>
               </Field>
             </div>
-
             <div className="grid sm:grid-cols-2 gap-4">
               <CurrencyInput label="Gross Monthly Income" value={form.monthlyIncome}
                 onChange={(v) => set("monthlyIncome", v)} placeholder="9,200"
                 hint="Before taxes. Used for DTI calculation." error={errors.monthlyIncome} />
               <CurrencyInput label="Existing Monthly Debt" value={form.monthlyDebt}
                 onChange={(v) => set("monthlyDebt", v)} placeholder="0"
-                hint="Car payments, credit cards, etc. Enter 0 if none." />
+                hint="Car payments, credit cards, etc." />
             </div>
           </div>
 
-          {/* ── Deal Preferences ── */}
+          {/* Deal Preferences */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
             <h2 className="font-semibold text-gray-900 text-base">Deal Preferences</h2>
 
@@ -260,9 +309,9 @@ export default function CreateProfile() {
               <label className="block text-sm font-medium text-gray-700 mb-3">Risk Tolerance</label>
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { val: "Low",      color: "border-green-400 bg-green-50",  text: "text-green-700",  desc: "Clean title, standard terms only" },
+                  { val: "Low",      color: "border-green-400 bg-green-50",   text: "text-green-700",  desc: "Clean title, standard terms only" },
                   { val: "Moderate", color: "border-yellow-400 bg-yellow-50", text: "text-yellow-700", desc: "Flexible on some conditions" },
-                  { val: "High",     color: "border-red-400 bg-red-50",      text: "text-red-700",    desc: "Open to complex arrangements" },
+                  { val: "High",     color: "border-red-400 bg-red-50",       text: "text-red-700",    desc: "Open to complex arrangements" },
                 ].map(({ val, color, text, desc }) => {
                   const active = form.riskTolerance === val;
                   return (
@@ -280,7 +329,6 @@ export default function CreateProfile() {
             </div>
           </div>
 
-          {/* Privacy note */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
             <strong>Privacy Note:</strong> Your financial details are only used for matching purposes.
             Full financial figures are visible to sellers only when you choose to engage with a listing.
@@ -292,9 +340,7 @@ export default function CreateProfile() {
               className="flex-1 sm:flex-none px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
               {submitting ? "Creating..." : "Create My Profile"}
             </button>
-            <Link to="/" className="px-6 py-3 border border-gray-300 text-gray-600 font-medium rounded-lg hover:bg-gray-50 transition-colors">
-              Cancel
-            </Link>
+            <Link to="/" className="px-6 py-3 border border-gray-300 text-gray-600 font-medium rounded-lg hover:bg-gray-50 transition-colors">Cancel</Link>
           </div>
         </form>
       </div>
