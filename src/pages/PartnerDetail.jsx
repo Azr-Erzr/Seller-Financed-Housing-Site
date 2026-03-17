@@ -21,6 +21,7 @@ const categoryColors = {
   broker:       "bg-yellow-100 text-yellow-700",
   mover:        "bg-teal-100 text-teal-700",
 };
+
 const getInitials = (name) =>
   name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 
@@ -30,31 +31,43 @@ export default function PartnerDetail() {
   const isBusiness = mode === MODES.business;
   const partner = getPartnerById(id);
 
-  const primaryBtn = isBusiness ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
-  const linkColor  = isBusiness ? "text-emerald-600" : "text-blue-600";
-  const contactHover = isBusiness ? "hover:bg-emerald-50 hover:border-emerald-200 group-hover:text-emerald-600" : "hover:bg-blue-50 hover:border-blue-200 group-hover:text-blue-600";
-  const iconBg     = isBusiness ? "bg-emerald-100" : "bg-blue-100";
-  const iconColor  = isBusiness ? "text-emerald-600" : "text-blue-600";
+  // All mode-specific styles derived here — no inline conditionals scattered through JSX
+  const primaryBtnCls  = isBusiness
+    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+    : "bg-blue-600 hover:bg-blue-700 text-white";
+  const linkColorCls   = isBusiness ? "text-emerald-600 hover:text-emerald-700" : "text-blue-600 hover:text-blue-700";
+  const iconBgCls      = isBusiness ? "bg-emerald-100" : "bg-blue-100";
+  const iconTextCls    = isBusiness ? "text-emerald-600" : "text-blue-600";
+  const contactHoverCls = isBusiness
+    ? "hover:bg-emerald-50 hover:border-emerald-200"
+    : "hover:bg-blue-50 hover:border-blue-200";
+  const contactValueHoverCls = isBusiness ? "group-hover:text-emerald-600" : "group-hover:text-blue-600";
+  const heroBg = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-600 to-blue-800";
 
-  if (!partner) return (
-    <div className="p-12 text-center text-gray-500">
-      Partner not found. <Link to="/partners" className={`${linkColor} underline`}>Back to directory</Link>
-    </div>
-  );
+  if (!partner) {
+    return (
+      <div className="p-12 text-center text-gray-500">
+        Partner not found.{" "}
+        <Link to="/partners" className={linkColorCls}>Back to directory</Link>
+      </div>
+    );
+  }
 
   const categoryLabel = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.label || "";
   const categoryIcon  = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.icon || "";
-  const related = getFeaturedPartners().filter((p) => p.category === partner.category && p.id !== partner.id).slice(0, 2);
+  const related = getFeaturedPartners()
+    .filter((p) => p.category === partner.category && p.id !== partner.id)
+    .slice(0, 2);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
 
-        <Link to="/partners" className={`inline-flex items-center gap-1.5 text-sm text-gray-500 hover:${isBusiness ? "text-emerald-600" : "text-blue-600"} transition-colors`}>
+        <Link to="/partners" className={`inline-flex items-center gap-1.5 text-sm transition-colors text-gray-500 ${linkColorCls}`}>
           <ArrowLeft className="w-4 h-4" /> Back to Directory
         </Link>
 
-        {/* Profile */}
+        {/* Profile card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${avatarColors[partner.category]} flex items-center justify-center text-white font-bold text-3xl shrink-0`}>
@@ -80,40 +93,62 @@ export default function PartnerDetail() {
               </div>
             </div>
           </div>
-          {partner.bio && <p className="mt-6 pt-6 border-t border-gray-100 text-gray-600 leading-relaxed">{partner.bio}</p>}
+          {partner.bio && (
+            <p className="mt-6 pt-6 border-t border-gray-100 text-gray-600 leading-relaxed">
+              {partner.bio}
+            </p>
+          )}
         </div>
 
-        {/* Services + Contact */}
+        {/* Two-col layout */}
         <div className="grid md:grid-cols-3 gap-6">
+
+          {/* Services */}
           <div className="md:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="font-semibold text-gray-900 text-lg mb-4">Services Offered</h2>
             <div className="flex flex-wrap gap-2">
               {partner.services.map((s) => (
-                <span key={s} className="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-lg font-medium">{s}</span>
+                <span key={s} className="bg-gray-100 text-gray-700 text-sm px-3 py-1.5 rounded-lg font-medium">
+                  {s}
+                </span>
               ))}
             </div>
           </div>
 
+          {/* Contact */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-3">
             <h2 className="font-semibold text-gray-900 text-lg">Contact</h2>
+
             {[
               { href: `tel:${partner.phone}`, icon: <Phone className="w-4 h-4" />, label: "Phone", value: partner.phone },
               { href: `mailto:${partner.email}`, icon: <Mail className="w-4 h-4" />, label: "Email", value: partner.email },
-              ...(partner.website ? [{ href: partner.website, icon: <Globe className="w-4 h-4" />, label: "Website", value: "Visit website ↗", external: true }] : []),
+              ...(partner.website
+                ? [{ href: partner.website, icon: <Globe className="w-4 h-4" />, label: "Website", value: "Visit website ↗", external: true }]
+                : []
+              ),
             ].map(({ href, icon, label, value, external }) => (
-              <a key={label} href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className={`flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-transparent transition-all group ${contactHover}`}>
-                <div className={`w-8 h-8 ${iconBg} rounded-lg flex items-center justify-center shrink-0`}>
-                  <span className={iconColor}>{icon}</span>
+              <a
+                key={label}
+                href={href}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className={`flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-transparent transition-all group ${contactHoverCls}`}
+              >
+                <div className={`w-8 h-8 ${iconBgCls} rounded-lg flex items-center justify-center shrink-0`}>
+                  <span className={iconTextCls}>{icon}</span>
                 </div>
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs text-gray-400">{label}</p>
-                  <p className="text-sm font-medium text-gray-800 truncate">{value}</p>
+                  <p className={`text-sm font-medium text-gray-800 truncate transition-colors ${contactValueHoverCls}`}>
+                    {value}
+                  </p>
                 </div>
               </a>
             ))}
-            <a href={`mailto:${partner.email}?subject=LandMatch Inquiry`}
-              className={`w-full flex items-center justify-center gap-2 py-3 font-semibold text-sm rounded-xl transition-colors mt-2 ${primaryBtn}`}>
+
+            <a
+              href={`mailto:${partner.email}?subject=LandMatch Inquiry`}
+              className={`w-full flex items-center justify-center gap-2 py-3 font-semibold text-sm rounded-xl transition-colors mt-2 ${primaryBtnCls}`}
+            >
               Send a Message
             </a>
           </div>
@@ -121,18 +156,25 @@ export default function PartnerDetail() {
 
         {/* Disclaimer */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
-          <strong>Note:</strong> LandMatch lists these professionals as a convenience. We do not endorse or guarantee any professional's services.
-          Always verify credentials and conduct your own due diligence. Partner status indicates a verified, paid listing placement only.
+          <strong>Note:</strong> LandMatch lists these professionals as a convenience for users.
+          We do not endorse or guarantee any professional's services. Always verify credentials
+          and conduct your own due diligence before engaging any professional.
+          Partner status indicates a verified, paid listing placement only.
         </div>
 
         {/* Related */}
         {related.length > 0 && (
           <div>
-            <h2 className="font-semibold text-gray-900 mb-4">Other {categoryLabel} in the Area</h2>
+            <h2 className="font-semibold text-gray-900 mb-4">
+              Other {categoryLabel} in the Area
+            </h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {related.map((p) => (
-                <Link key={p.id} to={`/partners/${p.id}`}
-                  className="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <Link
+                  key={p.id}
+                  to={`/partners/${p.id}`}
+                  className="flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                >
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarColors[p.category]} flex items-center justify-center text-white font-bold shrink-0`}>
                     {getInitials(p.name)}
                   </div>
@@ -148,7 +190,9 @@ export default function PartnerDetail() {
         )}
 
         <div className="text-center pb-4">
-          <Link to="/partners" className={`text-sm hover:underline ${linkColor}`}>← View all professionals</Link>
+          <Link to="/partners" className={`text-sm ${linkColorCls}`}>
+            ← View all professionals
+          </Link>
         </div>
       </div>
     </div>
