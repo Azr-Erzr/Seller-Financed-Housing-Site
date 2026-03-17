@@ -5,6 +5,7 @@ import { SiteProvider } from "./context/SiteContext";
 import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ModeRedirect from "./components/ModeRedirect";
 
 // ── Homes ─────────────────────────────────────────────────────────────
 import Home from "./pages/Home";
@@ -40,8 +41,14 @@ export default function App() {
             <Navbar />
             <main className="flex-grow">
               <Routes>
+
                 {/* ── Homes ── */}
-                <Route path="/"               element={<Home />} />
+                {/* ModeRedirect: if stored mode is "business", sends user to /business */}
+                <Route path="/" element={
+                  <ModeRedirect targetMode="homes">
+                    <Home />
+                  </ModeRedirect>
+                } />
                 <Route path="/listings"       element={<Listings />} />
                 <Route path="/profiles"       element={<Profiles />} />
                 <Route path="/listings/:id"   element={<ListingDetail />} />
@@ -56,16 +63,22 @@ export default function App() {
                 <Route path="/map"            element={<MapSearch />} />
 
                 {/* ── Business ── */}
-                <Route path="/business"                       element={<BusinessHome />} />
-                <Route path="/business/listings"              element={<BusinessListings />} />
-                <Route path="/business/profiles"              element={<BusinessProfiles />} />
-                <Route path="/business/listings/:id"          element={<BusinessListingDetail />} />
-                <Route path="/business/profiles/:id"          element={<BusinessProfileDetail />} />
-                <Route path="/business/list-property"         element={<BusinessListHome />} />
-                <Route path="/business/create-profile"        element={<BusinessCreateProfile />} />
+                {/* ModeRedirect: if stored mode is "homes", sends user back to / */}
+                <Route path="/business" element={
+                  <ModeRedirect targetMode="business">
+                    <BusinessHome />
+                  </ModeRedirect>
+                } />
+                <Route path="/business/listings"         element={<BusinessListings />} />
+                <Route path="/business/profiles"         element={<BusinessProfiles />} />
+                <Route path="/business/listings/:id"     element={<BusinessListingDetail />} />
+                <Route path="/business/profiles/:id"     element={<BusinessProfileDetail />} />
+                <Route path="/business/list-property"    element={<BusinessListHome />} />
+                <Route path="/business/create-profile"   element={<BusinessCreateProfile />} />
 
                 {/* ── Catch-all ── */}
                 <Route path="*" element={<NotFound />} />
+
               </Routes>
             </main>
             <Footer />
