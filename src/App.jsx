@@ -13,6 +13,8 @@ import ListHome from "./pages/ListHome";
 import CreateProfile from "./pages/CreateProfile";
 import About from "./pages/About";
 import HowItWorks from "./pages/HowItWorks";
+import Partners from "./pages/Partners";
+import PartnerDetail from "./pages/PartnerDetail";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -32,6 +34,8 @@ export default function App() {
               <Route path="/create-profile" element={<CreateProfile />} />
               <Route path="/about"          element={<About />} />
               <Route path="/how-it-works"   element={<HowItWorks />} />
+              <Route path="/partners"       element={<Partners />} />
+              <Route path="/partners/:id"   element={<PartnerDetail />} />
               <Route path="*"               element={<NotFound />} />
             </Routes>
           </main>
