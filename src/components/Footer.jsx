@@ -8,6 +8,11 @@ export default function Footer() {
   const { mode, MODES } = useSite();
   const isBusiness = mode === MODES.business;
 
+  // Links are emerald in business mode, blue in homes mode
+  const linkCls = isBusiness
+    ? "hover:text-emerald-600 transition-colors"
+    : "hover:text-blue-600 transition-colors";
+
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-20">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -16,7 +21,9 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <Link to={isBusiness ? "/business" : "/"} className="flex items-center gap-2.5 mb-4">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${isBusiness ? "from-emerald-600 to-emerald-800" : "from-blue-600 to-blue-800"}`}>
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${
+                isBusiness ? "from-emerald-600 to-emerald-800" : "from-blue-600 to-blue-800"
+              }`}>
                 {isBusiness
                   ? <Building2 className="w-5 h-5 text-white" />
                   : <Home className="w-5 h-5 text-white" />
@@ -24,7 +31,9 @@ export default function Footer() {
               </div>
               <div>
                 <span className="text-lg font-bold text-gray-900">LandMatch</span>
-                <span className={`ml-1.5 text-xs font-semibold px-2 py-0.5 rounded-full ${isBusiness ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"}`}>
+                <span className={`ml-1.5 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  isBusiness ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"
+                }`}>
                   {isBusiness ? "Business" : "Homes"}
                 </span>
               </div>
@@ -48,18 +57,19 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-gray-500">
               {isBusiness ? (
                 <>
-                  <li><Link to="/business/listings"      className="hover:text-emerald-600 transition-colors">Browse Properties</Link></li>
-                  <li><Link to="/business/create-profile" className="hover:text-emerald-600 transition-colors">Buyer Profile</Link></li>
-                  <li><Link to="/how-it-works"           className="hover:text-emerald-600 transition-colors">How It Works</Link></li>
-                  <li><Link to="/partners"               className="hover:text-emerald-600 transition-colors">Find a Lawyer</Link></li>
+                  <li><Link to="/business/listings"      className={linkCls}>Browse Properties</Link></li>
+                  <li><Link to="/business/map"           className={linkCls}>Map Search</Link></li>
+                  <li><Link to="/business/create-profile" className={linkCls}>Buyer Profile</Link></li>
+                  <li><Link to="/how-it-works"           className={linkCls}>How It Works</Link></li>
+                  <li><Link to="/partners"               className={linkCls}>Find a Lawyer</Link></li>
                 </>
               ) : (
                 <>
-                  <li><Link to="/listings"       className="hover:text-blue-600 transition-colors">Browse Homes</Link></li>
-                  <li><Link to="/map"            className="hover:text-blue-600 transition-colors">Map Search</Link></li>
-                  <li><Link to="/create-profile" className="hover:text-blue-600 transition-colors">Create Profile</Link></li>
-                  <li><Link to="/how-it-works"   className="hover:text-blue-600 transition-colors">How It Works</Link></li>
-                  <li><Link to="/partners"       className="hover:text-blue-600 transition-colors">Find a Lawyer</Link></li>
+                  <li><Link to="/listings"       className={linkCls}>Browse Homes</Link></li>
+                  <li><Link to="/map"            className={linkCls}>Map Search</Link></li>
+                  <li><Link to="/create-profile" className={linkCls}>Create Profile</Link></li>
+                  <li><Link to="/how-it-works"   className={linkCls}>How It Works</Link></li>
+                  <li><Link to="/partners"       className={linkCls}>Find a Lawyer</Link></li>
                 </>
               )}
             </ul>
@@ -73,39 +83,42 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-gray-500">
               {isBusiness ? (
                 <>
-                  <li><Link to="/business/list-property" className="hover:text-emerald-600 transition-colors">List a Property</Link></li>
-                  <li><Link to="/business/profiles"      className="hover:text-emerald-600 transition-colors">Find Buyers</Link></li>
-                  <li><Link to="/partners"               className="hover:text-emerald-600 transition-colors">Find a Lawyer</Link></li>
-                  <li><Link to="/partners"               className="hover:text-emerald-600 transition-colors">Find an Inspector</Link></li>
+                  <li><Link to="/business/list-property" className={linkCls}>List a Property</Link></li>
+                  <li><Link to="/business/profiles"      className={linkCls}>Find Buyers</Link></li>
+                  <li><Link to="/partners"               className={linkCls}>Find a Lawyer</Link></li>
+                  <li><Link to="/partners"               className={linkCls}>Find an Inspector</Link></li>
                 </>
               ) : (
                 <>
-                  <li><Link to="/list-home"                         className="hover:text-blue-600 transition-colors">List Your Home</Link></li>
-                  <li><Link to="/profiles"                          className="hover:text-blue-600 transition-colors">Find Buyers</Link></li>
-                  <li><Link to="/partners?category=stager"          className="hover:text-blue-600 transition-colors">Find a Stager</Link></li>
-                  <li><Link to="/partners?category=photographer"    className="hover:text-blue-600 transition-colors">Find a Photographer</Link></li>
-                  <li><Link to="/partners?category=inspector"       className="hover:text-blue-600 transition-colors">Find an Inspector</Link></li>
+                  <li><Link to="/list-home"                      className={linkCls}>List Your Home</Link></li>
+                  <li><Link to="/profiles"                       className={linkCls}>Find Buyers</Link></li>
+                  <li><Link to="/partners?category=stager"       className={linkCls}>Find a Stager</Link></li>
+                  <li><Link to="/partners?category=photographer" className={linkCls}>Find a Photographer</Link></li>
+                  <li><Link to="/partners?category=inspector"    className={linkCls}>Find an Inspector</Link></li>
                 </>
               )}
             </ul>
           </div>
 
-          {/* Column 5 */}
+          {/* Column 5 — Company */}
           <div>
             <h4 className="font-semibold text-gray-900 mb-4 text-sm">Company</h4>
             <ul className="space-y-2.5 text-sm text-gray-500">
-              <li><Link to="/about"         className="hover:text-blue-600 transition-colors">About Us</Link></li>
-              <li><Link to="/partners"      className="hover:text-blue-600 transition-colors">Partner Directory</Link></li>
-              <li><Link to="/partner-apply" className="hover:text-blue-600 transition-colors">Become a Partner</Link></li>
-              <li><Link to="/how-it-works"  className="hover:text-blue-600 transition-colors">FAQ</Link></li>
+              <li><Link to="/about"         className={linkCls}>About Us</Link></li>
+              <li><Link to="/partners"      className={linkCls}>Partner Directory</Link></li>
+              <li><Link to="/partner-apply" className={linkCls}>Become a Partner</Link></li>
+              <li><Link to="/how-it-works"  className={linkCls}>FAQ</Link></li>
+              <li><Link to="/account"       className={linkCls}>Sign In</Link></li>
               <li>
-                {/* Mode switcher */}
-                <Link to={isBusiness ? "/" : "/business"}
+                {/* Mode switcher — always blue for Homes, always emerald for Business */}
+                <Link
+                  to={isBusiness ? "/" : "/business"}
                   className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
                     isBusiness
                       ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
                       : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                  }`}>
+                  }`}
+                >
                   {isBusiness
                     ? <><Home className="w-3 h-3" /> Switch to LandMatch Homes</>
                     : <><Building2 className="w-3 h-3" /> Switch to LandMatch Business</>
