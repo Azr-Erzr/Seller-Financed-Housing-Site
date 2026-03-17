@@ -1,25 +1,29 @@
 // src/pages/MapSearch.jsx
 //
-// ROOT CAUSE OF TILE FRAGMENTATION:
-// Leaflet calls getBoundingClientRect() on the map container at init time to
-// compute tile grid offsets. When using flex/height:100%, that resolves to 0px
-// if the async `import("leaflet")` resolves before the browser finishes layout.
-// All subsequent invalidateSize() calls reposition markers but can't re-anchor
-// the tile grid, so tiles render scattered across the page.
-//
-// THE FIX (confirmed across react-leaflet GitHub issues and docs):
-// Use position:absolute on the map div inside a position:relative wrapper with
-// an EXPLICIT vh height. `vh` units resolve at CSS parse time — before any JS
-// runs — so Leaflet always measures a non-zero container.
+// KEY FIX: Static import instead of dynamic import("leaflet").
+// In a Vite/React SPA (browser-only), this is completely safe.
+// The dynamic import was causing a race condition where Leaflet's
+// tile grid origin was computed before the container had real dimensions,
+// producing the 256px staircase tile fragmentation pattern.
+// Static import means Leaflet is available synchronously, before any
+// component renders, so L.map() always measures a real container.
 
+import L from "leaflet";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllListings } from "../lib/storage";
 import { SlidersHorizontal, X, Bed, Bath, Square, LocateFixed, PenTool } from "lucide-react";
 
-// ── Constants ────────────────────────────────────────────────────────
+// Fix default icon paths broken by Vite's asset handling
+// Must be done once at module load time
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+  iconUrl:       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+  shadowUrl:     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+});
 
-const NAVBAR_HEIGHT = 73; // px — keep in sync with Navbar height
+const NAVBAR_HEIGHT = 73;
 
 const CITY_COORDS = {
   "Whitby":    { lat: 43.8975, lng: -78.9429 },
@@ -58,57 +62,48 @@ function haversine(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// ── Component ────────────────────────────────────────────────────────
-
 export default function MapSearch() {
-  // Refs
   const mapDivRef      = useRef(null);
   const mapRef         = useRef(null);
-  const leafletRef     = useRef(null);
   const markersRef     = useRef([]);
   const radiusLayerRef = useRef(null);
   const drawLayerRef   = useRef(null);
   const drawState      = useRef({ active: false, startLL: null, tempRect: null });
+  const topBarRef      = useRef(null);
 
-  // State
   const [listings,    setListings]    = useState([]);
   const [filtered,    setFiltered]    = useState([]);
   const [selected,    setSelected]    = useState(null);
   const [view,        setView]        = useState("split");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapReady,    setMapReady]    = useState(false);
-  const [topBarH,     setTopBarH]     = useState(40); // measured after render
+  const [topBarH,     setTopBarH]     = useState(40);
 
-  const topBarRef = useRef(null);
-
-  // Filters
   const [pricePreset, setPricePreset] = useState(0);
   const [dealTypes,   setDealTypes]   = useState([]);
   const [propTypes,   setPropTypes]   = useState([]);
   const [minBeds,     setMinBeds]     = useState(0);
+  const [userLat,     setUserLat]     = useState(null);
+  const [userLng,     setUserLng]     = useState(null);
+  const [radiusKm,    setRadiusKm]    = useState(10);
+  const [radiusActive,setRadiusActive]= useState(false);
+  const [drawMode,    setDrawMode]    = useState(false);
+  const [drawnBounds, setDrawnBounds] = useState(null);
+  const [locating,    setLocating]    = useState(false);
 
-  // Location tools
-  const [userLat,      setUserLat]      = useState(null);
-  const [userLng,      setUserLng]      = useState(null);
-  const [radiusKm,     setRadiusKm]     = useState(10);
-  const [radiusActive, setRadiusActive] = useState(false);
-  const [drawMode,     setDrawMode]     = useState(false);
-  const [drawnBounds,  setDrawnBounds]  = useState(null);
-  const [locating,     setLocating]     = useState(false);
-
-  // ── Listings ──────────────────────────────────────────────────────
+  // Load listings
   useEffect(() => {
     getAllListings().then((all) => {
       setListings(all.map((l) => {
         if (l.lat && l.lng) return l;
         const f = CITY_COORDS[l.city];
         if (!f) return null;
-        return { ...l, lat: f.lat + (Math.random()-.5)*.012, lng: f.lng + (Math.random()-.5)*.018 };
+        return { ...l, lat: f.lat+(Math.random()-.5)*.012, lng: f.lng+(Math.random()-.5)*.018 };
       }).filter(Boolean));
     });
   }, []);
 
-  // ── Filters ───────────────────────────────────────────────────────
+  // Apply filters
   useEffect(() => {
     const p = PRICE_PRESETS[pricePreset];
     let r = listings.filter((l) => {
@@ -120,80 +115,69 @@ export default function MapSearch() {
     });
     if (radiusActive && userLat != null)
       r = r.filter((l) => haversine(userLat, userLng, l.lat, l.lng) <= radiusKm);
-    if (drawnBounds && leafletRef.current)
+    if (drawnBounds)
       r = r.filter((l) => drawnBounds.contains([l.lat, l.lng]));
     setFiltered(r);
   }, [listings, pricePreset, dealTypes, propTypes, minBeds, radiusActive, userLat, userLng, radiusKm, drawnBounds]);
 
-  // ── Measure top bar height after render ───────────────────────────
+  // Measure top bar
   useEffect(() => {
     if (topBarRef.current) setTopBarH(topBarRef.current.offsetHeight);
   }, []);
 
-  // ── Init Leaflet ──────────────────────────────────────────────────
-  // We wait for mapDivRef to be populated AND for the map to be in a view that
-  // renders it (not "list" view). When both are true, init the map.
+  // Init map — fires when mapDivRef becomes available (view switches from list)
+  // L is already available synchronously — no async timing issue
   useEffect(() => {
-    if (view === "list") return;           // map div not rendered in list view
-    if (mapRef.current) return;            // already initialised
-    if (!mapDivRef.current) return;        // ref not yet attached
+    if (view === "list") return;
+    if (mapRef.current) return;
+    if (!mapDivRef.current) return;
 
-    import("leaflet").then((L) => {
-      const Lf = L.default || L;
-      leafletRef.current = Lf;
+    const map = L.map(mapDivRef.current, { center: [43.89, -78.93], zoom: 11 });
 
-      delete Lf.Icon.Default.prototype._getIconUrl;
-      Lf.Icon.Default.mergeOptions({
-        iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-        iconUrl:       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-        shadowUrl:     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-      });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
 
-      // The div is position:absolute inside a vh-sized wrapper.
-      // By the time this async import resolves, the container has real px dimensions.
-      const map = Lf.map(mapDivRef.current, { center: [43.89, -78.93], zoom: 11 });
+    mapRef.current = map;
 
-      Lf.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(map);
-
-      mapRef.current = map;
-
-      // One invalidateSize after init as a safety net
-      requestAnimationFrame(() => {
-        map.invalidateSize();
-        setMapReady(true);
-      });
+    // invalidateSize still useful after DOM settles
+    requestAnimationFrame(() => {
+      map.invalidateSize();
+      setMapReady(true);
     });
 
     return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-        leafletRef.current = null;
-        setMapReady(false);
-      }
+      map.remove();
+      mapRef.current = null;
+      setMapReady(false);
     };
-  }, [view]); // re-run if view changes from "list" to "split"/"map"
+  }, [view]);
 
-  // ── Markers ───────────────────────────────────────────────────────
+  // Invalidate when view changes size (list panel appearing/disappearing)
   useEffect(() => {
-    const Lf = leafletRef.current, map = mapRef.current;
-    if (!Lf || !map || !mapReady) return;
+    if (mapRef.current && mapReady) {
+      requestAnimationFrame(() => mapRef.current?.invalidateSize());
+    }
+  }, [view, mapReady]);
+
+  // Update markers
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
 
     markersRef.current.forEach((m) => map.removeLayer(m));
     markersRef.current = [];
 
     filtered.forEach((listing) => {
-      const color   = getDealColor(listing.dealType);
-      const isSel   = selected?.id === listing.id;
-      const icon    = Lf.divIcon({
+      const color = getDealColor(listing.dealType);
+      const isSel = selected?.id === listing.id;
+      const icon  = L.divIcon({
         className: "",
         html: `<div style="background:${color};color:white;padding:${isSel?"5px 10px":"4px 8px"};border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:${isSel?"3px":"2px"} solid white;cursor:pointer;">$${Math.round(listing.price/1000)}K</div>`,
         iconAnchor: [30, 16],
       });
-      const marker = Lf.marker([listing.lat, listing.lng], { icon })
+      const marker = L.marker([listing.lat, listing.lng], { icon })
         .addTo(map)
         .on("click", () => {
           setSelected((p) => p?.id === listing.id ? null : listing);
@@ -203,23 +187,23 @@ export default function MapSearch() {
     });
   }, [filtered, mapReady, selected]);
 
-  // ── Radius ────────────────────────────────────────────────────────
+  // Radius circle
   useEffect(() => {
-    const Lf = leafletRef.current, map = mapRef.current;
-    if (!Lf || !map || !mapReady) return;
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
     if (radiusLayerRef.current) { map.removeLayer(radiusLayerRef.current); radiusLayerRef.current = null; }
     if (radiusActive && userLat != null) {
-      radiusLayerRef.current = Lf.circle([userLat, userLng], {
-        radius: radiusKm*1000, color:"#2563EB", fillColor:"#2563EB", fillOpacity:0.07, weight:2
+      radiusLayerRef.current = L.circle([userLat, userLng], {
+        radius: radiusKm*1000, color: "#2563EB", fillColor: "#2563EB", fillOpacity: 0.07, weight: 2,
       }).addTo(map);
       map.setView([userLat, userLng], 11, { animate: true });
     }
   }, [radiusActive, userLat, userLng, radiusKm, mapReady]);
 
-  // ── Draw mode ─────────────────────────────────────────────────────
+  // Draw mode
   useEffect(() => {
-    const Lf = leafletRef.current, map = mapRef.current;
-    if (!Lf || !map || !mapReady || !drawMode) return;
+    const map = mapRef.current;
+    if (!map || !mapReady || !drawMode) return;
     const s = drawState.current;
     s.active = true;
     map.getContainer().style.cursor = "crosshair";
@@ -227,13 +211,13 @@ export default function MapSearch() {
     const onMove = (e) => {
       if (!s.startLL) return;
       if (s.tempRect) map.removeLayer(s.tempRect);
-      s.tempRect = Lf.rectangle(Lf.latLngBounds(s.startLL, e.latlng), { color:"#059669", fillOpacity:0.08, weight:2, dashArray:"6 4" }).addTo(map);
+      s.tempRect = L.rectangle(L.latLngBounds(s.startLL, e.latlng), { color:"#059669", fillOpacity:0.08, weight:2, dashArray:"6 4" }).addTo(map);
     };
     const onUp = (e) => {
       if (!s.startLL) return;
-      const b = Lf.latLngBounds(s.startLL, e.latlng);
+      const b = L.latLngBounds(s.startLL, e.latlng);
       if (drawLayerRef.current) map.removeLayer(drawLayerRef.current);
-      drawLayerRef.current = Lf.rectangle(b, { color:"#059669", fillOpacity:0.07, weight:2 }).addTo(map);
+      drawLayerRef.current = L.rectangle(b, { color:"#059669", fillOpacity:0.07, weight:2 }).addTo(map);
       setDrawnBounds(b); setDrawMode(false); s.startLL = null; map.dragging.enable();
     };
     map.on("mousedown", onDown); map.on("mousemove", onMove); map.on("mouseup", onUp);
@@ -246,7 +230,6 @@ export default function MapSearch() {
     };
   }, [drawMode, mapReady]);
 
-  // ── Helpers ───────────────────────────────────────────────────────
   const locateMe = () => {
     if (!navigator.geolocation) return;
     setLocating(true);
@@ -256,20 +239,14 @@ export default function MapSearch() {
     );
   };
   const clearRadius  = () => { setRadiusActive(false); setUserLat(null); setUserLng(null); };
-  const clearDraw    = () => {
-    if (drawLayerRef.current && mapRef.current) mapRef.current.removeLayer(drawLayerRef.current);
-    drawLayerRef.current = null; setDrawnBounds(null);
-  };
-  const toggle = (arr, setArr, val) => setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
-  const clearAll = () => { setPricePreset(0); setDealTypes([]); setPropTypes([]); setMinBeds(0); clearRadius(); clearDraw(); };
-  const activeN  = (pricePreset>0?1:0) + dealTypes.length + propTypes.length + (minBeds>0?1:0) + (radiusActive?1:0) + (drawnBounds?1:0);
-
-  // Computed heights for the position:absolute layout
-  const totalH    = `calc(100vh - ${NAVBAR_HEIGHT}px)`;
-  const mapAreaH  = `calc(100vh - ${NAVBAR_HEIGHT}px - ${topBarH}px)`;
+  const clearDraw    = () => { if (drawLayerRef.current && mapRef.current) mapRef.current.removeLayer(drawLayerRef.current); drawLayerRef.current = null; setDrawnBounds(null); };
+  const toggle       = (arr, setArr, val) => setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
+  const clearAll     = () => { setPricePreset(0); setDealTypes([]); setPropTypes([]); setMinBeds(0); clearRadius(); clearDraw(); };
+  const activeN      = (pricePreset>0?1:0)+dealTypes.length+propTypes.length+(minBeds>0?1:0)+(radiusActive?1:0)+(drawnBounds?1:0);
+  const mapAreaH     = `calc(100vh - ${NAVBAR_HEIGHT}px - ${topBarH}px)`;
 
   return (
-    <div style={{ height: totalH, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: `calc(100vh - ${NAVBAR_HEIGHT}px)`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
 
       {/* Top bar */}
       <div ref={topBarRef} className="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-2 flex-wrap shrink-0">
@@ -279,20 +256,20 @@ export default function MapSearch() {
         <div className="flex items-center gap-2 ml-1 flex-wrap">
           <button onClick={locateMe} disabled={locating}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${radiusActive?"bg-blue-600 text-white":"bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
-            <LocateFixed className="w-3.5 h-3.5" />
-            {locating ? "Locating..." : radiusActive ? `Within ${radiusKm}km` : "Near Me"}
+            <LocateFixed className="w-3.5 h-3.5"/>
+            {locating?"Locating...":radiusActive?`Within ${radiusKm}km`:"Near Me"}
           </button>
           {radiusActive && (
             <>
               <input type="range" min={2} max={50} step={2} value={radiusKm}
-                onChange={(e) => setRadiusKm(Number(e.target.value))} className="w-20 accent-blue-600" />
+                onChange={(e) => setRadiusKm(Number(e.target.value))} className="w-20 accent-blue-600"/>
               <button onClick={clearRadius} className="p-1 hover:bg-gray-100 rounded-full"><X className="w-3.5 h-3.5 text-gray-400"/></button>
             </>
           )}
           <button onClick={() => !drawMode && setDrawMode(true)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${drawMode?"bg-green-600 text-white":drawnBounds?"bg-green-100 text-green-700":"bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
-            <PenTool className="w-3.5 h-3.5" />
-            {drawMode ? "Drawing — drag on map" : drawnBounds ? "Boundary Active" : "Draw Area"}
+            <PenTool className="w-3.5 h-3.5"/>
+            {drawMode?"Drawing — drag on map":drawnBounds?"Boundary Active":"Draw Area"}
           </button>
           {drawnBounds && <button onClick={clearDraw} className="p-1 hover:bg-gray-100 rounded-full"><X className="w-3.5 h-3.5 text-gray-400"/></button>}
         </div>
@@ -314,13 +291,13 @@ export default function MapSearch() {
         </button>
       </div>
 
-      {/* Content area — the KEY layout: position:relative wrapper with explicit height */}
-      <div style={{ position: "relative", height: mapAreaH, flexShrink: 0 }}>
+      {/* Main layout — position:relative wrapper with explicit pixel height */}
+      <div style={{ position: "relative", height: mapAreaH }}>
 
         {/* Filter drawer */}
         {sidebarOpen && (
           <>
-            <div className="absolute inset-0 bg-black/20 z-20 sm:hidden" onClick={() => setSidebarOpen(false)} />
+            <div className="absolute inset-0 bg-black/20 z-20 sm:hidden" onClick={() => setSidebarOpen(false)}/>
             <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl z-30 overflow-y-auto p-5 space-y-5">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-gray-900">Filters</h2>
@@ -386,17 +363,9 @@ export default function MapSearch() {
           </>
         )}
 
-        {/* List panel — position:absolute, left-anchored */}
+        {/* List panel */}
         {(view==="list"||view==="split") && (
-          <div style={{
-            position: "absolute",
-            top: 0, left: 0, bottom: 0,
-            width: view==="list" ? "100%" : "320px",
-            overflowY: "auto",
-            background: "#f9fafb",
-            borderRight: "1px solid #e5e7eb",
-            zIndex: 10,
-          }}>
+          <div style={{ position:"absolute", top:0, left:0, bottom:0, width: view==="list"?"100%":"320px", overflowY:"auto", background:"#f9fafb", borderRight:"1px solid #e5e7eb", zIndex:10 }}>
             {filtered.length===0 ? (
               <div className="text-center py-16 text-gray-400 px-6">
                 <p className="font-medium mb-1">No listings found</p>
@@ -436,29 +405,22 @@ export default function MapSearch() {
           </div>
         )}
 
-        {/* Map div — position:absolute, fills remaining space.
-            THE CRITICAL PART: this div has an explicit pixel height via its
-            position:absolute bounds. Leaflet can measure it correctly. */}
+        {/* Map div — position:absolute so Leaflet always measures real pixel bounds */}
         {(view==="map"||view==="split") && (
           <div
             ref={mapDivRef}
             style={{
               position: "absolute",
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: (view==="split") ? "320px" : "0",
+              top: 0, right: 0, bottom: 0,
+              left: view==="split" ? "320px" : "0",
             }}
           >
-            {/* Draw hint */}
             {drawMode && (
-              <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:1000}}
-                className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg pointer-events-none">
+              <div style={{position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",zIndex:1000,pointerEvents:"none"}}
+                className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">
                 Click and drag to draw a search boundary
               </div>
             )}
-
-            {/* Selected popup */}
             {selected && (
               <div style={{position:"absolute",bottom:24,left:"50%",transform:"translateX(-50%)",zIndex:1000}}
                 className="w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
