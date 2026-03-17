@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Home, Menu, X } from "lucide-react";
+import { Home, Menu, X, Map } from "lucide-react";
 
 export default function Navbar() {
   const loc = useLocation();
@@ -18,6 +18,7 @@ export default function Navbar() {
 
   const NAV_LINKS = [
     { to: "/listings",     label: "Browse Homes" },
+    { to: "/map",          label: "Map Search",  icon: <Map className="w-3.5 h-3.5" /> },
     { to: "/profiles",     label: "Browse Buyers" },
     { to: "/partners",     label: "Find a Pro" },
     { to: "/how-it-works", label: "How It Works" },
@@ -35,9 +36,13 @@ export default function Navbar() {
           <span className="text-xl font-bold text-gray-900">HomeMatch</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          {NAV_LINKS.map(({ to, label }) => (
-            <NavLink key={to} to={to} className={linkCls}>{label}</NavLink>
+        <nav className="hidden md:flex items-center gap-5 text-sm font-medium">
+          {NAV_LINKS.map(({ to, label, icon }) => (
+            <NavLink key={to} to={to} className={({ isActive }) =>
+              `flex items-center gap-1 ${isActive ? "text-blue-600 font-semibold" : "text-gray-600 hover:text-gray-900 transition-colors"}`
+            }>
+              {icon}{label}
+            </NavLink>
           ))}
         </nav>
 
@@ -58,13 +63,13 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white px-6 py-5 space-y-1">
-          {NAV_LINKS.map(({ to, label }) => (
+          {NAV_LINKS.map(({ to, label, icon }) => (
             <NavLink key={to} to={to}
               className={({ isActive }) =>
-                `block py-3 text-sm font-medium border-b border-gray-50 last:border-0 ${isActive ? "text-blue-600" : "text-gray-700"}`
+                `flex items-center gap-2 py-3 text-sm font-medium border-b border-gray-50 last:border-0 ${isActive ? "text-blue-600" : "text-gray-700"}`
               }
             >
-              {label}
+              {icon}{label}
             </NavLink>
           ))}
           <div className="pt-4 flex flex-col gap-2">
