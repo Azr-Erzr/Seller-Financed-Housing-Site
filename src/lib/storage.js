@@ -120,6 +120,8 @@ function profileToRow(p) {
     deal_preferences: p.dealPreferences || [],
     risk_tolerance: p.riskTolerance || "Moderate",
     show_income:    p.showIncome ?? p.show_income ?? false,
+    use_alias:      p.useAlias ?? p.use_alias ?? true,
+    alias:          p.alias || null,
     badges:         p.badges || [],
     is_active:      true,
     owner_email:    p.ownerEmail || null,
@@ -144,6 +146,8 @@ function rowToProfile(r) {
     dealPreferences:r.deal_preferences || [],
     riskTolerance:  r.risk_tolerance,
     showIncome:     r.show_income,
+    useAlias:       r.use_alias ?? true,
+    alias:          r.alias || null,
     badges:         r.badges || [],
     createdAt:      r.created_at,
   };

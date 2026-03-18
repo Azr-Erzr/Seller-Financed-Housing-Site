@@ -135,6 +135,8 @@ function profileToRow(p) {
     min_acreage:         p.minAcreage ? Number(p.minAcreage) : null,
     max_acreage:         p.maxAcreage ? Number(p.maxAcreage) : null,
     timeline_months:     p.timelineMonths ? Number(p.timelineMonths) : null,
+    use_alias:           p.useAlias ?? p.use_alias ?? true,
+    alias:               p.alias || null,
     badges:              p.badges || [],
     is_active:           true,
     owner_email:         p.ownerEmail || null,
@@ -165,6 +167,8 @@ function rowToProfile(r) {
     minAcreage:         r.min_acreage,
     maxAcreage:         r.max_acreage,
     timelineMonths:     r.timeline_months,
+    useAlias:           r.use_alias ?? true,
+    alias:              r.alias || null,
     badges:             r.badges || [],
     createdAt:          r.created_at,
   };
