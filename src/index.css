@@ -3,6 +3,26 @@
 @tailwind utilities;
 
 /* -----------------------------
+   Leaflet fix — Tailwind Preflight override
+   Preflight sets img { max-width:100%; display:block } which
+   breaks Leaflet's pixel-precise tile positioning. These rules
+   restore Leaflet's expected image behaviour inside map containers.
+   This is the ROOT CAUSE of the staircase tile fragmentation bug.
+   ----------------------------- */
+.leaflet-container img {
+  max-width: none !important;
+  max-height: none !important;
+}
+.leaflet-container .leaflet-tile {
+  max-width: none !important;
+  max-height: none !important;
+}
+/* Prevent Tailwind's base anchor styles from affecting Leaflet controls */
+.leaflet-container a {
+  color: inherit;
+}
+
+/* -----------------------------
    Custom global styles
    ----------------------------- */
 

@@ -73,6 +73,7 @@ function listingToRow(l) {
     badges:               l.badges || [],
     docs_locked:          l.docsLocked ?? true,
     is_active:            true,
+    owner_email:          l.ownerEmail || null,
   };
 }
 
@@ -136,8 +137,8 @@ function profileToRow(p) {
     timeline_months:     p.timelineMonths ? Number(p.timelineMonths) : null,
     badges:              p.badges || [],
     is_active:           true,
+    owner_email:         p.ownerEmail || null,
   };
-}
 
 function rowToProfile(r) {
   return {
@@ -216,7 +217,7 @@ export async function saveCommListing(listing) {
 export async function getAllCommProfiles() {
   if (USE_SUPABASE && supabase) {
     const { data, error } = await supabase
-      .from("commercial_profiles")
+      .from("public_commercial_profiles")
       .select("*")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
@@ -230,7 +231,7 @@ export async function getCommProfileById(id) {
   if (seed) return seed;
   if (USE_SUPABASE && supabase) {
     const { data, error } = await supabase
-      .from("commercial_profiles")
+      .from("public_commercial_profiles")
       .select("*")
       .eq("id", id)
       .single();

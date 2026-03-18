@@ -5,6 +5,7 @@ import { Search, ArrowRight } from "lucide-react";
 import { getAllListings, getAllProfiles } from "../lib/storage";
 import ListingCard from "../components/ListingCard";
 import ProfileCard from "../components/ProfileCard";
+import { ListingsSkeleton } from "../components/LoadingSkeleton";
 import SavingsCalculator from "../components/SavingsCalculator";
 import { ARTICLES } from "../data/guide-articles";
 
@@ -12,11 +13,14 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [listings, setListings] = useState([]);
   const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAllListings().then((l) => setListings(l.slice(0, 3)));
-    getAllProfiles().then((p) => setProfiles(p.slice(0, 3)));
+    Promise.all([
+      getAllListings().then((l) => setListings(l.slice(0, 3))),
+      getAllProfiles().then((p) => setProfiles(p.slice(0, 3))),
+    ]).finally(() => setLoading(false));
   }, []);
 
   const handleSearch = () => {
@@ -113,7 +117,7 @@ export default function Home() {
               </p>
               <div className="space-y-4">
                 {[
-                  { icon: "💸", title: "Keep both sides of the commission", body: "Typically 5% + HST — that's $33,900 saved on a $600K home." },
+                  { icon: "💸", title: "Keep both sides of the commission", body: "Typically 5% + HST — that's over $36,000 saved on a $650K home." },
                   { icon: "🏦", title: "Earn interest like a bank", body: "At 7% on a $480K VTB, you collect ~$150K in interest over 5 years." },
                   { icon: "✅", title: "You choose your buyer", body: "Review profiles, see income and DTI ratios, and decide who gets to buy your home." },
                   { icon: "⚖️", title: "You're legally protected", body: "Your mortgage is registered on title. If the buyer defaults, you have Power of Sale — the same right any bank has." },
@@ -194,6 +198,26 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Trust Signals ── */}
+      <section className="py-12 border-y border-gray-100">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { icon: "⚖️", title: "Backed by Ontario Law", body: "VTB mortgages are registered on title under the same legal framework as any bank mortgage." },
+              { icon: "🏛️", title: "Lawyer Required", body: "Every deal closes through a licensed Ontario real estate lawyer. No exceptions." },
+              { icon: "🤝", title: "No Referral Kickbacks", body: "Our partner directory is unbiased. We don't take commissions from professionals we recommend." },
+              { icon: "🔒", title: "Income Privacy", body: "Financial data is protected by default. Buyers choose what to share and when." },
+            ].map(({ icon, title, body }) => (
+              <div key={title}>
+                <div className="text-3xl mb-3">{icon}</div>
+                <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
+                <p className="text-xs text-gray-500 leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── How It Works ── */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6">
@@ -224,7 +248,7 @@ export default function Home() {
       </section>
 
       {/* ── Featured Homes ── */}
-      {listings.length > 0 && (
+      {(loading || listings.length > 0) && (
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between mb-8">
@@ -236,9 +260,13 @@ export default function Home() {
                 View all <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
-            </div>
+            {loading ? (
+              <ListingsSkeleton count={3} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
+              </div>
+            )}
           </div>
         </section>
       )}

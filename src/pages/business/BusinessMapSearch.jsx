@@ -123,7 +123,13 @@ export default function BusinessMapSearch() {
     }).addTo(map);
     mapRef.current = map;
     requestAnimationFrame(() => { map.invalidateSize(); setMapReady(true); });
-    return () => { map.remove(); mapRef.current = null; setMapReady(false); };
+    const t = setTimeout(() => map.invalidateSize(), 300);
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => map.invalidateSize());
+      ro.observe(mapDivRef.current);
+    }
+    return () => { clearTimeout(t); if (ro) ro.disconnect(); map.remove(); mapRef.current = null; setMapReady(false); };
   }, [view]);
 
   useEffect(() => {

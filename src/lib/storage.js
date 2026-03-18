@@ -68,6 +68,7 @@ function listingToRow(l) {
     video_url:      l.videoUrl || "",
     badges:         l.badges || [],
     is_active:      true,
+    owner_email:    l.ownerEmail || null,
   };
 }
 
@@ -121,6 +122,7 @@ function profileToRow(p) {
     show_income:    p.showIncome ?? p.show_income ?? false,
     badges:         p.badges || [],
     is_active:      true,
+    owner_email:    p.ownerEmail || null,
   };
 }
 
@@ -185,8 +187,10 @@ export async function saveListing(listing) {
 
 export async function getAllProfiles() {
   if (USE_SUPABASE && supabase) {
+    // Query the public_profiles VIEW (not the profiles table) so that
+    // show_income masking is enforced by the database, not the client.
     const { data, error } = await supabase
-      .from("profiles")
+      .from("public_profiles")
       .select("*")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
@@ -199,7 +203,7 @@ export async function getProfileById(id) {
   const seed = SEED_PROFILES.find((p) => p.id === id);
   if (seed) return seed;
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("profiles").select("*").eq("id", id).single();
+    const { data, error } = await supabase.from("public_profiles").select("*").eq("id", id).single();
     if (!error && data) return rowToProfile(data);
   }
   return read(KEYS.profiles).find((p) => p.id === id) || null;

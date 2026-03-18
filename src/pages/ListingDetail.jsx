@@ -7,6 +7,7 @@ import { useToast } from "../components/Toast";
 import NDA from "../components/NDA";
 import ContactModal from "../components/ContactModal";
 import { MapPin, Home, Bed, Bath, Square, Bookmark, BookmarkCheck, Phone, ArrowLeft } from "lucide-react";
+import { DetailSkeleton } from "../components/LoadingSkeleton";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
 const pct   = (n) => n ? `${(Number(n) * 100).toFixed(1)}%` : "—";
@@ -54,7 +55,7 @@ export default function ListingDetail() {
     toast[nowSaved ? "success" : "info"](nowSaved ? "Listing saved." : "Listing removed from saved.");
   };
 
-  if (loading) return <div className="p-12 text-center text-gray-400">Loading...</div>;
+  if (loading) return <DetailSkeleton />;
   if (!listing) return (
     <div className="p-12 text-center text-gray-500">
       Listing not found. <Link to="/listings" className="text-blue-600 underline">Back to listings</Link>
@@ -157,6 +158,46 @@ export default function ListingDetail() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* What You're Saving — per-listing commission savings */}
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-100 p-6">
+          <h2 className="font-semibold text-lg text-gray-900 mb-1">What You're Saving on This Property</h2>
+          <p className="text-sm text-gray-500 mb-4">By selling directly on LandMatch instead of through agents.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {(() => {
+              const price = listing.price;
+              const listingComm = price * 0.025;
+              const buyerComm  = price * 0.025;
+              const hst        = (listingComm + buyerComm) * 0.13;
+              const total      = listingComm + buyerComm + hst;
+              return [
+                { label: "Listing agent (2.5%)", value: money(listingComm), color: "text-red-500" },
+                { label: "Buyer's agent (2.5%)", value: money(buyerComm), color: "text-red-500" },
+                { label: "HST on commissions",   value: money(hst), color: "text-red-500" },
+                { label: "Total saved",          value: money(total), color: "text-green-700" },
+              ].map(({ label, value, color }) => (
+                <div key={label} className="bg-white rounded-xl p-4 text-center shadow-sm">
+                  <p className="text-xs text-gray-400 mb-1">{label}</p>
+                  <p className={`text-xl font-extrabold ${color}`}>{value}</p>
+                </div>
+              ));
+            })()}
+          </div>
+          {hasFinancing && (
+            <div className="mt-4 bg-white rounded-xl p-4 shadow-sm">
+              <p className="text-sm text-gray-600">
+                <strong className="text-green-700">Plus interest income:</strong>{" "}
+                At {(calcRate*100).toFixed(1)}% on a {money(listing.price - calcDown)} VTB over {calcTerm} years, 
+                the seller collects approximately <strong className="text-green-700">{money(payment*calcTerm*12-(listing.price-calcDown))}</strong> in 
+                interest — income a bank would normally keep.
+              </p>
+            </div>
+          )}
+          <p className="text-xs text-gray-400 mt-3">
+            Estimates based on standard 5% total commission + 13% HST. Actual savings depend on your specific situation.
+            Always consult a real estate lawyer and accountant.
+          </p>
         </div>
 
         {/* Finance Calculator */}

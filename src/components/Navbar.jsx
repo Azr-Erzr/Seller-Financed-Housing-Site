@@ -189,6 +189,18 @@ export default function Navbar() {
             </NavLink>
           ))}
           <div className="pt-4 flex flex-col gap-2">
+            {/* Mode switcher — mobile */}
+            <div className="flex items-center bg-gray-100 rounded-lg p-0.5 mb-2">
+              <button onClick={() => handleModeSwitch(MODES.homes)}
+                className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500"}`}>
+                <Home className="w-3 h-3"/><span>Homes</span>
+              </button>
+              <button onClick={() => handleModeSwitch(MODES.business)}
+                className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500"}`}>
+                <Building2 className="w-3 h-3"/><span>Business</span>
+              </button>
+            </div>
+
             {user ? (
               <>
                 <div className="px-3 py-2 bg-gray-50 rounded-lg">

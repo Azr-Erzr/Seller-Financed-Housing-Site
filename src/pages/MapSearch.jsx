@@ -141,13 +141,24 @@ export default function MapSearch() {
 
     mapRef.current = map;
 
-    // invalidateSize still useful after DOM settles
+    // Double invalidateSize — first on next frame, then after a short delay
+    // to catch any late layout shifts from React/Tailwind
     requestAnimationFrame(() => {
       map.invalidateSize();
       setMapReady(true);
     });
+    const t = setTimeout(() => map.invalidateSize(), 300);
+
+    // ResizeObserver catches container size changes (split↔map toggle, window resize)
+    let ro;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => map.invalidateSize());
+      ro.observe(mapDivRef.current);
+    }
 
     return () => {
+      clearTimeout(t);
+      if (ro) ro.disconnect();
       map.remove();
       mapRef.current = null;
       setMapReady(false);

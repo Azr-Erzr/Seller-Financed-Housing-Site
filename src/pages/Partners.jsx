@@ -342,9 +342,13 @@ export default function Partners() {
         {/* CTA to apply */}
         <div className="mt-12 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
           <h3 className="font-bold text-gray-900 text-xl mb-2">Are You a Real Estate Professional?</h3>
-          <p className="text-gray-500 text-sm max-w-md mx-auto mb-6">
+          <p className="text-gray-500 text-sm max-w-md mx-auto mb-4">
             Join the LandMatch Partner Directory to connect with buyers and sellers in the Durham Region
             who specifically need your expertise in seller-financed transactions.
+          </p>
+          <p className="text-xs text-gray-400 max-w-md mx-auto mb-6">
+            LandMatch does not charge referral fees or take commissions from professionals listed in this directory.
+            Our directory is free, unbiased, and based solely on expertise in seller-financed deals.
           </p>
           <Link to="/partner-apply"
             className={`inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-colors ${isBusiness?"bg-emerald-600 hover:bg-emerald-700":"bg-blue-600 hover:bg-blue-700"}`}>

@@ -7,6 +7,7 @@ import { useToast } from "../../components/Toast";
 import NDA from "../../components/NDA";
 import ContactModal from "../../components/ContactModal";
 import { MapPin, Ruler, Phone, Bookmark, BookmarkCheck, ArrowLeft } from "lucide-react";
+import { DetailSkeleton } from "../../components/LoadingSkeleton";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
 
@@ -64,7 +65,7 @@ export default function BusinessListingDetail() {
     toast[nowSaved ? "success" : "info"](nowSaved ? "Listing saved." : "Listing removed from saved.");
   };
 
-  if (loading) return <div className="p-12 text-center text-gray-400">Loading...</div>;
+  if (loading) return <DetailSkeleton />;
   if (!listing) return (
     <div className="p-12 text-center text-gray-500">
       Listing not found. <Link to="/business/listings" className="text-emerald-600 underline">Back to listings</Link>
@@ -182,6 +183,45 @@ export default function BusinessListingDetail() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Vendor Savings — per-listing */}
+        <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border border-emerald-100 p-6">
+          <h2 className="font-semibold text-lg text-gray-900 mb-1">Vendor Savings on This Property</h2>
+          <p className="text-sm text-gray-500 mb-4">By selling directly on LandMatch instead of through agents.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {(() => {
+              const price = listing.price;
+              const commLow = price * 0.02;
+              const commHigh = price * 0.03;
+              const hstLow = commLow * 0.13;
+              const hstHigh = commHigh * 0.13;
+              return [
+                { label: "Commission saved (2%)", value: money(commLow), color: "text-red-500" },
+                { label: "Commission saved (3%)", value: money(commHigh), color: "text-red-500" },
+                { label: "Total with HST (2–3%)", value: `${money(commLow + hstLow)}–${money(commHigh + hstHigh)}`, color: "text-green-700" },
+              ].map(({ label, value, color }) => (
+                <div key={label} className="bg-white rounded-xl p-4 text-center shadow-sm">
+                  <p className="text-xs text-gray-400 mb-1">{label}</p>
+                  <p className={`text-lg font-extrabold ${color}`}>{value}</p>
+                </div>
+              ));
+            })()}
+          </div>
+          {hasFinancing && (
+            <div className="mt-4 bg-white rounded-xl p-4 shadow-sm">
+              <p className="text-sm text-gray-600">
+                <strong className="text-emerald-700">Plus interest income:</strong>{" "}
+                At {(calcRate*100).toFixed(1)}% on a {money(listing.price - calcDown)} VTB over {calcTerm} years,
+                the vendor collects approximately <strong className="text-emerald-700">{money(payment*calcTerm*12-(listing.price-calcDown))}</strong> in
+                interest. CRA may also allow spreading capital gains over the payment term (max 5 years).
+              </p>
+            </div>
+          )}
+          <p className="text-xs text-gray-400 mt-3">
+            Estimates based on typical 2–3% commercial commission + 13% HST. Actual savings vary.
+            Always consult a real estate lawyer and accountant.
+          </p>
         </div>
 
         {/* Finance Calculator */}
