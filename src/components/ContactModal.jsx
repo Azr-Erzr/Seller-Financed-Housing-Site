@@ -33,6 +33,8 @@ export default function ContactModal({
   refType,       // 'listing' | 'profile' | 'comm_listing' | 'comm_profile'
   refId,
   refTitle,
+  // Privacy — if the recipient is aliased, show confidentiality agreement
+  isAliased = false,
 }) {
   const { toast } = useToast();
   const { mode, MODES } = useSite();
@@ -44,6 +46,7 @@ export default function ContactModal({
   const [sending,     setSending]     = useState(false);
   const [sent,        setSent]        = useState(false);
   const [showTemplates, setShowTemplates] = useState(true);
+  const [agreedToConfidentiality, setAgreedToConfidentiality] = useState(false);
 
   const templates = recipientType === "buyer" ? SELLER_TEMPLATES : BUYER_TEMPLATES;
 
@@ -106,6 +109,7 @@ export default function ContactModal({
     setSenderEmail("");
     setMessage("");
     setShowTemplates(true);
+    setAgreedToConfidentiality(false);
     onClose();
   };
 
@@ -246,11 +250,28 @@ export default function ContactModal({
               Sel-Fi does not share contact details publicly.
             </p>
 
+            {/* Confidentiality agreement — shown when contacting aliased profiles */}
+            {isAliased && (
+              <label className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-3.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={agreedToConfidentiality}
+                  onChange={(e) => setAgreedToConfidentiality(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 shrink-0"
+                />
+                <span className="text-xs text-amber-800 leading-relaxed">
+                  <strong>Confidentiality agreement:</strong> By contacting this buyer, I agree not to share their
+                  personal or financial information outside of this platform. Their identity was protected for a reason —
+                  I will respect their privacy.
+                </span>
+              </label>
+            )}
+
             {/* Actions */}
             <div className="flex gap-2 pt-1 pb-1">
               <button
                 onClick={handleSend}
-                disabled={sending || !message.trim() || !senderName.trim() || !senderEmail.trim()}
+                disabled={sending || !message.trim() || !senderName.trim() || !senderEmail.trim() || (isAliased && !agreedToConfidentiality)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 font-semibold text-sm rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${primaryBtn}`}
               >
                 <Send className="w-4 h-4" />

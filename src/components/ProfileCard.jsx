@@ -1,7 +1,10 @@
 // src/components/ProfileCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { DollarSign, TrendingUp } from "lucide-react";
+import { DollarSign, TrendingUp, Shield } from "lucide-react";
+
+const getDisplayName = (profile) =>
+  profile.useAlias && profile.alias ? profile.alias : profile.name;
 
 const getInitials = (name) =>
   name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) || "?";
@@ -33,22 +36,29 @@ const StarIcon = () => (
 
 export default function ProfileCard({ profile, matchScore }) {
   const score = matchScore ?? profile.matchScore ?? null;
+  const displayName = getDisplayName(profile);
+  const isAliased = profile.useAlias && profile.alias;
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-5">
       <div className="flex items-start gap-4">
 
         {/* Avatar */}
-        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-800 flex items-center justify-center text-white font-semibold text-lg shrink-0">
-          {getInitials(profile.name)}
+        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-white font-semibold text-lg shrink-0 ${
+          isAliased ? "bg-gradient-to-br from-gray-500 to-gray-700" : "bg-gradient-to-br from-blue-500 to-blue-800"
+        }`}>
+          {isAliased ? <Shield className="w-6 h-6" /> : getInitials(profile.name)}
         </div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-1">
             <div>
-              <h3 className="font-semibold text-gray-900">{profile.name}</h3>
-              <p className="text-sm text-gray-500">{profile.city}</p>
+              <h3 className="font-semibold text-gray-900">{displayName}</h3>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-gray-500">{profile.city}</p>
+                {isAliased && <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">Identity protected</span>}
+              </div>
             </div>
             {score !== null && (
               <div className={`${getMatchColor(score)} text-white px-2.5 py-1 rounded-full flex items-center gap-1 text-xs font-semibold shrink-0`}>
