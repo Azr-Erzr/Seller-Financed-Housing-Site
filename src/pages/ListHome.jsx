@@ -6,7 +6,7 @@ import { saveListing } from "../lib/storage";
 import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
 import { useAuth } from "../context/AuthContext";
-import { Home, CheckCircle, Upload, X, ImageIcon, Star, Wand2, GripVertical, Video, Eye, EyeOff, Bed, Bath, Square, Car } from "lucide-react";
+import { Home, CheckCircle, Upload, X, ImageIcon, Star, Wand2, GripVertical, Video, Eye, EyeOff, Bed, Bath, Square, Car, Check, AlertTriangle } from "lucide-react";
 import AddressAutocomplete from "../components/AddressAutocomplete";
 
 const DEAL_TYPES = [
@@ -138,7 +138,7 @@ function PhotoUploader({ photos, onChange }) {
             {p.aiStaged&&<span className="absolute top-1.5 left-1.5 bg-purple-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-1"><Wand2 className="w-2.5 h-2.5"/>AI</span>}
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
               {i!==0&&<button type="button" onClick={()=>setCover(i)} className="w-full flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-semibold py-1 rounded-lg"><Star className="w-3 h-3"/>Set Cover</button>}
-              <button type="button" onClick={()=>toggleAI(i)} className={`w-full flex items-center justify-center gap-1 text-[11px] font-semibold py-1 rounded-lg ${p.aiStaged?"bg-purple-500 hover:bg-purple-600 text-white":"bg-white/20 hover:bg-white/30 text-white"}`}><Wand2 className="w-3 h-3"/>{p.aiStaged?"AI Staged ✓":"AI Staged?"}</button>
+              <button type="button" onClick={()=>toggleAI(i)} className={`w-full flex items-center justify-center gap-1 text-[11px] font-semibold py-1 rounded-lg ${p.aiStaged?"bg-purple-500 hover:bg-purple-600 text-white":"bg-white/20 hover:bg-white/30 text-white"}`}><Wand2 className="w-3 h-3"/>{p.aiStaged?<>AI Staged <Check className="w-3 h-3"/></>:"AI Staged?"}</button>
               <button type="button" onClick={()=>remove(i)} className="w-full flex items-center justify-center gap-1 bg-red-500 hover:bg-red-600 text-white text-[11px] font-semibold py-1 rounded-lg"><X className="w-3 h-3"/>Remove</button>
             </div>
           </div>))}
@@ -157,7 +157,7 @@ function VideoField({ value, onChange }) {
     <div className="relative"><Video className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"/><input type="url" value={value} onChange={(e)=>onChange(e.target.value)} placeholder="YouTube, Vimeo, or Matterport URL" className={`${inputCls} pl-9`}/></div>
     <p className="text-xs text-gray-400 mt-1">Supports YouTube, Vimeo, and Matterport 3D tours.</p>
     {embedUrl&&<div className="mt-3 rounded-xl overflow-hidden border border-gray-200 aspect-video bg-gray-100"><iframe src={embedUrl} title="Tour" className="w-full h-full" allowFullScreen/></div>}
-    {value&&!embedUrl&&<p className="text-xs text-orange-500 mt-1.5">⚠ URL not recognized. Use YouTube, Vimeo, or Matterport.</p>}
+    {value&&!embedUrl&&<p className="text-xs text-orange-500 mt-1.5 flex items-center gap-1"><AlertTriangle className="w-3 h-3"/> URL not recognized. Use YouTube, Vimeo, or Matterport.</p>}
   </div>);
 }
 
@@ -191,7 +191,7 @@ function ListingPreview({ form, photos }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       <div className="relative h-48 bg-gray-100">
-        {coverImg ? <img src={coverImg} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-300 text-4xl">🏠</div>}
+        {coverImg ? <img src={coverImg} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-300"><Home className="w-10 h-10" /></div>}
         {dealLabel !== "—" && <div className="absolute top-3 right-3 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow" style={{ background: getDealColor(dealLabel) }}>{dealLabel}</div>}
         <div className="absolute bottom-3 left-3 bg-black/60 text-white px-2 py-0.5 rounded text-[10px] font-medium">Preview</div>
       </div>

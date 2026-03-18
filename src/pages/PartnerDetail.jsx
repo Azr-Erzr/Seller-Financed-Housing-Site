@@ -2,8 +2,13 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { getPartnerById, PARTNER_CATEGORIES, getFeaturedPartners } from "../data/partners";
-import { MapPin, Phone, Globe, Mail, Star, ChevronRight, ArrowLeft } from "lucide-react";
+import { MapPin, Phone, Globe, Mail, Star, ChevronRight, ArrowLeft, Scale, Sofa, Camera, Search as SearchIcon, Landmark, Truck } from "lucide-react";
 import { useSite } from "../context/SiteContext";
+
+const PARTNER_ICON_MAP = {
+  scale: Scale, sofa: Sofa, camera: Camera, search: SearchIcon,
+  landmark: Landmark, truck: Truck,
+};
 
 const avatarColors = {
   lawyer:       "from-blue-500 to-blue-700",
@@ -54,7 +59,8 @@ export default function PartnerDetail() {
   }
 
   const categoryLabel = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.label || "";
-  const categoryIcon  = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.icon || "";
+  const categoryIconKey = PARTNER_CATEGORIES.find((c) => c.value === partner.category)?.icon || "";
+  const CategoryIcon = PARTNER_ICON_MAP[categoryIconKey];
   const related = getFeaturedPartners()
     .filter((p) => p.category === partner.category && p.id !== partner.id)
     .slice(0, 2);
@@ -84,8 +90,8 @@ export default function PartnerDetail() {
               </div>
               <p className="text-gray-500 text-sm mb-2">{partner.contact}</p>
               <div className="flex flex-wrap justify-center sm:justify-start gap-2">
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${categoryColors[partner.category]}`}>
-                  {categoryIcon} {categoryLabel}
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1 ${categoryColors[partner.category]}`}>
+                  {CategoryIcon && <CategoryIcon className="w-3.5 h-3.5" />} {categoryLabel}
                 </span>
                 <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-gray-100 text-gray-600 flex items-center gap-1">
                   <MapPin className="w-3 h-3" /> {partner.city} · {partner.region}

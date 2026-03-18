@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, FileText, Search, HeartHandshake, Scale, PenLine, DollarSign, UserCircle, Map, MailOpen, FileSearch, Home as HomeIcon, Landmark, ClipboardList } from "lucide-react";
 
 function FAQ({ q, a }) {
   const [open, setOpen] = useState(false);
@@ -25,54 +25,54 @@ function FAQ({ q, a }) {
 
 const SELLER_STEPS = [
   {
-    num: 1, icon: "📝", title: "Create Your Listing",
+    num: 1, Icon: FileText, title: "Create Your Listing",
     body: "Fill out the listing form with your home's details, photos, and the financing terms you're willing to offer: down payment minimum, interest rate range, and deal type (VTB, Rent-to-Own, Lease Option, or Private Sale). Takes about 10 minutes.",
   },
   {
-    num: 2, icon: "🔍", title: "Browse Matched Buyers",
+    num: 2, Icon: Search, title: "Browse Matched Buyers",
     body: "Sel-Fi shows you buyer profiles scored against your terms — budget, down payment capacity, debt-to-income ratio, and deal preference alignment. You review them privately. No one contacts you without your permission.",
   },
   {
-    num: 3, icon: "🤝", title: "Connect and Qualify",
+    num: 3, Icon: HeartHandshake, title: "Connect and Qualify",
     body: "When you find a promising match, use the Invite to Deal feature to start a conversation. Share financial documents behind a mutual NDA. Ask for what you need: income verification, bank statements, employment confirmation. You choose who to work with.",
   },
   {
-    num: 4, icon: "⚖️", title: "Negotiate Directly",
+    num: 4, Icon: Scale, title: "Negotiate Directly",
     body: "Agree on the final terms: purchase price, down payment, interest rate, amortization period, and any special conditions. You're in charge of this negotiation — not an agent acting on your behalf.",
   },
   {
-    num: 5, icon: "✍️", title: "Close With a Lawyer",
+    num: 5, Icon: PenLine, title: "Close With a Lawyer",
     body: "A real estate lawyer drafts the Agreement of Purchase and Sale (including VTB terms), conducts title search, registers your mortgage charge on the buyer's title, and handles the transfer. This registration is public record — your security is ironclad.",
   },
   {
-    num: 6, icon: "💰", title: "Collect Monthly Payments",
+    num: 6, Icon: DollarSign, title: "Collect Monthly Payments",
     body: "After closing, the buyer sends you monthly principal and interest payments according to your agreed schedule. You are earning an investment return, secured against property you once owned. When the balance is paid, you discharge the mortgage from their title.",
   },
 ];
 
 const BUYER_STEPS = [
   {
-    num: 1, icon: "👤", title: "Create Your Buyer Profile",
+    num: 1, Icon: UserCircle, title: "Create Your Buyer Profile",
     body: "Enter your budget, available down payment, maximum monthly payment, income, existing debt, and deal preferences. Your debt-to-income ratio is calculated automatically. Sellers see this — so make it accurate and complete.",
   },
   {
-    num: 2, icon: "🗺️", title: "Browse and Search",
+    num: 2, Icon: Map, title: "Browse and Search",
     body: "Use the map or list view to browse seller-financed listings filtered by price, location, deal type, and property type. Each listing shows the seller's terms so you know upfront what you're working with.",
   },
   {
-    num: 3, icon: "📬", title: "Contact the Seller",
+    num: 3, Icon: MailOpen, title: "Contact the Seller",
     body: "When a listing matches your profile, send a contact message directly to the seller. You can use a template or write your own. Sellers receive your profile alongside your message — make a good impression.",
   },
   {
-    num: 4, icon: "📄", title: "Due Diligence",
+    num: 4, Icon: FileSearch, title: "Due Diligence",
     body: "Before committing to any deal, get a home inspection (find one in our Partner Directory), have a lawyer review the title, and confirm property taxes are current. The seller may ask you for income documentation and financial statements.",
   },
   {
-    num: 5, icon: "✍️", title: "Close With a Lawyer",
+    num: 5, Icon: PenLine, title: "Close With a Lawyer",
     body: "Your lawyer reviews the Agreement of Purchase and Sale, confirms the VTB terms, and represents your interests at closing. Title transfers to you. The seller's mortgage charge is registered on your title. You own the home.",
   },
   {
-    num: 6, icon: "🏡", title: "Make Your Monthly Payments",
+    num: 6, Icon: HomeIcon, title: "Make Your Monthly Payments",
     body: "Pay the seller monthly according to your agreement — principal and interest, directly. If you want to pay down the mortgage faster, your agreement may allow prepayments. When the balance reaches zero, the seller discharges the charge. The home is fully yours.",
   },
 ];
@@ -180,12 +180,14 @@ export default function HowItWorks() {
             </p>
             <div className="grid sm:grid-cols-3 gap-4 mt-6">
               {[
-                { icon: "🏦", label: "Seller becomes the lender" },
-                { icon: "📋", label: "Mortgage registered on title" },
-                { icon: "💰", label: "Seller earns interest income" },
-              ].map(({ icon, label }) => (
+                { Icon: Landmark, label: "Seller becomes the lender" },
+                { Icon: ClipboardList, label: "Mortgage registered on title" },
+                { Icon: DollarSign, label: "Seller earns interest income" },
+              ].map(({ Icon, label }) => (
                 <div key={label} className="text-center bg-gray-50 rounded-xl p-4">
-                  <div className="text-3xl mb-2">{icon}</div>
+                  <div className={`w-12 h-12 rounded-xl ${isBusiness ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"} flex items-center justify-center mx-auto mb-2`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
                   <p className="text-sm font-medium text-gray-700">{label}</p>
                 </div>
               ))}
@@ -202,12 +204,12 @@ export default function HowItWorks() {
           <div className="space-y-6">
             {SELLER_STEPS.map((step) => (
               <div key={step.num} className="flex gap-5 items-start">
-                <div className="shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                <div className={`shrink-0 w-10 h-10 ${bg} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
                   {step.num}
                 </div>
                 <div className="bg-gray-50 rounded-xl p-5 flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xl">{step.icon}</span>
+                    <step.Icon className={`w-5 h-5 ${accent}`} />
                     <h3 className="font-semibold text-gray-900">{step.title}</h3>
                   </div>
                   <p className="text-sm text-gray-600 leading-relaxed">{step.body}</p>
@@ -245,7 +247,7 @@ export default function HowItWorks() {
                 </div>
                 <div className="bg-white rounded-xl p-5 flex-1 border border-gray-100 shadow-sm">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xl">{step.icon}</span>
+                    <step.Icon className="w-5 h-5 text-green-600" />
                     <h3 className="font-semibold text-gray-900">{step.title}</h3>
                   </div>
                   <p className="text-sm text-gray-600 leading-relaxed">{step.body}</p>
@@ -259,7 +261,7 @@ export default function HowItWorks() {
       {/* Legal explainer */}
       <section className="py-16 bg-amber-50">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">⚖️ The Legal Framework — What Both Sides Should Know</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"><Scale className="w-6 h-6 text-amber-600" /> The Legal Framework — What Both Sides Should Know</h2>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
               {

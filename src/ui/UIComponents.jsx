@@ -1,5 +1,6 @@
 // src/ui/UIComponents.jsx
 import React, { useState } from "react";
+import { Zap } from "lucide-react";
 
 /* -----------------------------
    Brand & Helpers
@@ -195,7 +196,7 @@ export const MatchBadge = ({ score }) => {
       "inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold ring-1",
       color
     )}>
-      ⚡ {score}% match
+      <Zap className="w-3 h-3" /> {score}% match
     </span>
   );
 };

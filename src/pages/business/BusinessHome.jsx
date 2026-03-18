@@ -1,7 +1,7 @@
 // src/pages/business/BusinessHome.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ArrowRight } from "lucide-react";
+import { Search, ArrowRight, Wheat, Hammer, Building2, Factory, Droplets, TreePine, Hotel, Star, DollarSign, BarChart3, Landmark, Zap, Sprout, Timer, HeartHandshake } from "lucide-react";
 import { getAllCommListings, getAllCommProfiles } from "../../lib/commercial-storage";
 import { useRequireAuth } from "../../context/AuthContext";
 import CommListingCard from "../../components/business/CommListingCard";
@@ -10,14 +10,14 @@ import SavingsCalculator from "../../components/SavingsCalculator";
 import { ARTICLES_BUSINESS } from "../../data/guide-articles";
 
 const CATEGORIES = [
-  { icon: "🌾", label: "Farmland",    cat: "Agricultural / Farm"         },
-  { icon: "🏗️", label: "Development", cat: "Development Land"             },
-  { icon: "🏢", label: "Commercial",  cat: "Commercial Building"           },
-  { icon: "🏭", label: "Industrial",  cat: "Industrial / Warehouse"        },
-  { icon: "💧", label: "Waterfront",  cat: "Waterfront / Recreational"     },
-  { icon: "🌿", label: "Vacant Land", cat: "Vacant Land"                   },
-  { icon: "🏘️", label: "Multi-Unit",  cat: "Multi-Unit / Apartment"        },
-  { icon: "⭐", label: "Special Use", cat: "Special Purpose"               },
+  { Icon: Wheat, label: "Farmland",    cat: "Agricultural / Farm"         },
+  { Icon: Hammer, label: "Development", cat: "Development Land"             },
+  { Icon: Building2, label: "Commercial",  cat: "Commercial Building"           },
+  { Icon: Factory, label: "Industrial",  cat: "Industrial / Warehouse"        },
+  { Icon: Droplets, label: "Waterfront",  cat: "Waterfront / Recreational"     },
+  { Icon: TreePine, label: "Vacant Land", cat: "Vacant Land"                   },
+  { Icon: Hotel, label: "Multi-Unit",  cat: "Multi-Unit / Apartment"        },
+  { Icon: Star, label: "Special Use", cat: "Special Purpose"               },
 ];
 
 export default function BusinessHome() {
@@ -44,7 +44,7 @@ export default function BusinessHome() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 pt-16 pb-20">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 text-emerald-100 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            🏗️ Sel-Fi Business
+            <Hammer className="w-4 h-4" /> Sel-Fi Business
           </div>
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-5" style={{color:"#fff"}}>
             Commercial &amp; Land Deals,<br/>
@@ -70,11 +70,11 @@ export default function BusinessHome() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/business/listings"
               className="flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 transition-colors">
-              🏢 Browse Properties
+              <Building2 className="w-4 h-4" /> Browse Properties
             </Link>
             <Link to="/business/profiles"
               className="flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 transition-colors">
-              👥 Browse Buyers
+              <Search className="w-4 h-4" /> Browse Buyers
             </Link>
           </div>
         </div>
@@ -103,10 +103,12 @@ export default function BusinessHome() {
       <section className="py-12 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
-            {CATEGORIES.map(({ icon, label, cat }) => (
+            {CATEGORIES.map(({ Icon, label, cat }) => (
               <Link key={cat} to={`/business/listings?category=${encodeURIComponent(cat)}`}
                 className="flex flex-col items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 border border-gray-100 hover:border-emerald-200 transition-all group">
-                <span className="text-2xl">{icon}</span>
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-100">
+                  <Icon className="w-5 h-5" />
+                </div>
                 <span className="text-xs font-medium text-gray-600 group-hover:text-emerald-700 text-center leading-tight">{label}</span>
               </Link>
             ))}
@@ -129,13 +131,15 @@ export default function BusinessHome() {
               </p>
               <div className="space-y-4">
                 {[
-                  { icon: "💰", title: "Avoid the commission",          body: "On a $2M deal at 3% + HST that's $67,800 you keep. On a $5M deal it's $169,500." },
-                  { icon: "📊", title: "Defer capital gains",           body: "Spread recognition over the payment term via the CRA capital gains reserve. Your CPA can model the structure." },
-                  { icon: "🏦", title: "Earn secured investment income", body: "8% on a $1.5M VTB is $120,000/year in interest — secured against property you know well." },
-                  { icon: "⚡", title: "Close faster",                  body: "No bank underwriting, environmental sign-offs, or 90-day approval delays. Qualified buyer, motivated vendor, deal done." },
-                ].map(({ icon, title, body }) => (
+                  { Icon: DollarSign, title: "Avoid the commission",          body: "On a $2M deal at 3% + HST that's $67,800 you keep. On a $5M deal it's $169,500." },
+                  { Icon: BarChart3, title: "Defer capital gains",           body: "Spread recognition over the payment term via the CRA capital gains reserve. Your CPA can model the structure." },
+                  { Icon: Landmark, title: "Earn secured investment income", body: "8% on a $1.5M VTB is $120,000/year in interest — secured against property you know well." },
+                  { Icon: Zap, title: "Close faster",                  body: "No bank underwriting, environmental sign-offs, or 90-day approval delays. Qualified buyer, motivated vendor, deal done." },
+                ].map(({ Icon, title, body }) => (
                   <div key={title} className="flex items-start gap-3">
-                    <span className="text-2xl shrink-0">{icon}</span>
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                      <Icon className="w-5 h-5" />
+                    </div>
                     <div>
                       <p className="font-semibold text-gray-900 text-sm">{title}</p>
                       <p className="text-gray-500 text-sm mt-0.5">{body}</p>
@@ -194,14 +198,16 @@ export default function BusinessHome() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
-              { icon: "🌾", title: "Farm &amp; Agricultural Land", body: "Banks rarely finance raw agricultural land without production income. Vendors who know the land can finance it directly." },
-              { icon: "🏗️", title: "Development Parcels", body: "Pre-zoning or rezoning-dependent parcels are nearly impossible to bank-finance. Vendor financing bridges the gap." },
-              { icon: "⏱️", title: "Time-Sensitive Deals", body: "Commercial bank approvals take 60–90 days. A motivated vendor can close in weeks with a qualified buyer." },
-              { icon: "🤝", title: "Flexible Structures", body: "Balloon terms, interest-only periods, and negotiated rates — structures a bank would never offer." },
-            ].map(({ icon, title, body }) => (
+              { Icon: Wheat, title: "Farm & Agricultural Land", body: "Banks rarely finance raw agricultural land without production income. Vendors who know the land can finance it directly." },
+              { Icon: Hammer, title: "Development Parcels", body: "Pre-zoning or rezoning-dependent parcels are nearly impossible to bank-finance. Vendor financing bridges the gap." },
+              { Icon: Timer, title: "Time-Sensitive Deals", body: "Commercial bank approvals take 60–90 days. A motivated vendor can close in weeks with a qualified buyer." },
+              { Icon: HeartHandshake, title: "Flexible Structures", body: "Balloon terms, interest-only periods, and negotiated rates — structures a bank would never offer." },
+            ].map(({ Icon, title, body }) => (
               <div key={title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
-                <div className="text-2xl mb-3" dangerouslySetInnerHTML={{__html: icon}} />
-                <p className="font-semibold text-gray-900 text-sm mb-1" dangerouslySetInnerHTML={{__html: title}} />
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{body}</p>
               </div>
             ))}

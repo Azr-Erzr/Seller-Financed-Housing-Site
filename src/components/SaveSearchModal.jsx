@@ -167,8 +167,8 @@ export default function SaveSearchModal({ open, onClose, filters = {}, label = "
               )}
             </div>
 
-            <p className="text-xs text-gray-400 leading-relaxed">
-              🔔 We'll send you a daily digest when new listings match your filters.
+            <p className="text-xs text-gray-400 leading-relaxed flex items-start gap-1.5">
+              <Bell className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" /> We'll send you a daily digest when new listings match your filters.
               No spam — only relevant new listings. Unsubscribe anytime from your account.
             </p>
 

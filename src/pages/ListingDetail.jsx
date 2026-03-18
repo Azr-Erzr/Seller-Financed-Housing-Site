@@ -20,7 +20,7 @@ import { DetailSkeleton } from "../components/LoadingSkeleton";
 import {
   MapPin, Bed, Bath, Square, Car, Calendar, Ruler, Home, Bookmark,
   BookmarkCheck, Phone, ArrowLeft, Flame, Snowflake, Droplets, Trees,
-  Building, Shield, Clock, DollarSign, ChevronDown
+  Building, Shield, Clock, DollarSign, ChevronDown, Check, FileText
 } from "lucide-react";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
@@ -179,7 +179,7 @@ export default function ListingDetail() {
             <div className="relative h-72 md:h-[420px] bg-gray-100">
               {listing.image
                 ? <img src={listing.image} alt={listing.title} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center text-gray-300 text-6xl">🏠</div>
+                : <div className="w-full h-full flex items-center justify-center text-gray-300"><Home className="w-16 h-16" /></div>
               }
               <div className="absolute top-4 right-4 flex gap-2">
                 {listing.badges?.map((b) => (
@@ -456,10 +456,11 @@ export default function ListingDetail() {
                 </button>
 
                 <div className="pt-3 border-t border-gray-100">
-                  <p className="text-sm text-gray-500 mb-2">
+                  <p className="text-sm text-gray-500 mb-2 flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-gray-400" />
                     {docsUnlocked
-                      ? "📄 Documents are unlocked."
-                      : "📄 Full documents available after NDA."}
+                      ? "Documents are unlocked."
+                      : "Full documents available after NDA."}
                   </p>
                   {!docsUnlocked ? (
                     <button onClick={() => setNdaOpen(true)}
@@ -467,7 +468,7 @@ export default function ListingDetail() {
                       Sign NDA & Unlock Docs
                     </button>
                   ) : (
-                    <span className="text-green-600 font-medium text-sm">✓ NDA signed — docs available</span>
+                    <span className="text-green-600 font-medium text-sm flex items-center gap-1"><Check className="w-4 h-4" /> NDA signed — docs available</span>
                   )}
                 </div>
               </div>

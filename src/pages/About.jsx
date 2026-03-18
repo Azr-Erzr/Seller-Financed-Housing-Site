@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
-import { ArrowRight, Shield, Scale, DollarSign, Users, Building2, Home } from "lucide-react";
+import { ArrowRight, Shield, Scale, DollarSign, Users, Building2, Home, CheckCircle, XCircle, Zap, Landmark, ScrollText } from "lucide-react";
 
 export default function About() {
   const { mode, MODES } = useSite();
@@ -126,7 +126,7 @@ export default function About() {
           </p>
           <div className="bg-orange-50 border border-orange-200 rounded-xl p-5 space-y-3 mb-4">
             <div className="flex items-start gap-3">
-              <span className="text-xl shrink-0">⚡</span>
+              <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mt-0.5"><Zap className="w-4 h-4" /></div>
               <div>
                 <p className="font-semibold text-gray-900 text-sm">Power of Sale (Ontario's preferred remedy)</p>
                 <p className="text-sm text-gray-600">If a buyer defaults, you issue a Notice of Default. After a minimum 35-day
@@ -136,7 +136,7 @@ export default function About() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-xl shrink-0">🏛️</span>
+              <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mt-0.5"><Landmark className="w-4 h-4" /></div>
               <div>
                 <p className="font-semibold text-gray-900 text-sm">Foreclosure</p>
                 <p className="text-sm text-gray-600">A longer court process that results in full title transfer back to you.
@@ -144,7 +144,7 @@ export default function About() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-xl shrink-0">📜</span>
+              <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mt-0.5"><ScrollText className="w-4 h-4" /></div>
               <div>
                 <p className="font-semibold text-gray-900 text-sm">Writ of Possession</p>
                 <p className="text-sm text-gray-600">If the buyer refuses to vacate, a court-issued Writ of Possession directs
@@ -223,15 +223,15 @@ export default function About() {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Are (and Are Not)</h2>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { icon: "✅", title: "A marketplace", body: "We connect buyers and sellers. We provide tools to evaluate matches, share documents privately, and initiate contact." },
-              { icon: "✅", title: "An education platform", body: "We explain how seller financing works, what the legal framework looks like, and what both parties should expect." },
-              { icon: "✅", title: "A partner directory", body: "We vet and list real estate lawyers, inspectors, stagers, photographers, and movers — so you can build your team independently." },
-              { icon: "❌", title: "Not a mortgage broker", body: "We do not arrange financing, provide mortgage advice, or act as an intermediary in your transaction." },
-              { icon: "❌", title: "Not a real estate agent", body: "We are not licensed to represent buyers or sellers. All negotiations happen directly between parties." },
-              { icon: "❌", title: "Not a legal advisor", body: "We strongly recommend — and will repeatedly remind you — to engage a licensed Ontario real estate lawyer for every deal." },
-            ].map(({ icon, title, body }) => (
+              { Icon: CheckCircle, color: "text-green-600", title: "A marketplace", body: "We connect buyers and sellers. We provide tools to evaluate matches, share documents privately, and initiate contact." },
+              { Icon: CheckCircle, color: "text-green-600", title: "An education platform", body: "We explain how seller financing works, what the legal framework looks like, and what both parties should expect." },
+              { Icon: CheckCircle, color: "text-green-600", title: "A partner directory", body: "We vet and list real estate lawyers, inspectors, stagers, photographers, and movers — so you can build your team independently." },
+              { Icon: XCircle, color: "text-red-500", title: "Not a mortgage broker", body: "We do not arrange financing, provide mortgage advice, or act as an intermediary in your transaction." },
+              { Icon: XCircle, color: "text-red-500", title: "Not a real estate agent", body: "We are not licensed to represent buyers or sellers. All negotiations happen directly between parties." },
+              { Icon: XCircle, color: "text-red-500", title: "Not a legal advisor", body: "We strongly recommend — and will repeatedly remind you — to engage a licensed Ontario real estate lawyer for every deal." },
+            ].map(({ Icon, color, title, body }) => (
               <div key={title} className="flex items-start gap-3">
-                <span className="text-lg shrink-0 mt-0.5">{icon}</span>
+                <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${color}`} />
                 <div>
                   <p className="font-semibold text-gray-900 text-sm">{title}</p>
                   <p className="text-sm text-gray-500 mt-0.5">{body}</p>

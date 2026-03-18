@@ -5,7 +5,7 @@ import maplibregl from "maplibre-gl";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { getAllCommListings } from "../../lib/commercial-storage";
-import { SlidersHorizontal, X, Ruler, Building, Truck, LocateFixed, PenTool } from "lucide-react";
+import { SlidersHorizontal, X, Ruler, Building, Truck, LocateFixed, PenTool, Check } from "lucide-react";
 import { PROPERTY_CATEGORIES } from "../../data/commercial-seed";
 
 const NAVBAR_HEIGHT = 73;
@@ -68,7 +68,7 @@ function MapCommCard({listing,isSelected,isHovered,onClick,onHover,onLeave}){
           </div>
           <div className="flex items-center gap-1.5 mt-2">
             {listing.zoning&&<span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600">{listing.zoning}</span>}
-            {listing.environmentalStatus?.includes("Clean")&&<span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-green-50 text-green-700">✓ Clean</span>}
+            {listing.environmentalStatus?.includes("Clean")&&<span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 flex items-center gap-0.5"><Check className="w-2.5 h-2.5"/> Clean</span>}
           </div>
         </div>
       </div>

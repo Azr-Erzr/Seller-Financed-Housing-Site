@@ -10,7 +10,7 @@ export const ARTICLES = [
     title: "What Is Seller Financing? A Plain-English Guide",
     subtitle: "No banks, no agents — just two people making a deal.",
     readTime: "5 min read",
-    icon: "🏡",
+    icon: "home",
     heroColor: "from-blue-600 to-blue-800",
     summary: "Seller financing (also called a Vendor Take-Back mortgage or VTB) is when the person selling a home acts as the bank. Instead of the buyer going to a bank for a mortgage, they make monthly payments directly to the seller — at a rate and on terms they negotiate together.",
     sections: [
@@ -48,7 +48,7 @@ This means a seller on Sel-Fi saves their side of the commission regardless of w
     title: "The True Cost of Selling With an Agent",
     subtitle: "The numbers most sellers don't see until it's too late.",
     readTime: "6 min read",
-    icon: "💸",
+    icon: "banknote",
     heroColor: "from-orange-500 to-orange-700",
     summary: "A traditional real estate sale costs the seller far more than most people realize going in. Between commissions, hidden fees, and the loss of control over your own negotiation, selling through an agent on a $600,000 home typically costs $30,000–$45,000 before you walk away.",
     sections: [
@@ -87,7 +87,7 @@ Total estimated savings: $30,000–$34,000 on a $600,000 home. Before the intere
     title: "How to Be Your Own Bank: The Seller as Lender",
     subtitle: "You've built equity. Now let it work for you.",
     readTime: "7 min read",
-    icon: "🏦",
+    icon: "landmark",
     heroColor: "from-purple-600 to-purple-800",
     summary: "When a seller holds a VTB mortgage, they don't just sell their property — they become an investor. The unpaid balance earns interest every month. On a $500,000 VTB at 7% over 5 years, a seller earns roughly $150,000 in interest payments. This is income a bank would normally capture.",
     sections: [
@@ -129,7 +129,7 @@ One important note: if the buyer also has a first-position bank mortgage, that l
     title: "A Buyer's Complete Guide to VTB Mortgages",
     subtitle: "The bank said no. Here's your actual path to homeownership.",
     readTime: "8 min read",
-    icon: "🔑",
+    icon: "key",
     heroColor: "from-green-600 to-green-800",
     summary: "A Vendor Take-Back (VTB) mortgage is when the person selling the home lends you some or all of the purchase price directly. You still get the house. You still get the keys. You just make payments to the seller instead of the bank.",
     sections: [
@@ -166,7 +166,7 @@ Difference: ~$184/month — or $2,208/year. In exchange, you avoid months of app
     title: "The Closing Process Without a Bank",
     subtitle: "Step by step — what actually happens when you close a seller-financed deal.",
     readTime: "5 min read",
-    icon: "✍️",
+    icon: "pen",
     heroColor: "from-teal-600 to-teal-800",
     summary: "Closing a seller-financed deal uses the same legal process as any real estate transaction in Ontario — just without a bank in the middle. A real estate lawyer handles the paperwork, registers the mortgage, and transfers the title.",
     sections: [
@@ -201,7 +201,7 @@ After closing, the buyer sends monthly payments to the seller. When the balance 
     title: "Rent-to-Own vs. Seller Finance: Which Is Right for You?",
     subtitle: "Two paths to homeownership without a bank.",
     readTime: "5 min read",
-    icon: "⚖️",
+    icon: "scale",
     heroColor: "from-purple-600 to-purple-800",
     summary: "Both rent-to-own and seller financing let buyers get into a home without traditional bank approval. But they work very differently and suit different buyer situations.",
     sections: [
@@ -228,7 +228,7 @@ Consider rent-to-own if you need time to save a larger down payment or your cred
     title: "VTB in Commercial Real Estate: Why Vendors Use It",
     subtitle: "Seller financing closes deals banks can't — and earns you a secured return.",
     readTime: "5 min read",
-    icon: "🏗️",
+    icon: "hammer",
     heroColor: "from-emerald-600 to-emerald-800",
     summary: "Vendor Take-Back financing is far more common in commercial real estate than most residential buyers realize. Land, farms, development parcels, and commercial buildings regularly transact with the vendor holding a registered mortgage — because it benefits both sides and bypasses the delays and rigidity of institutional commercial lending.",
     sections: [
@@ -268,7 +268,7 @@ The balloon balance at term end is typically refinanced by the buyer. Your lawye
     title: "Capital Gains Deferral: The Vendor's Hidden Advantage",
     subtitle: "Structuring a VTB correctly can defer a significant tax liability over the payment term.",
     readTime: "6 min read",
-    icon: "📊",
+    icon: "chart",
     heroColor: "from-amber-500 to-amber-700",
     summary: "Under Canada's Income Tax Act, a vendor who accepts payment for a property over multiple years may be able to use the 'capital gains reserve' to defer recognizing the full gain until proceeds are actually received. A VTB mortgage, by its nature, creates exactly this kind of installment structure.",
     sections: [
@@ -304,7 +304,7 @@ This is exactly why a CPA who understands real estate transactions is essential.
     title: "Commercial Land Due Diligence: What to Verify Before You Close",
     subtitle: "The bank would do all of this before approving a loan. You need to do it too.",
     readTime: "6 min read",
-    icon: "🔍",
+    icon: "search",
     heroColor: "from-blue-600 to-blue-800",
     summary: "In a seller-financed commercial land transaction, there's no bank forcing a Phase 1 ESA or title search. That means the buyer and their lawyer must drive the due diligence process. Here's what a responsible buyer verifies before closing on a VTB deal.",
     sections: [

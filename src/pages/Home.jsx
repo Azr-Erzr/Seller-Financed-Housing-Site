@@ -1,7 +1,7 @@
 // src/pages/Home.jsx — Sel-Fi Homes redesign
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ArrowRight } from "lucide-react";
+import { Search, ArrowRight, Banknote, Landmark, CheckCircle, Scale, Wrench, Globe, RefreshCw, BarChart3, Building, HeartHandshake, Lock, FileText, PenLine } from "lucide-react";
 import { getAllListings, getAllProfiles } from "../lib/storage";
 import { useRequireAuth } from "../context/AuthContext";
 import ListingCard from "../components/ListingCard";
@@ -119,13 +119,15 @@ export default function Home() {
               </p>
               <div className="space-y-4">
                 {[
-                  { icon: "💸", title: "Keep both sides of the commission", body: "Typically 5% + HST — that's over $36,000 saved on a $650K home." },
-                  { icon: "🏦", title: "Earn interest like a bank", body: "At 7% on a $480K VTB, you collect ~$150K in interest over 5 years." },
-                  { icon: "✅", title: "You choose your buyer", body: "Review profiles, see income and DTI ratios, and decide who gets to buy your home." },
-                  { icon: "⚖️", title: "You're legally protected", body: "Your mortgage is registered on title. If the buyer defaults, you have Power of Sale — the same right any bank has." },
-                ].map(({ icon, title, body }) => (
+                  { Icon: Banknote, title: "Keep both sides of the commission", body: "Typically 5% + HST — that's over $36,000 saved on a $650K home." },
+                  { Icon: Landmark, title: "Earn interest like a bank", body: "At 7% on a $480K VTB, you collect ~$150K in interest over 5 years." },
+                  { Icon: CheckCircle, title: "You choose your buyer", body: "Review profiles, see income and DTI ratios, and decide who gets to buy your home." },
+                  { Icon: Scale, title: "You're legally protected", body: "Your mortgage is registered on title. If the buyer defaults, you have Power of Sale — the same right any bank has." },
+                ].map(({ Icon, title, body }) => (
                   <div key={title} className="flex items-start gap-3">
-                    <span className="text-2xl shrink-0">{icon}</span>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                      <Icon className="w-5 h-5" />
+                    </div>
                     <div>
                       <p className="font-semibold text-gray-900 text-sm">{title}</p>
                       <p className="text-gray-500 text-sm mt-0.5">{body}</p>
@@ -178,13 +180,15 @@ export default function Home() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
-              { icon: "👷", title: "Self-Employed", body: "Banks reject you because of T4 variability. Sellers can see your actual income and stability." },
-              { icon: "🌍", title: "New to Canada", body: "Banks want 2 years of Canadian credit history. Sellers can consider your full financial picture." },
-              { icon: "🔄", title: "Career Change", body: "New job, new income — but banks want 2 years at the same employer. Sellers are more flexible." },
-              { icon: "📊", title: "Just Below Threshold", body: "If you're close but not quite there on the stress test, a seller can make the call a bank won't." },
-            ].map(({ icon, title, body }) => (
+              { Icon: Wrench, title: "Self-Employed", body: "Banks reject you because of T4 variability. Sellers can see your actual income and stability." },
+              { Icon: Globe, title: "New to Canada", body: "Banks want 2 years of Canadian credit history. Sellers can consider your full financial picture." },
+              { Icon: RefreshCw, title: "Career Change", body: "New job, new income — but banks want 2 years at the same employer. Sellers are more flexible." },
+              { Icon: BarChart3, title: "Just Below Threshold", body: "If you're close but not quite there on the stress test, a seller can make the call a bank won't." },
+            ].map(({ Icon, title, body }) => (
               <div key={title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
-                <div className="text-2xl mb-3">{icon}</div>
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5" />
+                </div>
                 <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{body}</p>
               </div>
@@ -205,13 +209,15 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { icon: "⚖️", title: "Backed by Ontario Law", body: "VTB mortgages are registered on title under the same legal framework as any bank mortgage." },
-              { icon: "🏛️", title: "Lawyer Required", body: "Every deal closes through a licensed Ontario real estate lawyer. No exceptions." },
-              { icon: "🤝", title: "No Referral Kickbacks", body: "Our partner directory is unbiased. We don't take commissions from professionals we recommend." },
-              { icon: "🔒", title: "Income Privacy", body: "Financial data is protected by default. Buyers choose what to share and when." },
-            ].map(({ icon, title, body }) => (
+              { Icon: Scale, title: "Backed by Ontario Law", body: "VTB mortgages are registered on title under the same legal framework as any bank mortgage." },
+              { Icon: Building, title: "Lawyer Required", body: "Every deal closes through a licensed Ontario real estate lawyer. No exceptions." },
+              { Icon: HeartHandshake, title: "No Referral Kickbacks", body: "Our partner directory is unbiased. We don't take commissions from professionals we recommend." },
+              { Icon: Lock, title: "Income Privacy", body: "Financial data is protected by default. Buyers choose what to share and when." },
+            ].map(({ Icon, title, body }) => (
               <div key={title}>
-                <div className="text-3xl mb-3">{icon}</div>
+                <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3">
+                  <Icon className="w-6 h-6" />
+                </div>
                 <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{body}</p>
               </div>
@@ -229,12 +235,14 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { num: 1, icon: "📝", title: "List or Create a Profile", body: "Sellers post their home with financing terms. Buyers create a profile with budget, income, and deal preferences. Both take about 5 minutes." },
-              { num: 2, icon: "🔍", title: "Match and Connect", body: "Sel-Fi scores compatibility across 5 financial dimensions. Browse matches, sign NDAs to share documents, and connect directly." },
-              { num: 3, icon: "✅", title: "Negotiate and Close", body: "Agree on terms directly. A real estate lawyer registers the mortgage and transfers title. No bank approval, no commission." },
-            ].map(({ num, icon, title, body }) => (
+              { num: 1, Icon: FileText, title: "List or Create a Profile", body: "Sellers post their home with financing terms. Buyers create a profile with budget, income, and deal preferences. Both take about 5 minutes." },
+              { num: 2, Icon: Search, title: "Match and Connect", body: "Sel-Fi scores compatibility across 5 financial dimensions. Browse matches, sign NDAs to share documents, and connect directly." },
+              { num: 3, Icon: CheckCircle, title: "Negotiate and Close", body: "Agree on terms directly. A real estate lawyer registers the mortgage and transfers title. No bank approval, no commission." },
+            ].map(({ num, Icon, title, body }) => (
               <div key={num} className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
-                <div className="text-4xl mb-4">{icon}</div>
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
+                  <Icon className="w-7 h-7" />
+                </div>
                 <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-4">{num}</div>
                 <h3 className="font-semibold text-gray-900 text-lg mb-2">{title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{body}</p>

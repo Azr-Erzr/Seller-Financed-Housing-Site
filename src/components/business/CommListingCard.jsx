@@ -2,7 +2,7 @@
 // Enhanced commercial card — days on market, color-coded category, richer details
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Ruler, Building, Truck } from "lucide-react";
+import { MapPin, Ruler, Building, Truck, Check } from "lucide-react";
 
 const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'%3E%3Crect width='100%25' height='100%25' fill='%23f0fdf4'/%3E%3Cpath d='M120 380h560v-28H120v28Zm60-68h440l-110-120-124 138-46-52-160 162z' fill='%2386efac'/%3E%3C/svg%3E";
 
@@ -111,7 +111,7 @@ export default function CommListingCard({ listing }) {
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{listing.zoning}</span>
             )}
             {listing.environmentalStatus && listing.environmentalStatus.includes("Clean") && (
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">✓ Env Clean</span>
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700 flex items-center gap-0.5"><Check className="w-3 h-3"/> Env Clean</span>
             )}
             {listing.frontage && (
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{listing.frontage}</span>

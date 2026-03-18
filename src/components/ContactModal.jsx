@@ -3,7 +3,7 @@
 // Saves message to Supabase messages table. No real-time needed at MVP.
 
 import React, { useState } from "react";
-import { X, Send, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Send, MessageSquare, ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useToast } from "./Toast";
 import { useSite } from "../context/SiteContext";
@@ -245,8 +245,8 @@ export default function ContactModal({
             </div>
 
             {/* Privacy note */}
-            <p className="text-xs text-gray-400 leading-relaxed">
-              🔒 Your email is only used so the recipient can reply to you.
+            <p className="text-xs text-gray-400 leading-relaxed flex items-start gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" /> Your email is only used so the recipient can reply to you.
               Sel-Fi does not share contact details publicly.
             </p>
 

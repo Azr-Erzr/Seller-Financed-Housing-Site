@@ -3,20 +3,25 @@ import React, { useState, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { PARTNERS } from "../data/partners";
 import { useSite } from "../context/SiteContext";
-import { Star, MapPin, Shield, CheckCircle, ArrowRight, Phone, ExternalLink } from "lucide-react";
+import { Star, MapPin, Shield, CheckCircle, ArrowRight, Phone, ExternalLink, Scale, Sofa, Camera, Search as SearchIcon, Landmark, Truck, Trophy } from "lucide-react";
+
+const PARTNER_ICON_MAP = {
+  scale: Scale, sofa: Sofa, camera: Camera, search: SearchIcon,
+  landmark: Landmark, truck: Truck, trophy: Trophy,
+};
 
 // ── Category definitions ──────────────────────────────────────────────
 const CATEGORIES = [
   {
     id: "all",
     label: "All Pros",
-    icon: "🏆",
+    icon: "trophy",
     description: null,
   },
   {
     id: "lawyer",
     label: "Real Estate Lawyers",
-    icon: "⚖️",
+    icon: "scale",
     description: "A real estate lawyer is not optional in a seller-financed deal — it's the foundation. They register your VTB mortgage on title, draft the Agreement of Purchase and Sale with proper default provisions, conduct the title search, and handle the closing. Without proper registration, your charge is unenforceable. Every deal on Sel-Fi should involve a lawyer on both sides.",
     whyNeed: [
       "Registers your VTB mortgage charge on the buyer's title",
@@ -29,7 +34,7 @@ const CATEGORIES = [
   {
     id: "inspector",
     label: "Home Inspectors",
-    icon: "🔍",
+    icon: "search",
     description: "A home inspection protects the buyer and gives the seller credibility. In a seller-financed deal, the seller has extra reason to want a clean inspection — it supports the property's value and reduces the chance of post-closing disputes about undisclosed defects.",
     whyNeed: [
       "Identifies structural, electrical, and plumbing issues before closing",
@@ -41,7 +46,7 @@ const CATEGORIES = [
   {
     id: "stager",
     label: "Home Stagers",
-    icon: "🛋️",
+    icon: "sofa",
     description: "Without a listing agent, you control your staging budget. You hire the stager directly — no referral kickbacks, no inflated invoices. Well-staged homes sell faster and at higher prices. On Sel-Fi, that means more buyers reaching out sooner.",
     whyNeed: [
       "Faster buyer interest — staged homes get more enquiries",
@@ -53,7 +58,7 @@ const CATEGORIES = [
   {
     id: "photographer",
     label: "Photographers",
-    icon: "📸",
+    icon: "camera",
     description: "Your listing photos are your first impression. On Sel-Fi, you upload photos directly — which means the quality of your photos determines how many buyers contact you. A professional photographer pays for themselves in buyer interest.",
     whyNeed: [
       "First impression in a buyer's search results is your photos",
@@ -65,7 +70,7 @@ const CATEGORIES = [
   {
     id: "broker",
     label: "Mortgage Brokers",
-    icon: "🏦",
+    icon: "landmark",
     description: "In a hybrid deal where the buyer also has a bank mortgage, a mortgage broker helps the buyer structure the bank portion alongside the seller's VTB. They also help sellers understand the implications of holding a second-position mortgage.",
     whyNeed: [
       "Helps buyers structure bank + VTB combined financing",
@@ -77,7 +82,7 @@ const CATEGORIES = [
   {
     id: "mover",
     label: "Verified Movers",
-    icon: "🚚",
+    icon: "truck",
     description: "All movers in our directory are CVOR registered, carry cargo insurance, and hold WSIB coverage. When you hire through our directory, you know exactly who's handling your belongings — no fly-by-night operators.",
     whyNeed: [
       "CVOR registered — legal to operate commercially in Ontario",
@@ -256,7 +261,9 @@ export default function Partners() {
       <div className="bg-white border-b border-gray-100 sticky top-[73px] z-40">
         <div className="max-w-6xl mx-auto px-4 py-3">
           <div className="flex flex-wrap items-center gap-2">
-            {CATEGORIES.map(({ id, label, icon }) => (
+            {CATEGORIES.map(({ id, label, icon }) => {
+              const IconComp = PARTNER_ICON_MAP[icon];
+              return (
               <button
                 key={id}
                 onClick={() => handleCategoryChange(id)}
@@ -266,9 +273,10 @@ export default function Partners() {
                     : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"
                 }`}
               >
-                <span>{icon}</span> {label}
+                {IconComp && <IconComp className="w-4 h-4" />} {label}
               </button>
-            ))}
+              );
+            })}
             <Link to="/partner-apply"
               className="flex items-center gap-1.5 px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-50 whitespace-nowrap transition-colors">
               + Become a Partner
@@ -283,7 +291,7 @@ export default function Partners() {
         {categoryDef?.description && (
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
             <div className="flex items-start gap-4">
-              <div className="text-4xl shrink-0">{categoryDef.icon}</div>
+              {(() => { const I = PARTNER_ICON_MAP[categoryDef.icon]; return I ? <div className={`w-12 h-12 rounded-xl ${isBusiness ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"} flex items-center justify-center shrink-0`}><I className="w-6 h-6" /></div> : null; })()}
               <div>
                 <h2 className="font-bold text-gray-900 text-xl mb-2">Why You Need a {categoryDef.label.replace(/s$/, "")}</h2>
                 <p className="text-gray-600 leading-relaxed text-sm mb-4">{categoryDef.description}</p>

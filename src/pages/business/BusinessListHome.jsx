@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { saveCommListing } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
-import { Building2, CheckCircle, Eye, EyeOff, Ruler, Building, Truck } from "lucide-react";
+import { Building2, CheckCircle, Eye, EyeOff, Ruler, Building, Truck, Check } from "lucide-react";
 import AddressAutocomplete from "../../components/AddressAutocomplete";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS,
@@ -63,7 +63,7 @@ function CommPreview({ form }) {
   const catColor = getCategoryColor(form.propertyCategory);
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="relative h-48 bg-emerald-50 flex items-center justify-center text-emerald-200 text-4xl">🏢
+      <div className="relative h-48 bg-emerald-50 flex items-center justify-center text-emerald-200"><Building2 className="w-12 h-12" />
         {form.propertyCategory && <div className="absolute top-3 left-3 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow" style={{ background: catColor }}>{form.propertyCategory}</div>}
         {form.dealTypes[0] && <div className="absolute top-3 right-3 bg-emerald-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow">{form.dealTypes[0]}</div>}
         <div className="absolute bottom-3 left-3 bg-black/60 text-white px-2 py-0.5 rounded text-[10px] font-medium">Preview</div>
@@ -79,7 +79,7 @@ function CommPreview({ form }) {
         </div>
         <div className="flex flex-wrap gap-1.5 mt-3">
           {form.zoning && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{form.zoning}</span>}
-          {form.environmentalStatus && form.environmentalStatus.includes("Clean") && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700">✓ Env Clean</span>}
+          {form.environmentalStatus && form.environmentalStatus.includes("Clean") && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-700 flex items-center gap-0.5"><Check className="w-3 h-3"/> Env Clean</span>}
         </div>
       </div>
     </div>

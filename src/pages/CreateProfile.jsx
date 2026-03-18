@@ -8,7 +8,7 @@ import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
 import { useAuth } from "../context/AuthContext";
 import { generateAlias } from "../lib/alias";
-import { Users, CheckCircle, Camera, X, EyeOff, Eye } from "lucide-react";
+import { Users, CheckCircle, Camera, X, EyeOff, Eye, Lock, Check } from "lucide-react";
 
 const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white text-gray-900 placeholder-gray-400";
 
@@ -279,10 +279,10 @@ export default function CreateProfile() {
               </div>
               <CurrencyInput label="" value={form.monthlyIncome} onChange={(v) => set("monthlyIncome", v)}
                 placeholder="9,200" hint="Before taxes." error={errors.monthlyIncome} />
-              <p className="text-xs text-blue-600">
+              <p className="text-xs text-blue-600 flex items-center gap-1">
                 {form.showIncome
-                  ? "✓ Your income will be visible to sellers viewing your profile."
-                  : "🔒 Your income is hidden from sellers but used internally for match scoring."}
+                  ? <><Check className="w-3 h-3" /> Your income will be visible to sellers viewing your profile.</>
+                  : <><Lock className="w-3 h-3" /> Your income is hidden from sellers but used internally for match scoring.</>}
               </p>
             </div>
 
@@ -352,9 +352,9 @@ export default function CreateProfile() {
                   </div>
                 </label>
               </div>
-              <p className="text-xs text-blue-600 mt-2">
+              <p className="text-xs text-blue-600 mt-2 flex items-center gap-1">
                 {form.useAlias
-                  ? "🔒 Your profile will display a generated alias (e.g. \"Maple Buyer #7K4M\"). Your real name stays private until contact."
+                  ? <><Lock className="w-3 h-3" /> Your profile will display a generated alias (e.g. "Maple Buyer #7K4M"). Your real name stays private until contact.</>
                   : "Your real name will be visible on your public profile."}
               </p>
             </div>

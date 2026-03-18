@@ -1,12 +1,12 @@
 // src/data/partners.js
 
 export const PARTNER_CATEGORIES = [
-  { value: "lawyer",       label: "Real Estate Lawyers",       icon: "⚖️",  desc: "Essential for closing any seller-financed deal" },
-  { value: "stager",       label: "Home Stagers",              icon: "🛋️",  desc: "Traditional and AI staging services" },
-  { value: "photographer", label: "Photographers & Video",     icon: "📸",  desc: "Photos, drone footage, virtual tours" },
-  { value: "inspector",    label: "Home Inspectors",           icon: "🔍",  desc: "Pre-sale and buyer due diligence inspections" },
-  { value: "broker",       label: "Mortgage Brokers",          icon: "🏦",  desc: "For buyers exploring all financing options" },
-  { value: "mover",        label: "Licensed & Insured Movers", icon: "🚛",  desc: "CVOR-registered movers with verified cargo insurance" },
+  { value: "lawyer",       label: "Real Estate Lawyers",       icon: "scale",    desc: "Essential for closing any seller-financed deal" },
+  { value: "stager",       label: "Home Stagers",              icon: "sofa",     desc: "Traditional and AI staging services" },
+  { value: "photographer", label: "Photographers & Video",     icon: "camera",   desc: "Photos, drone footage, virtual tours" },
+  { value: "inspector",    label: "Home Inspectors",           icon: "search",   desc: "Pre-sale and buyer due diligence inspections" },
+  { value: "broker",       label: "Mortgage Brokers",          icon: "landmark", desc: "For buyers exploring all financing options" },
+  { value: "mover",        label: "Licensed & Insured Movers", icon: "truck",    desc: "CVOR-registered movers with verified cargo insurance" },
 ];
 
 export const PARTNERS = [

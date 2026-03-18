@@ -12,9 +12,9 @@ import ContactModal from "../../components/ContactModal";
 import CommListingCard from "../../components/business/CommListingCard";
 import { DetailSkeleton } from "../../components/LoadingSkeleton";
 import {
-  MapPin, Ruler, Building, Truck, Phone, Bookmark, BookmarkCheck, ArrowLeft,
+  MapPin, Ruler, Building, Building2, Truck, Phone, Bookmark, BookmarkCheck, ArrowLeft,
   Flame, Snowflake, Droplets, Trees, Shield, Clock, DollarSign, Zap, Wifi,
-  ChevronDown, Calendar, Leaf
+  ChevronDown, Calendar, Leaf, Check, FileText
 } from "lucide-react";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
@@ -170,7 +170,7 @@ export default function BusinessListingDetail() {
             <div className="relative h-72 md:h-[420px] bg-emerald-50">
               {listing.image
                 ? <img src={listing.image} alt={listing.title} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center text-gray-300 text-6xl">🏢</div>
+                : <div className="w-full h-full flex items-center justify-center text-gray-300"><Building2 className="w-16 h-16" /></div>
               }
               <div className="absolute top-4 left-4 flex gap-2">
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full shadow ${catColor}`}>
@@ -446,8 +446,9 @@ export default function BusinessListingDetail() {
                   {saved ? "Saved" : "Save Property"}
                 </button>
                 <div className="pt-3 border-t border-gray-100">
-                  <p className="text-sm text-gray-500 mb-2">
-                    {docsUnlocked ? "📄 Documents unlocked — surveys, environmental reports, and financials available." : "📄 Full documents available after NDA."}
+                  <p className="text-sm text-gray-500 mb-2 flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-gray-400" />
+                    {docsUnlocked ? "Documents unlocked — surveys, environmental reports, and financials available." : "Full documents available after NDA."}
                   </p>
                   {!docsUnlocked ? (
                     <button onClick={() => setNdaOpen(true)}
@@ -455,7 +456,7 @@ export default function BusinessListingDetail() {
                       Sign NDA & Unlock Docs
                     </button>
                   ) : (
-                    <span className="text-green-600 font-medium text-sm">✓ NDA signed — docs available</span>
+                    <span className="text-green-600 font-medium text-sm flex items-center gap-1"><Check className="w-4 h-4" /> NDA signed — docs available</span>
                   )}
                 </div>
               </div>

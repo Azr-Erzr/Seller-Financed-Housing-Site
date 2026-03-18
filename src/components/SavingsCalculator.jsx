@@ -4,6 +4,7 @@
 
 import React, { useState } from "react";
 import { useSite } from "../context/SiteContext";
+import { Check, X as XIcon } from "lucide-react";
 
 const fmt = (n) => `$${Math.round(n).toLocaleString("en-CA")}`;
 
@@ -238,10 +239,10 @@ function BuyerCalc({ accent, accentBg, ring, isBusiness }) {
           <p className={`text-3xl font-extrabold ${isBusiness ? "text-emerald-700" : "text-purple-700"}`}>{fmt(vtbMonthly)}</p>
           <p className={`text-xs mt-1 ${isBusiness ? "text-emerald-400" : "text-purple-400"}`}>/month at {vtbRate}%</p>
           <div className="mt-3 pt-3 border-t border-gray-200 space-y-1">
-            <p className="text-xs text-green-600 font-semibold">✓ No bank approval</p>
+            <p className="text-xs text-green-600 font-semibold flex items-center gap-1"><Check className="w-3 h-3" /> No bank approval</p>
             {isBusiness
-              ? <><p className="text-xs text-green-600">✓ Faster closing — no lender delays</p><p className="text-xs text-green-600">✓ Flexible balloon / terms</p></>
-              : <><p className="text-xs text-green-600">✓ Self-employed welcome</p><p className="text-xs text-green-600">✓ Flexible qualification</p></>
+              ? <><p className="text-xs text-green-600 flex items-center gap-1"><Check className="w-3 h-3" /> Faster closing — no lender delays</p><p className="text-xs text-green-600 flex items-center gap-1"><Check className="w-3 h-3" /> Flexible balloon / terms</p></>
+              : <><p className="text-xs text-green-600 flex items-center gap-1"><Check className="w-3 h-3" /> Self-employed welcome</p><p className="text-xs text-green-600 flex items-center gap-1"><Check className="w-3 h-3" /> Flexible qualification</p></>
             }
           </div>
         </div>
@@ -252,10 +253,10 @@ function BuyerCalc({ accent, accentBg, ring, isBusiness }) {
           <p className="text-3xl font-extrabold text-gray-700">{fmt(bnkMonthly)}</p>
           <p className="text-xs text-gray-400 mt-1">/month at {bankRate}%</p>
           <div className="mt-3 pt-3 border-t border-gray-200 space-y-1">
-            <p className="text-xs text-red-500">✗ Environmental reports required</p>
+            <p className="text-xs text-red-500 flex items-center gap-1"><XIcon className="w-3 h-3" /> Environmental reports required</p>
             {isBusiness
-              ? <><p className="text-xs text-red-500">✗ 60–90 day approval process</p><p className="text-xs text-red-500">✗ Rigid covenant requirements</p></>
-              : <><p className="text-xs text-red-500">✗ Stress test required</p><p className="text-xs text-red-500">✗ T4 income only</p></>
+              ? <><p className="text-xs text-red-500 flex items-center gap-1"><XIcon className="w-3 h-3" /> 60–90 day approval process</p><p className="text-xs text-red-500 flex items-center gap-1"><XIcon className="w-3 h-3" /> Rigid covenant requirements</p></>
+              : <><p className="text-xs text-red-500 flex items-center gap-1"><XIcon className="w-3 h-3" /> Stress test required</p><p className="text-xs text-red-500 flex items-center gap-1"><XIcon className="w-3 h-3" /> T4 income only</p></>
             }
           </div>
         </div>

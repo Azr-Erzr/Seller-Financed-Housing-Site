@@ -5,7 +5,12 @@ import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
 import { ARTICLES_HOMES, ARTICLES_BUSINESS } from "../data/guide-articles";
 import SavingsCalculator from "../components/SavingsCalculator";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, Banknote, Landmark, KeyRound, ClipboardList, BarChart3, Zap, Hammer, Home as HomeIcon, PenLine, Scale, Search as SearchIcon } from "lucide-react";
+
+const ARTICLE_ICON_MAP = {
+  home: HomeIcon, banknote: Banknote, landmark: Landmark, key: KeyRound,
+  pen: PenLine, scale: Scale, hammer: Hammer, chart: BarChart3, search: SearchIcon,
+};
 
 export default function Guide() {
   const { mode, MODES } = useSite();
@@ -22,15 +27,15 @@ export default function Guide() {
   const articles = isBusiness ? ARTICLES_BUSINESS : ARTICLES_HOMES;
 
   const HOMES_STATS = [
-    { icon: "💸", stat: "$30,000–$45,000", label: "Typical commission savings",       sub: "on a $600K–$900K home vs. traditional sale" },
-    { icon: "🏦", stat: "5–12%",           label: "Interest income for sellers",      sub: "earned on the VTB mortgage they hold" },
-    { icon: "🔑", stat: "No bank. No formula.", label: "Buyers qualify on their full story", sub: "self-employed, new to Canada, unconventional income" },
+    { Icon: Banknote, stat: "$30,000–$45,000", label: "Typical commission savings",       sub: "on a $600K–$900K home vs. traditional sale" },
+    { Icon: Landmark, stat: "5–12%",           label: "Interest income for sellers",      sub: "earned on the VTB mortgage they hold" },
+    { Icon: KeyRound, stat: "No bank. No formula.", label: "Buyers qualify on their full story", sub: "self-employed, new to Canada, unconventional income" },
   ];
 
   const BUSINESS_STATS = [
-    { icon: "📋", stat: "Common practice", label: "VTB is standard in commercial RE", sub: "land, farms, development parcels transact this way routinely" },
-    { icon: "📊", stat: "Up to 5 years",   label: "Capital gains can be deferred",   sub: "by spreading recognition over the payment term" },
-    { icon: "⚡", stat: "30–90 days faster", label: "Close without institutional delays", sub: "no bank underwriting, environmental review, or covenant checklist" },
+    { Icon: ClipboardList, stat: "Common practice", label: "VTB is standard in commercial RE", sub: "land, farms, development parcels transact this way routinely" },
+    { Icon: BarChart3, stat: "Up to 5 years",   label: "Capital gains can be deferred",   sub: "by spreading recognition over the payment term" },
+    { Icon: Zap, stat: "30–90 days faster", label: "Close without institutional delays", sub: "no bank underwriting, environmental review, or covenant checklist" },
   ];
 
   const stats = isBusiness ? BUSINESS_STATS : HOMES_STATS;
@@ -65,9 +70,11 @@ export default function Guide() {
       <section className="py-12 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid sm:grid-cols-3 gap-6">
-            {stats.map(({ icon, stat, label, sub }) => (
+            {stats.map(({ Icon, stat, label, sub }) => (
               <div key={label} className="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100">
-                <div className="text-3xl mb-3">{icon}</div>
+                <div className={`w-12 h-12 rounded-xl ${isBusiness ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"} flex items-center justify-center mx-auto mb-3`}>
+                  <Icon className="w-6 h-6" />
+                </div>
                 <p className="text-xl font-extrabold text-gray-900 mb-1">{stat}</p>
                 <p className="font-semibold text-gray-700 text-sm mb-1">{label}</p>
                 <p className="text-xs text-gray-400">{sub}</p>
@@ -82,7 +89,9 @@ export default function Guide() {
         <section className="py-8 bg-emerald-50 border-b border-emerald-100">
           <div className="max-w-4xl mx-auto px-6">
             <div className="flex items-start gap-4">
-              <span className="text-3xl shrink-0">🏗️</span>
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <Hammer className="w-5 h-5" />
+              </div>
               <div>
                 <p className="font-semibold text-gray-900 mb-1">Commercial Real Estate Context</p>
                 <p className="text-sm text-gray-600 leading-relaxed">
@@ -115,7 +124,7 @@ export default function Guide() {
               <Link key={article.id} to={`/guide/${article.id}`} className="group block">
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden h-full flex flex-col">
                   <div className={`h-24 bg-gradient-to-br ${article.heroColor} flex items-center justify-center`}>
-                    <span className="text-5xl">{article.icon}</span>
+                    {(() => { const Icon = ARTICLE_ICON_MAP[article.icon]; return Icon ? <Icon className="w-10 h-10 text-white/80" /> : null; })()}
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <div className="flex items-center justify-between mb-3">

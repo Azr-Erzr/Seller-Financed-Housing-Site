@@ -5,7 +5,7 @@ import { saveCommProfile } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { generateAlias } from "../../lib/alias";
-import { Users, CheckCircle } from "lucide-react";
+import { Users, CheckCircle, Lock } from "lucide-react";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS, INTENDED_USES,
 } from "../../data/commercial-seed";
@@ -339,9 +339,9 @@ export default function BusinessCreateProfile() {
                   </div>
                 </label>
               </div>
-              <p className="text-xs text-emerald-600 mt-2">
+              <p className="text-xs text-emerald-600 mt-2 flex items-center gap-1">
                 {form.useAlias
-                  ? "🔒 Your profile will display a generated alias (e.g. \"Granite Buyer #BD91\"). Your real identity stays private until contact."
+                  ? <><Lock className="w-3 h-3" /> Your profile will display a generated alias (e.g. "Granite Buyer #BD91"). Your real identity stays private until contact.</>
                   : "Your real name will be visible on your public profile."}
               </p>
             </div>
