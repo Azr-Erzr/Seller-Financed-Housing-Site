@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ModeRedirect from "./components/ModeRedirect";
 import SupportChat from "./components/SupportChat";
+import AuthModal from "./components/AuthModal";
 import ScrollToTop from "./components/ScrollToTop";
 
 // ── Homes ─────────────────────────────────────────────────────────────
@@ -89,6 +90,7 @@ export default function App() {
               </main>
               <Footer/>
               <SupportChat/>
+              <AuthModal/>
             </div>
           </ToastProvider>
         </SiteProvider>
