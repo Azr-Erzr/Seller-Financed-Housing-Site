@@ -1,10 +1,13 @@
 // src/components/business/CommProfileCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { DollarSign, Ruler, Target } from "lucide-react";
+import { DollarSign, Ruler, Target, Shield } from "lucide-react";
 
 const getInitials = (name) =>
   name?.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "?";
+
+const getDisplayName = (profile) =>
+  profile.useAlias && profile.alias ? profile.alias : profile.name;
 
 const getRiskStyle = (risk) => {
   if (risk === "Low")      return "bg-green-100 text-green-700";
@@ -13,22 +16,30 @@ const getRiskStyle = (risk) => {
 };
 
 export default function CommProfileCard({ profile }) {
+  const displayName = getDisplayName(profile);
+  const isAliased = profile.useAlias && profile.alias;
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-5">
       <div className="flex items-start gap-4">
 
         {/* Avatar */}
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-lg shrink-0">
-          {profile.avatar
-            ? <img src={profile.avatar} alt={profile.name} className="w-full h-full object-cover rounded-xl" />
-            : getInitials(profile.name)
+        <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0 ${
+          isAliased ? "bg-gradient-to-br from-gray-500 to-gray-700" : "bg-gradient-to-br from-emerald-500 to-emerald-700"
+        }`}>
+          {profile.avatar && !isAliased
+            ? <img src={profile.avatar} alt={displayName} className="w-full h-full object-cover rounded-xl" />
+            : isAliased ? <Shield className="w-6 h-6" /> : getInitials(profile.name)
           }
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{profile.name}</h3>
-          {profile.contact && <p className="text-xs text-gray-400">{profile.contact}</p>}
-          <p className="text-xs text-gray-500 mt-0.5">{profile.city}</p>
+          <h3 className="font-semibold text-gray-900 truncate">{displayName}</h3>
+          {!isAliased && profile.contact && <p className="text-xs text-gray-400">{profile.contact}</p>}
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-gray-500 mt-0.5">{profile.city}</p>
+            {isAliased && <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">Identity protected</span>}
+          </div>
 
           <div className="space-y-1.5 mt-3 mb-3">
             <div className="flex items-center gap-2 text-sm">
