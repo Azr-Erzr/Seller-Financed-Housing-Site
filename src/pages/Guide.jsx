@@ -2,12 +2,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
+import { useRequireAuth } from "../context/AuthContext";
 import { ARTICLES_HOMES, ARTICLES_BUSINESS } from "../data/guide-articles";
 import SavingsCalculator from "../components/SavingsCalculator";
 import { ArrowRight, BookOpen } from "lucide-react";
 
 export default function Guide() {
   const { mode, MODES } = useSite();
+  const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
 
   const heroBg    = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-600 to-blue-800";
@@ -170,14 +172,14 @@ export default function Guide() {
             }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to={isBusiness ? "/business/list-property" : "/list-home"}
+            <button onClick={() => requireAuth(isBusiness ? "/business/list-property" : "/list-home")}
               className={`px-8 py-3 text-white font-semibold rounded-lg transition-colors ${ctaBg1}`}>
               {isBusiness ? "List a Property" : "List Your Home"}
-            </Link>
-            <Link to={isBusiness ? "/business/create-profile" : "/create-profile"}
+            </button>
+            <button onClick={() => requireAuth(isBusiness ? "/business/create-profile" : "/create-profile")}
               className={`px-8 py-3 font-semibold rounded-lg transition-colors ${ctaBg2}`}>
               {isBusiness ? "Buyer Profile" : "Create Buyer Profile"}
-            </Link>
+            </button>
             <Link to="/partners?category=lawyer"
               className={`px-8 py-3 border font-semibold rounded-lg transition-colors ${ctaBd}`}>
               Find a Lawyer

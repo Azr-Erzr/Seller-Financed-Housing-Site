@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight } from "lucide-react";
 import { getAllListings, getAllProfiles } from "../lib/storage";
+import { useRequireAuth } from "../context/AuthContext";
 import ListingCard from "../components/ListingCard";
 import ProfileCard from "../components/ProfileCard";
 import { ListingsSkeleton } from "../components/LoadingSkeleton";
@@ -15,6 +16,7 @@ export default function Home() {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const requireAuth = useRequireAuth();
 
   useEffect(() => {
     Promise.all([
@@ -131,10 +133,10 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Link to="/list-home"
+              <button onClick={() => requireAuth("/list-home")}
                 className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
                 List Your Home <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
             </div>
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <p className="font-bold text-gray-900 text-lg mb-1">Seller on a $650,000 Home</p>
@@ -190,10 +192,10 @@ export default function Home() {
           </div>
           <div className="text-center">
             <p className="text-sm text-gray-500 mb-4">Buyers can also use their own realtor — we support hybrid deals.</p>
-            <Link to="/create-profile"
+            <button onClick={() => requireAuth("/create-profile")}
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
               Create a Buyer Profile <ArrowRight className="w-4 h-4" />
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -344,12 +346,12 @@ export default function Home() {
             Sel-Fi has a place for you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/list-home" className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors">
+            <button onClick={() => requireAuth("/list-home")} className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors">
               List Your Home
-            </Link>
-            <Link to="/create-profile" className="px-8 py-3 bg-white text-blue-700 font-bold rounded-lg hover:bg-blue-50 transition-colors">
+            </button>
+            <button onClick={() => requireAuth("/create-profile")} className="px-8 py-3 bg-white text-blue-700 font-bold rounded-lg hover:bg-blue-50 transition-colors">
               Create Buyer Profile
-            </Link>
+            </button>
             <Link to="/guide" className="px-8 py-3 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">
               Read the Guide
             </Link>

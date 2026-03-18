@@ -2,10 +2,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
+import { useRequireAuth } from "../context/AuthContext";
 import { ArrowRight, Shield, Scale, DollarSign, Users, Building2, Home } from "lucide-react";
 
 export default function About() {
   const { mode, MODES } = useSite();
+  const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
 
   if (isBusiness) {
@@ -247,8 +249,8 @@ export default function About() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/guide" className="px-6 py-2.5 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Read the Guide</Link>
-            <Link to="/list-home" className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</Link>
-            <Link to="/create-profile" className="px-6 py-2.5 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">Create Buyer Profile</Link>
+            <button onClick={() => requireAuth("/list-home")} className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</button>
+            <button onClick={() => requireAuth("/create-profile")} className="px-6 py-2.5 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">Create Buyer Profile</button>
           </div>
         </section>
 

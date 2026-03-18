@@ -1,10 +1,11 @@
 // src/pages/ListHome.jsx
 // Comprehensive listing form with all property detail fields + live preview.
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { saveListing } from "../lib/storage";
 import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
+import { useAuth } from "../context/AuthContext";
 import { Home, CheckCircle, Upload, X, ImageIcon, Star, Wand2, GripVertical, Video, Eye, EyeOff, Bed, Bath, Square, Car } from "lucide-react";
 import AddressAutocomplete from "../components/AddressAutocomplete";
 
@@ -216,6 +217,8 @@ function ListingPreview({ form, photos }) {
 
 // ── Main form ─────────────────────────────────────────────────────────
 export default function ListHome() {
+  const { user, loading: authLoading, openAuthModal } = useAuth();
+  const location = useLocation();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [newId, setNewId] = useState(null);
@@ -243,6 +246,19 @@ export default function ListHome() {
   const toggleArr = (key, val) => { const c = form[key]; set(key, c.includes(val) ? c.filter((v) => v !== val) : [...c, val]); };
   const needsFinancing = form.dealTypes.some((d) => d !== "private-sale");
   const showCondo = form.propertyType === "Condo" || form.propertyType === "Townhouse";
+
+  // Auth guard — open modal if not signed in
+  useEffect(() => {
+    if (!authLoading && !user) openAuthModal(location.pathname);
+  }, [authLoading, user, openAuthModal, location.pathname]);
+
+  if (authLoading) return <div className="py-20 text-center text-gray-400">Loading...</div>;
+  if (!user) return (
+    <div className="py-20 text-center">
+      <p className="text-gray-500 mb-2">You need to sign in to list a home.</p>
+      <p className="text-sm text-gray-400">A sign-in prompt should appear shortly.</p>
+    </div>
+  );
 
   const validate = () => {
     const e = {};

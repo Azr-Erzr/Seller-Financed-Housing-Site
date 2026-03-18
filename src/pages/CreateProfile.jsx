@@ -1,11 +1,12 @@
 // src/pages/CreateProfile.jsx
 // Income is always saved for DTI calculations but only shown publicly
 // if the user explicitly opts in via the show_income toggle.
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { saveProfile } from "../lib/storage";
 import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
+import { useAuth } from "../context/AuthContext";
 import { Users, CheckCircle, Camera, X, EyeOff, Eye } from "lucide-react";
 
 const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white text-gray-900 placeholder-gray-400";
@@ -96,6 +97,8 @@ async function uploadAvatar(file) {
 
 export default function CreateProfile() {
   const { toast } = useToast();
+  const { user, loading: authLoading, openAuthModal } = useAuth();
+  const location = useLocation();
   const [submitted, setSubmitted]   = useState(false);
   const [newId, setNewId]           = useState(null);
   const [errors, setErrors]         = useState({});
@@ -116,6 +119,19 @@ export default function CreateProfile() {
     const curr = form.dealPreferences;
     set("dealPreferences", curr.includes(val) ? curr.filter((v) => v !== val) : [...curr, val]);
   };
+
+  // Auth guard
+  useEffect(() => {
+    if (!authLoading && !user) openAuthModal(location.pathname);
+  }, [authLoading, user, openAuthModal, location.pathname]);
+
+  if (authLoading) return <div className="py-20 text-center text-gray-400">Loading...</div>;
+  if (!user) return (
+    <div className="py-20 text-center">
+      <p className="text-gray-500 mb-2">You need to sign in to create a buyer profile.</p>
+      <p className="text-sm text-gray-400">A sign-in prompt should appear shortly.</p>
+    </div>
+  );
 
   const validate = () => {
     const e = {};

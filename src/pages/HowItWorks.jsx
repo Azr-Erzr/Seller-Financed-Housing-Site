@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
+import { useRequireAuth } from "../context/AuthContext";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 function FAQ({ q, a }) {
@@ -139,6 +140,7 @@ const PARTNER_FAQS = [
 
 export default function HowItWorks() {
   const { mode, MODES } = useSite();
+  const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
   const accent      = isBusiness ? "text-emerald-600" : "text-blue-600";
   const bg          = isBusiness ? "bg-emerald-600" : "bg-blue-600";
@@ -319,10 +321,10 @@ export default function HowItWorks() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/guide" className="px-6 py-2.5 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Read the Full Guide</Link>
-            <Link to={isBusiness ? "/business/list-property" : "/list-home"}
+            <button onClick={() => requireAuth(isBusiness ? "/business/list-property" : "/list-home")}
               className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
               {isBusiness ? "List a Property" : "List Your Home"}
-            </Link>
+            </button>
             <Link to="/partners?category=lawyer" className="px-6 py-2.5 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">Find a Lawyer</Link>
           </div>
         </div>
