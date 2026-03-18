@@ -6,6 +6,7 @@ import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ModeRedirect from "./components/ModeRedirect";
+import SupportChat from "./components/SupportChat";
 
 // ── Homes ─────────────────────────────────────────────────────────────
 import Home from "./pages/Home";
@@ -23,6 +24,8 @@ import PartnerApply from "./pages/PartnerApply";
 import MapSearch from "./pages/MapSearch";
 import Saved from "./pages/Saved";
 import Account from "./pages/Account";
+import Guide from "./pages/Guide";
+import GuideArticle from "./pages/GuideArticle";
 import NotFound from "./pages/NotFound";
 
 // ── Business ──────────────────────────────────────────────────────────
@@ -47,20 +50,22 @@ export default function App() {
               <Routes>
                 {/* ── Homes ── */}
                 <Route path="/" element={<ModeRedirect targetMode="homes"><Home /></ModeRedirect>} />
-                <Route path="/listings"       element={<Listings />} />
-                <Route path="/profiles"       element={<Profiles />} />
-                <Route path="/listings/:id"   element={<ListingDetail />} />
-                <Route path="/profiles/:id"   element={<ProfileDetail />} />
-                <Route path="/list-home"      element={<ListHome />} />
-                <Route path="/create-profile" element={<CreateProfile />} />
-                <Route path="/about"          element={<About />} />
-                <Route path="/how-it-works"   element={<HowItWorks />} />
-                <Route path="/partners"       element={<Partners />} />
-                <Route path="/partners/:id"   element={<PartnerDetail />} />
-                <Route path="/partner-apply"  element={<PartnerApply />} />
-                <Route path="/map"            element={<MapSearch />} />
-                <Route path="/saved"          element={<Saved />} />
-                <Route path="/account"        element={<Account />} />
+                <Route path="/listings"         element={<Listings />} />
+                <Route path="/profiles"         element={<Profiles />} />
+                <Route path="/listings/:id"     element={<ListingDetail />} />
+                <Route path="/profiles/:id"     element={<ProfileDetail />} />
+                <Route path="/list-home"        element={<ListHome />} />
+                <Route path="/create-profile"   element={<CreateProfile />} />
+                <Route path="/about"            element={<About />} />
+                <Route path="/how-it-works"     element={<HowItWorks />} />
+                <Route path="/partners"         element={<Partners />} />
+                <Route path="/partners/:id"     element={<PartnerDetail />} />
+                <Route path="/partner-apply"    element={<PartnerApply />} />
+                <Route path="/map"              element={<MapSearch />} />
+                <Route path="/saved"            element={<Saved />} />
+                <Route path="/account"          element={<Account />} />
+                <Route path="/guide"            element={<Guide />} />
+                <Route path="/guide/:id"        element={<GuideArticle />} />
 
                 {/* ── Business ── */}
                 <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome /></ModeRedirect>} />
@@ -78,6 +83,8 @@ export default function App() {
               </Routes>
             </main>
             <Footer />
+            {/* Floating support chat — always visible */}
+            <SupportChat />
           </div>
         </ToastProvider>
       </SiteProvider>
