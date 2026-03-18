@@ -1,12 +1,19 @@
 // src/components/Footer.jsx
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Home, Building2 } from "lucide-react";
 import { useSite } from "../context/SiteContext";
 
 export default function Footer() {
-  const { mode, MODES } = useSite();
+  const { mode, setMode, MODES } = useSite();
   const isBusiness = mode === MODES.business;
+  const navigate = useNavigate();
+
+  const handleModeSwitch = () => {
+    const newMode = isBusiness ? MODES.homes : MODES.business;
+    setMode(newMode);
+    navigate(newMode === MODES.business ? "/business" : "/");
+  };
 
   // Links are emerald in business mode, blue in homes mode
   const linkCls = isBusiness
@@ -110,10 +117,10 @@ export default function Footer() {
               <li><Link to="/how-it-works"  className={linkCls}>FAQ</Link></li>
               <li><Link to="/account"       className={linkCls}>Sign In</Link></li>
               <li>
-                {/* Mode switcher — always blue for Homes, always emerald for Business */}
-                <Link
-                  to={isBusiness ? "/" : "/business"}
-                  className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                {/* Mode switcher — calls setMode + navigate so ModeRedirect doesn't bounce back */}
+                <button
+                  onClick={handleModeSwitch}
+                  className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
                     isBusiness
                       ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
                       : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
@@ -123,7 +130,7 @@ export default function Footer() {
                     ? <><Home className="w-3 h-3" /> Switch to LandMatch Homes</>
                     : <><Building2 className="w-3 h-3" /> Switch to LandMatch Business</>
                   }
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
