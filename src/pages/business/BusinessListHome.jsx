@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { saveCommListing } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
 import { Building2, CheckCircle } from "lucide-react";
+import AddressAutocomplete from "../../components/AddressAutocomplete";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS,
   PERMITTED_USES, ROAD_ACCESS, ENVIRONMENTAL_STATUS,
@@ -162,8 +163,17 @@ export default function BusinessListHome() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="Street Address / Legal Description">
-                <input className={inputCls} value={form.address} onChange={(e) => set("address", e.target.value)}
-                  placeholder="Lot 14, Concession 5" />
+                <AddressAutocomplete
+                  value={form.address}
+                  onChange={(v) => set("address", v)}
+                  onSelect={(s) => {
+                    const parts = (s.short || s.display).split(",").map((p) => p.trim());
+                    if (parts[0]) set("address", parts[0]);
+                    if (parts[1]) set("city", parts[1]);
+                  }}
+                  placeholder="Lot 14, Concession 5 or start typing..."
+                  ringColor="focus:ring-emerald-500"
+                />
               </Field>
               <Field label="City / Municipality" error={errors.city}>
                 <input className={inputCls} value={form.city} onChange={(e) => set("city", e.target.value)} placeholder="Clarington" />

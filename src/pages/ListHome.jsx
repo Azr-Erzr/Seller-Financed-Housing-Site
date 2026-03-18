@@ -5,6 +5,7 @@ import { saveListing } from "../lib/storage";
 import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
 import { Home, CheckCircle, Upload, X, ImageIcon, Star, Wand2, GripVertical, Video } from "lucide-react";
+import AddressAutocomplete from "../components/AddressAutocomplete";
 
 const DEAL_TYPES = [
   { value: "seller-finance", label: "Seller-Finance", desc: "You hold the mortgage directly" },
@@ -409,7 +410,19 @@ export default function ListHome() {
             </Field>
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="Street Address" error={errors.address}>
-                <input className={inputCls} value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="145 Maple Ave" />
+                <AddressAutocomplete
+                  value={form.address}
+                  onChange={(v) => set("address", v)}
+                  onSelect={(s) => {
+                    // Parse the short address: "house_number road, city, province"
+                    const parts = (s.short || s.display).split(",").map((p) => p.trim());
+                    if (parts[0]) set("address", parts[0]);
+                    // Fill city from the suggestion if available
+                    if (parts[1]) set("city", parts[1]);
+                  }}
+                  placeholder="Start typing an address..."
+                  ringColor="focus:ring-blue-500"
+                />
               </Field>
               <Field label="City" error={errors.city}>
                 <input className={inputCls} value={form.city} onChange={(e) => set("city", e.target.value)} placeholder="Whitby" />

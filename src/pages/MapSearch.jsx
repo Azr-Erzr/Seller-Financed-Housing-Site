@@ -132,6 +132,12 @@ export default function MapSearch() {
     if (mapRef.current) return;
     if (!mapDivRef.current) return;
 
+    // Nuclear Tailwind/Leaflet fix — inject style override directly into container
+    // Tailwind Preflight sets img { max-width:100%; display:block } which breaks tiles
+    const style = document.createElement("style");
+    style.textContent = `.leaflet-container img,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:256px!important;height:256px!important}.leaflet-container .leaflet-tile-pane img{width:256px!important;height:256px!important}`;
+    document.head.appendChild(style);
+
     const map = L.map(mapDivRef.current, { center: [43.89, -78.93], zoom: 11 });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -141,13 +147,13 @@ export default function MapSearch() {
 
     mapRef.current = map;
 
-    // Double invalidateSize — first on next frame, then after a short delay
-    // to catch any late layout shifts from React/Tailwind
+    // Triple invalidateSize — immediate, next frame, and delayed
+    map.invalidateSize();
     requestAnimationFrame(() => {
       map.invalidateSize();
       setMapReady(true);
     });
-    const t = setTimeout(() => map.invalidateSize(), 300);
+    const t = setTimeout(() => map.invalidateSize(), 400);
 
     // ResizeObserver catches container size changes (split↔map toggle, window resize)
     let ro;
@@ -159,6 +165,7 @@ export default function MapSearch() {
     return () => {
       clearTimeout(t);
       if (ro) ro.disconnect();
+      style.remove();
       map.remove();
       mapRef.current = null;
       setMapReady(false);

@@ -117,19 +117,26 @@ export default function BusinessMapSearch() {
   // Init — L is synchronously available, no race condition
   useEffect(() => {
     if (view === "list" || mapRef.current || !mapDivRef.current) return;
+
+    // Nuclear Tailwind/Leaflet fix — inject style override directly
+    const style = document.createElement("style");
+    style.textContent = `.leaflet-container img,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:256px!important;height:256px!important}.leaflet-container .leaflet-tile-pane img{width:256px!important;height:256px!important}`;
+    document.head.appendChild(style);
+
     const map = L.map(mapDivRef.current, { center:[43.89,-78.93], zoom:9 });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom:19,
     }).addTo(map);
     mapRef.current = map;
+    map.invalidateSize();
     requestAnimationFrame(() => { map.invalidateSize(); setMapReady(true); });
-    const t = setTimeout(() => map.invalidateSize(), 300);
+    const t = setTimeout(() => map.invalidateSize(), 400);
     let ro;
     if (typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(() => map.invalidateSize());
       ro.observe(mapDivRef.current);
     }
-    return () => { clearTimeout(t); if (ro) ro.disconnect(); map.remove(); mapRef.current = null; setMapReady(false); };
+    return () => { clearTimeout(t); if (ro) ro.disconnect(); style.remove(); map.remove(); mapRef.current = null; setMapReady(false); };
   }, [view]);
 
   useEffect(() => {

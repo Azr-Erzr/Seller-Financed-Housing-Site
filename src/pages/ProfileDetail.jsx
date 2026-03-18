@@ -21,21 +21,68 @@ function Stat({ label, value, sub }) {
 
 function DTIBar({ income, debt, payment }) {
   const total = (debt + payment);
-  const pct   = income > 0 ? Math.min((total / income) * 100, 100) : 0;
-  const color  = pct < 33 ? "bg-green-500" : pct < 43 ? "bg-yellow-500" : "bg-red-500";
+  const ratio = income > 0 ? Math.min((total / income) * 100, 100) : 0;
+  const color  = ratio < 33 ? "bg-green-500" : ratio < 43 ? "bg-yellow-500" : "bg-red-500";
+  const textColor = ratio < 33 ? "text-green-600" : ratio < 43 ? "text-yellow-600" : "text-red-500";
+
   return (
-    <div>
-      <div className="flex justify-between text-xs text-gray-500 mb-1">
-        <span>Debt-to-Income Ratio</span>
-        <span className={pct >= 43 ? "text-red-500 font-semibold" : pct >= 33 ? "text-yellow-600 font-semibold" : "text-green-600 font-semibold"}>
-          {pct.toFixed(1)}%
-        </span>
+    <div className="space-y-4">
+      {/* Calculation breakdown */}
+      <div className="bg-gray-50 rounded-xl p-4">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">DTI Calculation</p>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-gray-500">Monthly debt payments</span>
+            <span className="font-medium text-gray-800">${debt.toLocaleString("en-CA")}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-500">+ Proposed housing payment</span>
+            <span className="font-medium text-gray-800">${payment.toLocaleString("en-CA")}</span>
+          </div>
+          <div className="border-t border-gray-200 pt-2 flex justify-between">
+            <span className="text-gray-700 font-medium">Total monthly obligations</span>
+            <span className="font-bold text-gray-900">${total.toLocaleString("en-CA")}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-500">÷ Gross monthly income</span>
+            <span className="font-medium text-gray-800">${income.toLocaleString("en-CA")}</span>
+          </div>
+          <div className="border-t border-gray-200 pt-2 flex justify-between items-center">
+            <span className="text-gray-700 font-medium">Debt-to-Income Ratio</span>
+            <span className={`text-lg font-extrabold ${textColor}`}>{ratio.toFixed(1)}%</span>
+          </div>
+        </div>
       </div>
-      <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${pct}%` }} />
+
+      {/* Visual bar */}
+      <div>
+        <div className="h-3 bg-gray-100 rounded-full overflow-hidden relative">
+          {/* Zone indicators */}
+          <div className="absolute inset-0 flex">
+            <div className="w-[33%] bg-green-100" />
+            <div className="w-[10%] bg-yellow-100" />
+            <div className="flex-1 bg-red-100" />
+          </div>
+          {/* Actual value */}
+          <div className={`h-full rounded-full transition-all relative z-10 ${color}`} style={{ width: `${ratio}%` }} />
+        </div>
+        <div className="flex justify-between text-[10px] text-gray-400 mt-1.5">
+          <span className="text-green-600 font-medium">Good &lt;33%</span>
+          <span className="text-yellow-600 font-medium">Caution 33–43%</span>
+          <span className="text-red-500 font-medium">High &gt;43%</span>
+        </div>
       </div>
-      <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-        <span>Good &lt;33%</span><span>Caution 33–43%</span><span>High &gt;43%</span>
+
+      {/* Recommendation */}
+      <div className={`rounded-lg px-4 py-3 text-sm ${
+        ratio < 33 ? "bg-green-50 text-green-700" : ratio < 43 ? "bg-yellow-50 text-yellow-700" : "bg-red-50 text-red-700"
+      }`}>
+        {ratio < 33
+          ? "Strong financial position. Most sellers would be comfortable with this buyer's debt load."
+          : ratio < 43
+          ? "Moderate debt load. Sellers should consider the buyer's income stability and down payment size."
+          : "High debt-to-income ratio. A larger down payment or lower purchase price may be needed to offset risk."
+        }
       </div>
     </div>
   );
