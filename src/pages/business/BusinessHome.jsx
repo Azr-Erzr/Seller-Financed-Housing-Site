@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Wheat, Hammer, Building2, Factory, Droplets, TreePine, Hotel, Star, DollarSign, BarChart3, Landmark, Zap, Sprout, Timer, HeartHandshake } from "lucide-react";
+
+const ARTICLE_ICON_MAP = {
+  hammer: Hammer, chart: BarChart3, search: Search,
+};
 import { getAllCommListings, getAllCommProfiles } from "../../lib/commercial-storage";
 import { useRequireAuth } from "../../context/AuthContext";
 import CommListingCard from "../../components/business/CommListingCard";
@@ -290,8 +294,8 @@ export default function BusinessHome() {
             {ARTICLES_BUSINESS.slice(0, 3).map((article) => (
               <Link key={article.id} to={`/guide/${article.id}`}
                 className="group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                <div className={`h-16 bg-gradient-to-br ${article.heroColor} flex items-center px-4`}>
-                  <span className="text-3xl">{article.icon}</span>
+                <div className={`h-16 bg-gradient-to-br ${article.heroColor} flex items-center justify-center`}>
+                  {(() => { const I = ARTICLE_ICON_MAP[article.icon]; return I ? <I className="w-8 h-8 text-white/80" /> : null; })()}
                 </div>
                 <div className="p-4">
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${article.categoryColor}`}>

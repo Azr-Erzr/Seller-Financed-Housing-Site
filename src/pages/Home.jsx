@@ -1,7 +1,12 @@
 // src/pages/Home.jsx — Sel-Fi Homes redesign
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ArrowRight, Banknote, Landmark, CheckCircle, Scale, Wrench, Globe, RefreshCw, BarChart3, Building, HeartHandshake, Lock, FileText, PenLine } from "lucide-react";
+import { Search, ArrowRight, Banknote, Landmark, CheckCircle, Scale, Wrench, Globe, RefreshCw, BarChart3, Building, HeartHandshake, Lock, FileText, PenLine, Home as HomeIcon, KeyRound, Hammer } from "lucide-react";
+
+const ARTICLE_ICON_MAP = {
+  home: HomeIcon, banknote: Banknote, landmark: Landmark, key: KeyRound,
+  pen: PenLine, scale: Scale, hammer: Hammer, chart: BarChart3, search: Search,
+};
 import { getAllListings, getAllProfiles } from "../lib/storage";
 import { useRequireAuth } from "../context/AuthContext";
 import ListingCard from "../components/ListingCard";
@@ -329,8 +334,8 @@ export default function Home() {
           <div className="grid sm:grid-cols-3 gap-5">
             {ARTICLES.slice(0, 3).map((article) => (
               <Link key={article.id} to={`/guide/${article.id}`} className="group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                <div className={`h-16 bg-gradient-to-br ${article.heroColor} flex items-center px-4`}>
-                  <span className="text-3xl">{article.icon}</span>
+                <div className={`h-16 bg-gradient-to-br ${article.heroColor} flex items-center justify-center`}>
+                  {(() => { const I = ARTICLE_ICON_MAP[article.icon]; return I ? <I className="w-8 h-8 text-white/80" /> : null; })()}
                 </div>
                 <div className="p-4">
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${article.categoryColor}`}>{article.category}</span>
