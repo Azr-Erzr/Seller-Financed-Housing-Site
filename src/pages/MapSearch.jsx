@@ -129,6 +129,7 @@ export default function MapSearch() {
   const topBarRef  = useRef(null);
   const drawPoints = useRef([]);
   const listRefs   = useRef({});
+  const boundsTimer = useRef(null);
 
   const [listings, setListings] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -201,9 +202,14 @@ export default function MapSearch() {
       setMapReady(true);
       const b=map.getBounds(); setMapBounds({sw:[b.getWest(),b.getSouth()],ne:[b.getEast(),b.getNorth()]});
     });
-    map.on("moveend", () => { const b=map.getBounds(); setMapBounds({sw:[b.getWest(),b.getSouth()],ne:[b.getEast(),b.getNorth()]}); });
+    map.on("moveend", () => {
+      clearTimeout(boundsTimer.current);
+      boundsTimer.current = setTimeout(() => {
+        const b=map.getBounds(); setMapBounds({sw:[b.getWest(),b.getSouth()],ne:[b.getEast(),b.getNorth()]});
+      }, 300);
+    });
     mapRef.current = map;
-    return () => { map.remove(); mapRef.current=null; setMapReady(false); };
+    return () => { clearTimeout(boundsTimer.current); map.remove(); mapRef.current=null; setMapReady(false); };
   }, [view]);
 
   useEffect(() => { if (mapRef.current) setTimeout(()=>{mapRef.current?.resize();handleMapMove();},50); }, [view,mapReady,handleMapMove]);
@@ -216,10 +222,9 @@ export default function MapSearch() {
 
     filtered.forEach((listing) => {
       const color = getDealColor(listing.dealType);
-      const isSel = selected?.id===listing.id;
       const el = document.createElement("div");
       el.dataset.listingId = listing.id;
-      el.style.cssText = `background:${color};color:white;padding:${isSel?"6px 12px":"4px 9px"};border-radius:20px;font-size:${isSel?"12px":"11px"};font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:${isSel?"3px":"2px"} solid white;cursor:pointer;transform:translate(-50%,-50%);transition:transform 0.15s,box-shadow 0.15s;`;
+      el.style.cssText = `background:${color};color:white;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;cursor:pointer;transform:translate(-50%,-50%);transition:transform 0.15s,box-shadow 0.15s,padding 0.15s,font-size 0.15s;`;
       el.textContent = `$${Math.round(listing.price/1000)}K`;
 
       el.addEventListener("click", (e) => {
@@ -233,7 +238,20 @@ export default function MapSearch() {
       const marker = new maplibregl.Marker({element:el,anchor:"center"}).setLngLat([listing.lng,listing.lat]).addTo(mapRef.current);
       markersRef.current.set(listing.id, { marker, el });
     });
-  }, [filtered,mapReady,selected]);
+  }, [filtered,mapReady]);
+
+  // ── Selection styling on markers (no recreation) ──
+  useEffect(() => {
+    markersRef.current.forEach(({el}, id) => {
+      if (id === selected?.id) {
+        el.style.padding = "6px 12px"; el.style.fontSize = "12px"; el.style.borderWidth = "3px";
+        el.style.zIndex = "10";
+      } else {
+        el.style.padding = "4px 9px"; el.style.fontSize = "11px"; el.style.borderWidth = "2px";
+        if (id !== hoveredId) el.style.zIndex = "auto";
+      }
+    });
+  }, [selected, hoveredId]);
 
   // ── Hover highlight on markers from list ──
   useEffect(() => {
@@ -413,24 +431,24 @@ export default function MapSearch() {
                 className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">Click to add points — double-click to close</div>
             )}
             {selected&&(
-              <div style={{position:"absolute",bottom:24,left:"50%",transform:"translateX(-50%)",zIndex:10}}
-                className="w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-                <button onClick={()=>setSelected(null)} className="absolute top-2 right-2 w-7 h-7 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center z-10"><X className="w-3.5 h-3.5 text-white"/></button>
-                {selected.image&&<img src={selected.image} alt="" className="w-full h-36 object-cover"/>}
-                <div className="p-4">
+              <div style={{position:"absolute",top:16,right:16,zIndex:10,width:"300px"}}
+                className="bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-in">
+                <button onClick={()=>setSelected(null)} className="absolute top-2 right-2 w-6 h-6 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center z-10"><X className="w-3 h-3 text-white"/></button>
+                {selected.image&&<img src={selected.image} alt="" className="w-full h-32 object-cover"/>}
+                <div className="p-3.5">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-xl font-extrabold text-blue-600">{money(selected.price)}</p>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full text-white shrink-0" style={{background:getDealColor(selected.dealType)}}>{selected.dealType}</span>
+                    <p className="text-lg font-extrabold text-blue-600">{money(selected.price)}</p>
+                    <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full text-white shrink-0 mt-0.5" style={{background:getDealColor(selected.dealType)}}>{selected.dealType}</span>
                   </div>
-                  <p className="font-semibold text-gray-900 text-sm mt-1 truncate">{selected.title}</p>
+                  <p className="font-medium text-gray-900 text-sm mt-0.5 truncate">{selected.title}</p>
                   <p className="text-xs text-gray-400 truncate">{selected.address}, {selected.city}</p>
-                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
-                    <span className="flex items-center gap-1"><Bed className="w-3.5 h-3.5"/>{selected.bedrooms} bed</span>
-                    <span className="flex items-center gap-1"><Bath className="w-3.5 h-3.5"/>{selected.bathrooms} bath</span>
-                    <span className="flex items-center gap-1"><Square className="w-3.5 h-3.5"/>{selected.sqft?.toLocaleString()} sqft</span>
+                  <div className="flex items-center gap-2.5 mt-2 text-xs text-gray-500">
+                    <span className="flex items-center gap-0.5"><Bed className="w-3 h-3"/>{selected.bedrooms}</span>
+                    <span className="flex items-center gap-0.5"><Bath className="w-3 h-3"/>{selected.bathrooms}</span>
+                    <span className="flex items-center gap-0.5"><Square className="w-3 h-3"/>{selected.sqft?.toLocaleString()}</span>
                   </div>
                   <Link to={`/listings/${selected.id}`}
-                    className="mt-3 w-full flex items-center justify-center py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                    className="mt-2.5 w-full flex items-center justify-center py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors">
                     View Full Listing →
                   </Link>
                 </div>
