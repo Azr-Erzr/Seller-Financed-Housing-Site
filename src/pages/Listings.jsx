@@ -87,7 +87,7 @@ export default function Listings() {
 
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Max Price — <span className="text-blue-600">${(maxPrice / 1000).toFixed(0)}K</span>
+                  Max Price — <span className="text-blue-600">{maxPrice >= 1000000 ? `$${(maxPrice / 1000000).toFixed(1)}M` : `$${(maxPrice / 1000).toFixed(0)}K`}</span>
                 </label>
                 <input type="range" min={200000} max={1200000} step={10000} value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))} className="w-full accent-blue-600" />
