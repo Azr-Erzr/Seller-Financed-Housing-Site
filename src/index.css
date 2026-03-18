@@ -4,22 +4,56 @@
 
 /* -----------------------------
    Leaflet fix — Tailwind Preflight override
-   Preflight sets img { max-width:100%; display:block } which
-   breaks Leaflet's pixel-precise tile positioning. These rules
-   restore Leaflet's expected image behaviour inside map containers.
-   This is the ROOT CAUSE of the staircase tile fragmentation bug.
+   
+   Tailwind's Preflight (based on modern-normalize) sets:
+     img { display:block; max-width:100%; height:auto; vertical-align:middle }
+     *, ::before, ::after { box-sizing: border-box }
+   
+   ALL of these break Leaflet's pixel-precise tile positioning.
+   Leaflet tiles are <img> elements that must be:
+     - display: inline (not block)
+     - no max-width constraint
+     - explicit height (not auto)
+     - content-box sizing for the tile container
+   
+   Without these overrides, tiles render in offset staircase chunks.
    ----------------------------- */
 .leaflet-container img {
   max-width: none !important;
   max-height: none !important;
+  height: auto;
 }
+.leaflet-container .leaflet-tile-pane img,
 .leaflet-container .leaflet-tile {
   max-width: none !important;
   max-height: none !important;
+  width: 256px !important;
+  height: 256px !important;
 }
-/* Prevent Tailwind's base anchor styles from affecting Leaflet controls */
+.leaflet-container .leaflet-tile-pane {
+  box-sizing: content-box;
+}
+/* Reset Leaflet pane/layer z-index stacking and transforms */
+.leaflet-container .leaflet-map-pane {
+  z-index: 0;
+}
+/* Prevent Tailwind's base anchor/image styles from bleeding in */
 .leaflet-container a {
   color: inherit;
+}
+.leaflet-container .leaflet-control-zoom a {
+  text-decoration: none;
+  color: #333;
+}
+/* Prevent global border-box from affecting tile offset calculation */
+.leaflet-container * {
+  box-sizing: content-box;
+}
+/* Restore border-box for control elements (buttons, inputs) */
+.leaflet-container .leaflet-control *,
+.leaflet-container .leaflet-popup *,
+.leaflet-container .leaflet-tooltip * {
+  box-sizing: border-box;
 }
 
 /* -----------------------------
@@ -86,4 +120,44 @@ a {
 /* Sections */
 .section {
   @apply py-12;
+}
+
+/* Range slider — larger thumb for easier click-and-drag */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid currentColor;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  cursor: grab;
+  transition: transform 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.15);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid currentColor;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  cursor: grab;
+}
+input[type="range"]::-moz-range-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.15);
 }
