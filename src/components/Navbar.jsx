@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Map, Home, Building2, User, BookOpen, LogOut, ChevronDown } from "lucide-react";
+import { Menu, X, Home, Building2, User, BookOpen, LogOut, ChevronDown } from "lucide-react";
 import { useSite } from "../context/SiteContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -36,7 +36,6 @@ export default function Navbar() {
 
   const HOMES_LINKS = [
     { to: "/listings",     label: "Browse Homes" },
-    { to: "/map",          label: "Map",   icon: <Map       className="w-3.5 h-3.5"/> },
     { to: "/profiles",     label: "Browse Buyers" },
     { to: "/partners",     label: "Find a Pro" },
     { to: "/how-it-works", label: "How It Works" },
@@ -45,7 +44,6 @@ export default function Navbar() {
 
   const BUSINESS_LINKS = [
     { to: "/business/listings",  label: "Browse Properties" },
-    { to: "/business/map",       label: "Map",   icon: <Map      className="w-3.5 h-3.5"/> },
     { to: "/business/profiles",  label: "Browse Buyers" },
     { to: "/partners",           label: "Find a Pro" },
     { to: "/how-it-works",       label: "How It Works" },
