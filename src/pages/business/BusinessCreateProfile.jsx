@@ -1,8 +1,9 @@
 // src/pages/business/BusinessCreateProfile.jsx
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { saveCommProfile } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
+import { useAuth } from "../../context/AuthContext";
 import { Users, CheckCircle } from "lucide-react";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS, INTENDED_USES,
@@ -63,6 +64,8 @@ function TagGrid({ options, state, setState, colorClass = "emerald" }) {
 
 export default function BusinessCreateProfile() {
   const { toast } = useToast();
+  const { user, loading: authLoading, openAuthModal } = useAuth();
+  const location = useLocation();
   const [submitted, setSubmitted]   = useState(false);
   const [newId, setNewId]           = useState(null);
   const [errors, setErrors]         = useState({});
@@ -79,6 +82,19 @@ export default function BusinessCreateProfile() {
   });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+
+  // Auth guard
+  useEffect(() => {
+    if (!authLoading && !user) openAuthModal(location.pathname);
+  }, [authLoading, user, openAuthModal, location.pathname]);
+
+  if (authLoading) return <div className="py-20 text-center text-gray-400">Loading...</div>;
+  if (!user) return (
+    <div className="py-20 text-center">
+      <p className="text-gray-500 mb-2">You need to sign in to create a buyer profile.</p>
+      <p className="text-sm text-gray-400">A sign-in prompt should appear shortly.</p>
+    </div>
+  );
 
   const validate = () => {
     const e = {};

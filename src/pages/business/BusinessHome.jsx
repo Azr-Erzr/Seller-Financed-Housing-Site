@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight } from "lucide-react";
 import { getAllCommListings, getAllCommProfiles } from "../../lib/commercial-storage";
+import { useRequireAuth } from "../../context/AuthContext";
 import CommListingCard from "../../components/business/CommListingCard";
 import CommProfileCard from "../../components/business/CommProfileCard";
 import SavingsCalculator from "../../components/SavingsCalculator";
@@ -24,6 +25,7 @@ export default function BusinessHome() {
   const [profiles, setProfiles] = useState([]);
   const [search,   setSearch]   = useState("");
   const navigate   = useNavigate();
+  const requireAuth = useRequireAuth();
 
   useEffect(() => {
     getAllCommListings().then((l) => setListings(l.slice(0, 3)));
@@ -141,10 +143,10 @@ export default function BusinessHome() {
                   </div>
                 ))}
               </div>
-              <Link to="/business/list-property"
+              <button onClick={() => requireAuth("/business/list-property")}
                 className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors">
                 List a Property <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
             </div>
 
             {/* Quick deal comparison */}
@@ -205,10 +207,10 @@ export default function BusinessHome() {
             ))}
           </div>
           <div className="text-center">
-            <Link to="/business/create-profile"
+            <button onClick={() => requireAuth("/business/create-profile")}
               className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors">
               Create a Buyer Profile <ArrowRight className="w-4 h-4" />
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -308,14 +310,14 @@ export default function BusinessHome() {
             List a commercial property, create a buyer profile, or connect with a commercial real estate lawyer.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/business/list-property"
+            <button onClick={() => requireAuth("/business/list-property")}
               className="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg transition-colors">
               List a Property
-            </Link>
-            <Link to="/business/create-profile"
+            </button>
+            <button onClick={() => requireAuth("/business/create-profile")}
               className="px-8 py-3 bg-white text-emerald-700 font-bold rounded-lg hover:bg-emerald-50 transition-colors">
               Buyer Profile
-            </Link>
+            </button>
             <Link to="/partners?category=lawyer"
               className="px-8 py-3 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">
               Find a Lawyer

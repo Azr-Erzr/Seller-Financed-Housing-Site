@@ -1,9 +1,10 @@
 // src/pages/business/BusinessListHome.jsx
 // Comprehensive commercial listing form with all enriched fields + live preview.
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { saveCommListing } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
+import { useAuth } from "../../context/AuthContext";
 import { Building2, CheckCircle, Eye, EyeOff, Ruler, Building, Truck } from "lucide-react";
 import AddressAutocomplete from "../../components/AddressAutocomplete";
 import {
@@ -87,6 +88,8 @@ function CommPreview({ form }) {
 
 export default function BusinessListHome() {
   const { toast } = useToast();
+  const { user, loading: authLoading, openAuthModal } = useAuth();
+  const location = useLocation();
   const [submitted, setSubmitted] = useState(false);
   const [newId, setNewId] = useState(null);
   const [errors, setErrors] = useState({});
@@ -112,6 +115,19 @@ export default function BusinessListHome() {
   const toggleArr = (key, val) => { const c = form[key]; set(key, c.includes(val) ? c.filter((v) => v !== val) : [...c, val]); };
   const needsFinancing = form.dealTypes.some((d) => d !== "Private Sale");
   const hasBuilding = form.propertyCategory && (form.propertyCategory.includes("Commercial") || form.propertyCategory.includes("Industrial") || form.propertyCategory.includes("Multi"));
+
+  // Auth guard
+  useEffect(() => {
+    if (!authLoading && !user) openAuthModal(location.pathname);
+  }, [authLoading, user, openAuthModal, location.pathname]);
+
+  if (authLoading) return <div className="py-20 text-center text-gray-400">Loading...</div>;
+  if (!user) return (
+    <div className="py-20 text-center">
+      <p className="text-gray-500 mb-2">You need to sign in to list a property.</p>
+      <p className="text-sm text-gray-400">A sign-in prompt should appear shortly.</p>
+    </div>
+  );
 
   const validate = () => {
     const e = {};
