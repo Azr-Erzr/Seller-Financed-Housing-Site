@@ -1,8 +1,8 @@
 // src/pages/business/BusinessListings.jsx
 // Redesigned filter sidebar: collapsible sections, pill-style toggles, mobile drawer
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
+import { useSearchParams, Link } from "react-router-dom";
+import { SlidersHorizontal, ChevronDown, X, Map } from "lucide-react";
 import CommListingCard from "../../components/business/CommListingCard";
 import { getAllCommListings } from "../../lib/commercial-storage";
 import {
@@ -142,17 +142,23 @@ export default function BusinessListings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-[1400px] mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-1">Available Properties</h1>
             <p className="text-gray-500">{filtered.length} {filtered.length === 1 ? "property" : "properties"} found</p>
           </div>
-          <button onClick={() => setMobileOpen(true)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 shadow-sm">
-            <SlidersHorizontal className="w-4 h-4" /> Filters
-            {activeN > 0 && <span className="bg-emerald-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">{activeN}</span>}
-          </button>
+          <div className="flex items-center gap-3">
+            <Link to="/business/map"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+              <Map className="w-4 h-4" /> Map View
+            </Link>
+            <button onClick={() => setMobileOpen(true)}
+              className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 shadow-sm">
+              <SlidersHorizontal className="w-4 h-4" /> Filters
+              {activeN > 0 && <span className="bg-emerald-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">{activeN}</span>}
+            </button>
+          </div>
         </div>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Desktop sidebar */}
