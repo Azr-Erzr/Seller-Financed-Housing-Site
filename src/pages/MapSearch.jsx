@@ -126,17 +126,11 @@ export default function MapSearch() {
   }, []);
 
   // Init map — fires when mapDivRef becomes available (view switches from list)
-  // L is already available synchronously — no async timing issue
+  // L is available synchronously. Tailwind Preflight override is in index.html.
   useEffect(() => {
     if (view === "list") return;
     if (mapRef.current) return;
     if (!mapDivRef.current) return;
-
-    // Nuclear Tailwind/Leaflet fix — inject style override directly into container
-    // Tailwind Preflight sets img { max-width:100%; display:block } which breaks tiles
-    const style = document.createElement("style");
-    style.textContent = `.leaflet-container img,.leaflet-container .leaflet-tile{max-width:none!important;max-height:none!important;width:256px!important;height:256px!important}.leaflet-container .leaflet-tile-pane img{width:256px!important;height:256px!important}`;
-    document.head.appendChild(style);
 
     const map = L.map(mapDivRef.current, { center: [43.89, -78.93], zoom: 11 });
 
@@ -147,7 +141,7 @@ export default function MapSearch() {
 
     mapRef.current = map;
 
-    // Triple invalidateSize — immediate, next frame, and delayed
+    // invalidateSize after layout settles
     map.invalidateSize();
     requestAnimationFrame(() => {
       map.invalidateSize();
@@ -165,7 +159,6 @@ export default function MapSearch() {
     return () => {
       clearTimeout(t);
       if (ro) ro.disconnect();
-      style.remove();
       map.remove();
       mapRef.current = null;
       setMapReady(false);
