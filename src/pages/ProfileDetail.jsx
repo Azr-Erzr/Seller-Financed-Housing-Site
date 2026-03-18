@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { getProfileById, getAllListings, toggleSavedProfile, isProfileSaved } from "../lib/storage";
 import { useToast } from "../components/Toast";
 import ContactModal from "../components/ContactModal";
-import { MapPin, DollarSign, TrendingUp, Bookmark, BookmarkCheck, Send, ArrowLeft } from "lucide-react";
+import { MapPin, DollarSign, TrendingUp, Bookmark, BookmarkCheck, Send, ArrowLeft, Shield } from "lucide-react";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
 const pct   = (n) => n ? `${(Number(n)*100).toFixed(1)}%` : "—";
@@ -81,6 +81,9 @@ export default function ProfileDetail() {
     ? ((profile.monthlyDebt + profile.paymentBudget) / profile.monthlyIncome) * 100
     : null;
 
+  const isAliased = profile.useAlias && profile.alias;
+  const displayName = isAliased ? profile.alias : profile.name;
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -89,21 +92,40 @@ export default function ProfileDetail() {
           <ArrowLeft className="w-4 h-4" /> Back to Buyers
         </Link>
 
+        {/* Privacy notice for aliased profiles */}
+        {isAliased && (
+          <div className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 flex items-center gap-3">
+            <Shield className="w-5 h-5 text-gray-500 shrink-0" />
+            <p className="text-sm text-gray-600">
+              This buyer's identity is protected. Their real name will be shared when you contact them through Sel-Fi.
+            </p>
+          </div>
+        )}
+
         {/* Hero */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white text-3xl font-extrabold flex items-center justify-center shrink-0">
-              {profile.avatar
-                ? <img src={profile.avatar} alt={profile.name} className="w-full h-full object-cover rounded-2xl" />
-                : profile.name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0,2)
+            <div className={`w-24 h-24 rounded-2xl text-white text-3xl font-extrabold flex items-center justify-center shrink-0 ${
+              isAliased ? "bg-gradient-to-br from-gray-500 to-gray-700" : "bg-gradient-to-br from-blue-500 to-blue-700"
+            }`}>
+              {isAliased
+                ? <Shield className="w-10 h-10" />
+                : profile.avatar
+                  ? <img src={profile.avatar} alt={displayName} className="w-full h-full object-cover rounded-2xl" />
+                  : profile.name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0,2)
               }
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl font-bold text-gray-900">{profile.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
               <p className="text-gray-400 text-sm flex items-center justify-center sm:justify-start gap-1 mt-0.5">
                 <MapPin className="w-3.5 h-3.5" /> {profile.city}
               </p>
               <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
+                {isAliased && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+                    <Shield className="w-3 h-3" /> Identity protected
+                  </span>
+                )}
                 {profile.badges?.map((b) => (
                   <span key={b} className="text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-medium">{b}</span>
                 ))}
@@ -176,11 +198,12 @@ export default function ProfileDetail() {
         <ContactModal
           open={contactOpen}
           onClose={() => setContactOpen(false)}
-          recipientName={profile.name}
+          recipientName={displayName}
           recipientType="buyer"
           refType="profile"
           refId={profile.id}
-          refTitle={`Buyer Profile — ${profile.name}`}
+          refTitle={`Buyer Profile — ${displayName}`}
+          isAliased={isAliased}
         />
       </div>
     </div>

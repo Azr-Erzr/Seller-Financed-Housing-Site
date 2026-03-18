@@ -7,6 +7,7 @@ import { saveProfile } from "../lib/storage";
 import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
 import { useAuth } from "../context/AuthContext";
+import { generateAlias } from "../lib/alias";
 import { Users, CheckCircle, Camera, X, EyeOff, Eye } from "lucide-react";
 
 const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white text-gray-900 placeholder-gray-400";
@@ -111,7 +112,7 @@ export default function CreateProfile() {
     budget: "", downPayment: "", paymentBudget: "",
     monthlyIncome: "", monthlyDebt: "", interestMax: "",
     dealPreferences: [], riskTolerance: "Moderate",
-    showIncome: false,
+    showIncome: false, useAlias: true,
   });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
@@ -174,6 +175,8 @@ export default function CreateProfile() {
         avatar:         avatarUrl || "",
         avatar_url:     avatarUrl || "",
         show_income:    form.showIncome,
+        use_alias:      form.useAlias,
+        alias:          form.useAlias ? generateAlias("buyer") : null,
       };
       const saved = await saveProfile(profile);
       if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Your buyer profile is now live!"); }
@@ -329,9 +332,38 @@ export default function CreateProfile() {
             </div>
           </div>
 
+          {/* Privacy Settings */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+            <h2 className="font-semibold text-gray-900 text-base">Privacy Settings</h2>
+
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Use an alias on your public profile</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Your real name will only be revealed after a seller contacts you through Sel-Fi.</p>
+                </div>
+                <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                  <span className="text-xs text-gray-500 font-medium">{form.useAlias ? "Alias on" : "Real name"}</span>
+                  <div
+                    onClick={() => set("useAlias", !form.useAlias)}
+                    className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${form.useAlias ? "bg-blue-600" : "bg-gray-300"}`}
+                  >
+                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.useAlias ? "translate-x-5" : "translate-x-0.5"}`} />
+                  </div>
+                </label>
+              </div>
+              <p className="text-xs text-blue-600 mt-2">
+                {form.useAlias
+                  ? "🔒 Your profile will display a generated alias (e.g. \"Maple Buyer #7K4M\"). Your real name stays private until contact."
+                  : "Your real name will be visible on your public profile."}
+              </p>
+            </div>
+          </div>
+
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
             <strong>Privacy:</strong> Your financial details are used for matching only. Income is only shown
-            publicly if you choose to display it above. Sel-Fi never shares your information with third parties.
+            publicly if you choose to display it. Your real name is hidden behind an alias by default and only
+            revealed when a seller contacts you through the platform. Sel-Fi never shares your information with third parties.
           </div>
 
           <div className="flex gap-3 pb-8">
