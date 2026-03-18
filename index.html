@@ -20,6 +20,27 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
       crossorigin="anonymous"
     />
+    <!--
+      CRITICAL: Tailwind Preflight override for Leaflet.
+      This MUST live in index.html, not in a CSS file processed by Vite/PostCSS.
+      Vite's build pipeline can reorder rules inside compiled bundles, which is
+      why putting this in index.css failed repeatedly. Inline in the HTML, it loads
+      synchronously after Leaflet CSS but before any Vite bundle, and is immune
+      to build tool processing.
+    -->
+    <style>
+      .leaflet-container img,
+      .leaflet-tile-pane img,
+      .leaflet-container .leaflet-tile {
+        max-width: none !important;
+        max-height: none !important;
+      }
+      .leaflet-container .leaflet-tile-pane .leaflet-tile {
+        width: 256px !important;
+        height: 256px !important;
+      }
+      .leaflet-container a { color: inherit; text-decoration: none; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
