@@ -29,7 +29,7 @@ export default function NotFound() {
             className={`flex items-center justify-center gap-2 px-5 py-2.5 font-medium rounded-lg transition-colors ${primaryBtnCls}`}
           >
             {isBusiness ? <Building2 className="w-4 h-4" /> : <Home className="w-4 h-4" />}
-            {isBusiness ? "LandMatch Business" : "Go Home"}
+            {isBusiness ? "Sel-Fi Business" : "Go Home"}
           </Link>
           <Link
             to={isBusiness ? "/business/listings" : "/listings"}
@@ -54,7 +54,7 @@ export default function NotFound() {
             to={isBusiness ? "/" : "/business"}
             className={`font-medium ${isBusiness ? "text-blue-600 hover:underline" : "text-emerald-600 hover:underline"}`}
           >
-            Switch to LandMatch {isBusiness ? "Homes" : "Business"} →
+            Switch to Sel-Fi {isBusiness ? "Homes" : "Business"} →
           </Link>
         </p>
       </div>

@@ -77,7 +77,7 @@ export default function ContactModal({
         sender_name:    senderName.trim(),
         sender_email:   senderEmail.trim(),
         recipient_name: recipientName,
-        subject:        `LandMatch ${recipientType === "buyer" ? "Invite to Deal" : "Enquiry"}: ${refTitle || ""}`,
+        subject:        `Sel-Fi ${recipientType === "buyer" ? "Invite to Deal" : "Enquiry"}: ${refTitle || ""}`,
         body:           message.trim(),
         ref_type:       refType,
         ref_id:         String(refId),
@@ -243,7 +243,7 @@ export default function ContactModal({
             {/* Privacy note */}
             <p className="text-xs text-gray-400 leading-relaxed">
               🔒 Your email is only used so the recipient can reply to you.
-              LandMatch does not share contact details publicly.
+              Sel-Fi does not share contact details publicly.
             </p>
 
             {/* Actions */}

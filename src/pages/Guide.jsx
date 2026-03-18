@@ -48,7 +48,7 @@ export default function Guide() {
       <section className={`bg-gradient-to-br ${heroBg} py-16`}>
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className={`inline-flex items-center gap-2 text-sm font-medium px-4 py-1.5 rounded-full mb-5 ${badgeBg}`}>
-            <BookOpen className="w-4 h-4" /> LandMatch Guide {isBusiness ? "— Business Edition" : ""}
+            <BookOpen className="w-4 h-4" /> Sel-Fi Guide {isBusiness ? "— Business Edition" : ""}
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{color:"#fff"}}>
             {heroTitle}

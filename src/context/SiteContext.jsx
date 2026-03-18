@@ -14,9 +14,9 @@ export const MODES = {
 export const SITE_CONFIG = {
   homes: {
     mode:        "homes",
-    name:        "LandMatch",
+    name:        "Sel-Fi",
     tagline:     "Homes",
-    fullName:    "LandMatch Homes",
+    fullName:    "Sel-Fi Homes",
     description: "Seller-financed & rent-to-own residential deals",
     primaryColor:   "#2563EB",
     primaryHover:   "#1D4ED8",
@@ -32,9 +32,9 @@ export const SITE_CONFIG = {
   },
   business: {
     mode:        "business",
-    name:        "LandMatch",
+    name:        "Sel-Fi",
     tagline:     "Business",
-    fullName:    "LandMatch Business",
+    fullName:    "Sel-Fi Business",
     description: "Commercial, land & development properties",
     primaryColor:   "#059669",
     primaryHover:   "#047857",

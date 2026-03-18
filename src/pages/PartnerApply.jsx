@@ -41,7 +41,7 @@ function MoverCredentials({ form, set, errors }) {
         <div>
           <h2 className="font-semibold text-gray-900 text-base">Moving Company Requirements</h2>
           <p className="text-sm text-gray-500 mt-0.5">
-            HomeMatch only lists movers who meet all three requirements below.
+            Sel-Fi only lists movers who meet all three requirements below.
             Applications missing any of these will not be approved.
           </p>
         </div>
@@ -52,7 +52,7 @@ function MoverCredentials({ form, set, errors }) {
         <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
         <p className="text-xs text-amber-800 leading-relaxed">
           <strong>Why we require this:</strong> The moving industry has documented issues with
-          unlicensed operators, surprise charges, and held-hostage loads. All HomeMatch-listed
+          unlicensed operators, surprise charges, and held-hostage loads. All Sel-Fi-listed
           movers must be CVOR-registered, carry active cargo insurance, and be WSIB-covered.
           We verify this before approval and display verified badges on your profile.
         </p>
@@ -266,7 +266,7 @@ export default function PartnerApply() {
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Application Received!</h1>
         <p className="text-gray-500 mb-2">
-          Thank you for applying to the HomeMatch Partner network. We review all applications manually to ensure quality.
+          Thank you for applying to the Sel-Fi Partner network. We review all applications manually to ensure quality.
         </p>
         <p className="text-gray-400 text-sm mb-8">
           You'll hear from us at <strong>{form.email}</strong> within 2–3 business days.
@@ -276,7 +276,7 @@ export default function PartnerApply() {
             View Partner Directory
           </Link>
           <Link to="/" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
-            Back to HomeMatch
+            Back to Sel-Fi
           </Link>
         </div>
       </div>
@@ -292,7 +292,7 @@ export default function PartnerApply() {
           <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Star className="w-7 h-7 text-orange-500" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">Become a HomeMatch Partner</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">Become a Sel-Fi Partner</h1>
           <p className="text-gray-500 max-w-xl mx-auto">
             Join our network of trusted real estate professionals and connect with buyers and sellers
             who need your expertise. All applications are reviewed manually before approval.
@@ -302,9 +302,9 @@ export default function PartnerApply() {
         {/* Benefits */}
         <div className="grid sm:grid-cols-3 gap-4 mb-10">
           {[
-            { icon: <Users className="w-5 h-5 text-blue-600" />,      bg: "bg-blue-100",   title: "Direct Exposure",   body: "Your profile reaches every buyer and seller using HomeMatch in your area." },
+            { icon: <Users className="w-5 h-5 text-blue-600" />,      bg: "bg-blue-100",   title: "Direct Exposure",   body: "Your profile reaches every buyer and seller using Sel-Fi in your area." },
             { icon: <Star className="w-5 h-5 text-orange-500" />,     bg: "bg-orange-100", title: "Partner Badge",      body: "Verified partners appear at the top of search results with a visible trust badge." },
-            { icon: <TrendingUp className="w-5 h-5 text-green-600" />, bg: "bg-green-100", title: "Growing Network",   body: "As HomeMatch grows, so does your referral pipeline — no ongoing effort required." },
+            { icon: <TrendingUp className="w-5 h-5 text-green-600" />, bg: "bg-green-100", title: "Growing Network",   body: "As Sel-Fi grows, so does your referral pipeline — no ongoing effort required." },
           ].map(({ icon, bg, title, body }) => (
             <div key={title} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 text-center">
               <div className={`w-10 h-10 ${bg} rounded-full flex items-center justify-center mx-auto mb-3`}>{icon}</div>
@@ -345,7 +345,7 @@ export default function PartnerApply() {
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
                 <Truck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <p className="text-xs text-blue-800 leading-relaxed">
-                  <strong>Moving company requirements:</strong> HomeMatch requires CVOR registration,
+                  <strong>Moving company requirements:</strong> Sel-Fi requires CVOR registration,
                   active cargo insurance (min. $100K), and WSIB coverage for all listed movers.
                   You'll be asked to provide these details below.
                 </p>
@@ -425,7 +425,7 @@ export default function PartnerApply() {
             <h2 className="font-semibold text-gray-900 text-base">About Your Business</h2>
 
             <Field label="Business Bio" required error={errors.bio}
-              hint="This appears on your public profile. Tell HomeMatch users what makes you the right choice.">
+              hint="This appears on your public profile. Tell Sel-Fi users what makes you the right choice.">
               <textarea className={`${inputCls} h-32 resize-none`} value={form.bio}
                 onChange={(e) => set("bio", e.target.value)}
                 placeholder={isMover
@@ -446,10 +446,10 @@ export default function PartnerApply() {
 
           {/* Review process */}
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-xs text-blue-800 leading-relaxed">
-            <strong>Review Process:</strong> All partner applications are reviewed manually by the HomeMatch team.
+            <strong>Review Process:</strong> All partner applications are reviewed manually by the Sel-Fi team.
             Approval typically takes 2–3 business days. We may contact you for additional documentation.
             {isMover && " For moving companies, we verify CVOR, insurance, and WSIB before any approval."}
-            {" "}Approved partners receive the HomeMatch Partner badge and featured placement in the directory.
+            {" "}Approved partners receive the Sel-Fi Partner badge and featured placement in the directory.
           </div>
 
           <div className="flex gap-3 pb-8">

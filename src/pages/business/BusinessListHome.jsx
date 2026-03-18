@@ -155,7 +155,7 @@ export default function BusinessListHome() {
     <div className="max-w-lg mx-auto py-20 px-6 text-center">
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><CheckCircle className="w-8 h-8 text-green-600" /></div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Property Listed!</h1>
-      <p className="text-gray-500 mb-8">Your property is live on LandMatch Business.</p>
+      <p className="text-gray-500 mb-8">Your property is live on Sel-Fi Business.</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link to={`/business/listings/${newId}`} className="px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700">View Listing</Link>
         <Link to="/business/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Browse All</Link>
@@ -289,7 +289,7 @@ export default function BusinessListHome() {
             </SectionCard>
 
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
-              <strong>Disclaimer:</strong> LandMatch facilitates introductions only — not a mortgage broker, real estate agent, or legal advisor. Always consult a licensed Ontario real estate lawyer before entering any agreement.
+              <strong>Disclaimer:</strong> Sel-Fi facilitates introductions only — not a mortgage broker, real estate agent, or legal advisor. Always consult a licensed Ontario real estate lawyer before entering any agreement.
             </div>
 
             <div className="flex gap-3 pb-8">

@@ -37,7 +37,7 @@ export default function Footer() {
                 }
               </div>
               <div>
-                <span className="text-lg font-bold text-gray-900">LandMatch</span>
+                <span className="text-lg font-bold text-gray-900">Sel-Fi</span>
                 <span className={`ml-1.5 text-xs font-semibold px-2 py-0.5 rounded-full ${
                   isBusiness ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"
                 }`}>
@@ -52,7 +52,7 @@ export default function Footer() {
               }
             </p>
             <p className="text-xs text-gray-400 mt-4">
-              © {new Date().getFullYear()} LandMatch. All rights reserved.
+              © {new Date().getFullYear()} Sel-Fi. All rights reserved.
             </p>
           </div>
 
@@ -127,8 +127,8 @@ export default function Footer() {
                   }`}
                 >
                   {isBusiness
-                    ? <><Home className="w-3 h-3" /> Switch to LandMatch Homes</>
-                    : <><Building2 className="w-3 h-3" /> Switch to LandMatch Business</>
+                    ? <><Home className="w-3 h-3" /> Switch to Sel-Fi Homes</>
+                    : <><Building2 className="w-3 h-3" /> Switch to Sel-Fi Business</>
                   }
                 </button>
               </li>

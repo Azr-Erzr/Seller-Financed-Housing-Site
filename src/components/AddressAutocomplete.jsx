@@ -54,7 +54,7 @@ export default function AddressAutocomplete({
         countrycodes:   countryCode,
       });
       const res  = await fetch(`https://nominatim.openstreetmap.org/search?${params}`, {
-        headers: { "Accept-Language": "en", "User-Agent": "LandMatch/1.0" },
+        headers: { "Accept-Language": "en", "User-Agent": "Sel-Fi/1.0" },
       });
       const data = await res.json();
       setSuggestions(data.map((r) => ({

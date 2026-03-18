@@ -29,7 +29,7 @@ export default function SupportChat() {
   const handleSend = (e) => {
     e.preventDefault();
     if (!message.trim() || !email.trim()) return;
-    const subject = encodeURIComponent(`LandMatch ${isBusiness ? "Business" : "Homes"} Support`);
+    const subject = encodeURIComponent(`Sel-Fi ${isBusiness ? "Business" : "Homes"} Support`);
     const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
     window.location.href = `mailto:hello@landmatch.ca?subject=${subject}&body=${body}`;
     setSent(true);
@@ -52,7 +52,7 @@ export default function SupportChat() {
           <div className={`${headerBg} px-5 py-4 flex items-center justify-between`}>
             <div>
               <p className="font-semibold text-white text-sm">
-                Chat with LandMatch {isBusiness ? "Business" : "Homes"}
+                Chat with Sel-Fi {isBusiness ? "Business" : "Homes"}
               </p>
               <p className={`text-xs mt-0.5 ${subText}`}>We typically respond within a few hours</p>
             </div>
@@ -79,7 +79,7 @@ export default function SupportChat() {
               <div className={`rounded-xl p-3 text-xs leading-relaxed ${infoBox}`}>
                 {isBusiness
                   ? "Questions about commercial VTB deals, listing a property, or finding a buyer? We're here."
-                  : "Questions about seller financing, how LandMatch works, or need help with your listing? We're here."
+                  : "Questions about seller financing, how Sel-Fi works, or need help with your listing? We're here."
                 }
               </div>
               <input type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)}

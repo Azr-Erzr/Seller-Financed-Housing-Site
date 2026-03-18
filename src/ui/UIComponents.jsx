@@ -5,7 +5,7 @@ import React, { useState } from "react";
    Brand & Helpers
    ----------------------------- */
 export const BRAND = {
-  name: "HomeMatch",
+  name: "Sel-Fi",
   colors: {
     primary: "#2563EB",
     primaryHover: "#1D4ED8",
@@ -156,7 +156,7 @@ export const Img = ({ src, alt = "", className = "", ratio = "4/3" }) => {
    Logo
    ----------------------------- */
 export const Logo = ({ size = 40 }) => (
-  <div className="flex items-center gap-2 select-none" aria-label="HomeMatch logo">
+  <div className="flex items-center gap-2 select-none" aria-label="Sel-Fi logo">
     <svg
       width={size}
       height={size}

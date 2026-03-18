@@ -28,13 +28,13 @@ The seller holds a registered mortgage on the property — the same kind of lega
 
 If the buyer defaults, the seller can pursue Power of Sale (selling the property to recover what's owed) or foreclosure (reclaiming ownership outright). Ontario law requires a notice period before these proceedings begin, giving the buyer a chance to correct the default first.
 
-This is precisely why every LandMatch deal should involve a real estate lawyer. A lawyer registers the charge correctly, drafts the promissory note, and makes sure both parties' rights are protected.`,
+This is precisely why every Sel-Fi deal should involve a real estate lawyer. A lawyer registers the charge correctly, drafts the promissory note, and makes sure both parties' rights are protected.`,
       },
       {
         heading: "Can the Buyer Also Use a Realtor?",
-        body: `Yes — and this is an important point. A buyer can absolutely use a buyer's agent in a LandMatch deal. The seller simply doesn't pay a listing agent commission (typically 2.5% of the sale price). If the buyer has a realtor, that realtor's commission is a separate negotiation between buyer and buyer's agent — it does not come from the seller.
+        body: `Yes — and this is an important point. A buyer can absolutely use a buyer's agent in a Sel-Fi deal. The seller simply doesn't pay a listing agent commission (typically 2.5% of the sale price). If the buyer has a realtor, that realtor's commission is a separate negotiation between buyer and buyer's agent — it does not come from the seller.
 
-This means a seller on LandMatch saves their side of the commission regardless of whether the buyer uses a realtor. And the buyer gets professional representation if they want it.`,
+This means a seller on Sel-Fi saves their side of the commission regardless of whether the buyer uses a realtor. And the buyer gets professional representation if they want it.`,
       },
     ],
     cta: { label: "Browse Available Listings", href: "/listings" },
@@ -62,11 +62,11 @@ On a $900,000 home that climbs to roughly $50,800.`,
       },
       {
         heading: "What You're Not Told About Referrals",
-        body: `When your agent recommends a stager, a photographer, or a home inspector, there's something you may not know: there may be referral arrangements in place. On LandMatch, you find your own professionals from our vetted Partner Directory. You see exactly what you're paying and exactly who you're paying it to.`,
+        body: `When your agent recommends a stager, a photographer, or a home inspector, there's something you may not know: there may be referral arrangements in place. On Sel-Fi, you find your own professionals from our vetted Partner Directory. You see exactly what you're paying and exactly who you're paying it to.`,
       },
       {
-        heading: "What Sellers Actually Keep on LandMatch",
-        body: `By selling on LandMatch instead of through a traditional agent:
+        heading: "What Sellers Actually Keep on Sel-Fi",
+        body: `By selling on Sel-Fi instead of through a traditional agent:
 • Listing agent commission saved (~2.5%): $15,000 on $600K
 • Buyer's agent commission saved (~2.5%): $15,000
 • HST on commissions: ~$3,900
@@ -76,7 +76,7 @@ On a $900,000 home that climbs to roughly $50,800.`,
 Total estimated savings: $30,000–$34,000 on a $600,000 home. Before the interest income from the VTB.`,
       },
     ],
-    cta: { label: "List Your Home on LandMatch", href: "/list-home" },
+    cta: { label: "List Your Home on Sel-Fi", href: "/list-home" },
   },
 
   {
@@ -172,7 +172,7 @@ Difference: ~$184/month — or $2,208/year. In exchange, you avoid months of app
     sections: [
       {
         heading: "Step 1–3: Match, Qualify, Negotiate",
-        body: `Find each other on LandMatch. Exchange financials behind a mutual NDA. Negotiate terms directly: purchase price, down payment, interest rate, amortization, and any special conditions.`,
+        body: `Find each other on Sel-Fi. Exchange financials behind a mutual NDA. Negotiate terms directly: purchase price, down payment, interest rate, amortization, and any special conditions.`,
       },
       {
         heading: "Step 4: Agreement of Purchase and Sale",
@@ -254,7 +254,7 @@ The balloon balance at term end is typically refinanced by the buyer. Your lawye
       },
       {
         heading: "When a Buyer Also Uses a Broker",
-        body: `Commercial buyers frequently use their own broker or agent. This is entirely compatible with a LandMatch deal. You still save your side of the commission (typically 2–3% + HST on commercial transactions). The buyer's broker is the buyer's expense. You close faster because the buyer has professional deal support — and you keep your margin.`,
+        body: `Commercial buyers frequently use their own broker or agent. This is entirely compatible with a Sel-Fi deal. You still save your side of the commission (typically 2–3% + HST on commercial transactions). The buyer's broker is the buyer's expense. You close faster because the buyer has professional deal support — and you keep your margin.`,
       },
     ],
     cta: { label: "List a Commercial Property", href: "/business/list-property" },
@@ -312,7 +312,7 @@ This is exactly why a CPA who understands real estate transactions is essential.
         heading: "Environmental Status",
         body: `Environmental liability is the single biggest risk in commercial land transactions. A Phase 1 Environmental Site Assessment (ESA) reviews historical land use records and identifies potential contamination risks without physical testing. If a Phase 1 identifies concerns, a Phase 2 involves physical sampling.
 
-On LandMatch, sellers can indicate their environmental status (Phase 1 Complete — Clean, Phase 2 Required, No Assessment, etc.). But the buyer must independently verify. A Phase 1 costs $1,500–$4,000 and can save you from acquiring a remediation liability that exceeds the land value.`,
+On Sel-Fi, sellers can indicate their environmental status (Phase 1 Complete — Clean, Phase 2 Required, No Assessment, etc.). But the buyer must independently verify. A Phase 1 costs $1,500–$4,000 and can save you from acquiring a remediation liability that exceeds the land value.`,
       },
       {
         heading: "Zoning and Permitted Uses",

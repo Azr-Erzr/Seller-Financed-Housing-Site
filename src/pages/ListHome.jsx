@@ -293,7 +293,7 @@ export default function ListHome() {
         badges: ["New"], daysOnMarket: 0,
       };
       const saved = await saveListing(listing);
-      if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Your listing is live on LandMatch!"); }
+      if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Your listing is live on Sel-Fi!"); }
       else toast.error("Something went wrong.");
     } catch (err) { console.error(err); toast.error("Submission failed."); }
     finally { setSubmitting(false); }
@@ -303,7 +303,7 @@ export default function ListHome() {
     <div className="max-w-lg mx-auto py-20 px-6 text-center">
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><CheckCircle className="w-8 h-8 text-green-600"/></div>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Listing Submitted!</h1>
-      <p className="text-gray-500 mb-8">Your home is live on LandMatch. Buyers whose profile matches your terms will be able to find it.</p>
+      <p className="text-gray-500 mb-8">Your home is live on Sel-Fi. Buyers whose profile matches your terms will be able to find it.</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link to={`/listings/${newId}`} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">View My Listing</Link>
         <Link to="/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Browse All</Link>
@@ -439,7 +439,7 @@ export default function ListHome() {
             </SectionCard>
 
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
-              <strong>Disclaimer:</strong> LandMatch is a marketplace platform only. We do not provide legal, financial, or mortgage advice.
+              <strong>Disclaimer:</strong> Sel-Fi is a marketplace platform only. We do not provide legal, financial, or mortgage advice.
               Always consult a licensed Ontario real estate lawyer before entering any agreement.
             </div>
 

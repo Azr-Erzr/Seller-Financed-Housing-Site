@@ -1,4 +1,4 @@
-// src/pages/Home.jsx — LandMatch Homes redesign
+// src/pages/Home.jsx — Sel-Fi Homes redesign
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight } from "lucide-react";
@@ -45,7 +45,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl max-w-2xl mx-auto mb-8" style={{color:"#bfdbfe"}}>
-            LandMatch connects sellers and buyers directly — no listing agent, no buyer's agent,
+            Sel-Fi connects sellers and buyers directly — no listing agent, no buyer's agent,
             no bank approval required. Sellers earn interest. Buyers get access. Everyone saves.
           </p>
 
@@ -111,7 +111,7 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-4">You Are the Bank — and That's Powerful</h2>
               <p className="text-gray-600 leading-relaxed mb-6">
-                When you sell on LandMatch, you don't just sell your home — you become the lender.
+                When you sell on Sel-Fi, you don't just sell your home — you become the lender.
                 You hold a registered mortgage, set the interest rate, and receive monthly payments
                 directly from the buyer. That's income a bank would normally take. Now you take it instead.
               </p>
@@ -138,7 +138,7 @@ export default function Home() {
             </div>
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <p className="font-bold text-gray-900 text-lg mb-1">Seller on a $650,000 Home</p>
-              <p className="text-sm text-gray-500 mb-5">LandMatch vs. traditional agent sale</p>
+              <p className="text-sm text-gray-500 mb-5">Sel-Fi vs. traditional agent sale</p>
               <div className="space-y-3">
                 {[
                   { label: "Listing agent commission (2.5%)", trad: "-$16,250", lm: "$0", win: true },
@@ -171,7 +171,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-gray-900 mb-3">The Bank Said No. We Say Yes.</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               Banks use rigid formulas. Sellers can use judgment. If you're self-employed, new to Canada,
-              or simply don't fit the bank's mold — there's a seller on LandMatch who can say yes.
+              or simply don't fit the bank's mold — there's a seller on Sel-Fi who can say yes.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
@@ -228,7 +228,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { num: 1, icon: "📝", title: "List or Create a Profile", body: "Sellers post their home with financing terms. Buyers create a profile with budget, income, and deal preferences. Both take about 5 minutes." },
-              { num: 2, icon: "🔍", title: "Match and Connect", body: "LandMatch scores compatibility across 5 financial dimensions. Browse matches, sign NDAs to share documents, and connect directly." },
+              { num: 2, icon: "🔍", title: "Match and Connect", body: "Sel-Fi scores compatibility across 5 financial dimensions. Browse matches, sign NDAs to share documents, and connect directly." },
               { num: 3, icon: "✅", title: "Negotiate and Close", body: "Agree on terms directly. A real estate lawyer registers the mortgage and transfers title. No bank approval, no commission." },
             ].map(({ num, icon, title, body }) => (
               <div key={num} className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
@@ -309,7 +309,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">The LandMatch Guide</h2>
+              <h2 className="text-3xl font-bold text-gray-900">The Sel-Fi Guide</h2>
               <p className="text-gray-500 mt-1">Everything you need to understand seller financing</p>
             </div>
             <Link to="/guide" className="text-blue-600 text-sm font-medium hover:underline flex items-center gap-1">
@@ -341,7 +341,7 @@ export default function Home() {
           </h2>
           <p className="mb-8" style={{color:"#bfdbfe"}}>
             Whether you're selling and want to keep your commission, or buying and need a path the banks blocked —
-            LandMatch has a place for you.
+            Sel-Fi has a place for you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/list-home" className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors">

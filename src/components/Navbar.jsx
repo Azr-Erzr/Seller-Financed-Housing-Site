@@ -81,7 +81,7 @@ export default function Navbar() {
             <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${config.logoGradient} flex items-center justify-center shrink-0`}>
               {isHomes ? <Home className="w-5 h-5 text-white"/> : <Building2 className="w-5 h-5 text-white"/>}
             </div>
-            <span className="text-xl font-extrabold text-gray-900 tracking-tight hidden sm:block">LandMatch</span>
+            <span className="text-xl font-extrabold text-gray-900 tracking-tight hidden sm:block">Sel-Fi</span>
           </Link>
           <div className="flex items-center bg-gray-100 rounded-lg p-0.5 ml-1">
             <button onClick={() => handleModeSwitch(MODES.homes)}

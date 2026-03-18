@@ -174,7 +174,7 @@ export default function CreateProfile() {
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Profile Created!</h1>
-        <p className="text-gray-500 mb-8">Your buyer profile is live on LandMatch Homes.</p>
+        <p className="text-gray-500 mb-8">Your buyer profile is live on Sel-Fi Homes.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to={`/profiles/${newId}`} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">View My Profile</Link>
           <Link to="/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">Browse Listings</Link>
@@ -315,7 +315,7 @@ export default function CreateProfile() {
 
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
             <strong>Privacy:</strong> Your financial details are used for matching only. Income is only shown
-            publicly if you choose to display it above. LandMatch never shares your information with third parties.
+            publicly if you choose to display it above. Sel-Fi never shares your information with third parties.
           </div>
 
           <div className="flex gap-3 pb-8">

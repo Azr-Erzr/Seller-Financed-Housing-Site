@@ -42,7 +42,7 @@ export default function GuideArticle() {
         <div className="max-w-3xl mx-auto px-6">
           <Link to={backLink}
             className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Back to LandMatch Guide
+            <ArrowLeft className="w-4 h-4" /> Back to Sel-Fi Guide
           </Link>
           <div className="flex items-center gap-3 mb-4">
             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${article.categoryColor}`}>
@@ -85,7 +85,7 @@ export default function GuideArticle() {
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
           <strong>Disclaimer:</strong> This guide is for educational purposes only and does not constitute legal,
           financial, tax, or mortgage advice. Always consult a licensed real estate lawyer and, where appropriate,
-          a CPA or mortgage professional before entering any agreement. LandMatch facilitates introductions only.
+          a CPA or mortgage professional before entering any agreement. Sel-Fi facilitates introductions only.
         </div>
 
         {/* CTA */}

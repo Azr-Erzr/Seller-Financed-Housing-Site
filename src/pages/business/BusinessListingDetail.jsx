@@ -480,7 +480,7 @@ export default function BusinessListingDetail() {
 
               <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-xs text-gray-400 leading-relaxed">
-                  LandMatch facilitates introductions only — we are not a mortgage broker, real estate agent, or legal advisor.
+                  Sel-Fi facilitates introductions only — we are not a mortgage broker, real estate agent, or legal advisor.
                   Always consult a licensed Ontario real estate lawyer before entering any agreement.
                 </p>
               </div>

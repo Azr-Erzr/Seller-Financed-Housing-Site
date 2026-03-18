@@ -198,7 +198,7 @@ export default function Account() {
       <div className={`bg-gradient-to-br ${heroBg} py-14`}>
         <div className="max-w-xl mx-auto px-6 text-center">
           <h1 className="text-3xl font-bold mb-3" style={{color:"#fff"}}>
-            Sign in to LandMatch
+            Sign in to Sel-Fi
           </h1>
           <p className="text-base" style={{color:isBusiness?"#a7f3d0":"#bfdbfe"}}>
             No password needed — we'll send a secure sign-in link to your email.
@@ -227,7 +227,7 @@ export default function Account() {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
             <h2 className="font-bold text-gray-900 text-xl mb-1">Sign in or create account</h2>
             <p className="text-gray-500 text-sm mb-6">
-              New to LandMatch? Just enter your email — we'll create your account automatically.
+              New to Sel-Fi? Just enter your email — we'll create your account automatically.
             </p>
             <form onSubmit={handleSend} className="space-y-4">
               <div>

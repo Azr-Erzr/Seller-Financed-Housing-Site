@@ -42,7 +42,7 @@ export default function BusinessHome() {
       <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 pt-16 pb-20">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 text-emerald-100 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            🏗️ LandMatch Business
+            🏗️ Sel-Fi Business
           </div>
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-5" style={{color:"#fff"}}>
             Commercial &amp; Land Deals,<br/>
@@ -122,7 +122,7 @@ export default function BusinessHome() {
               </h2>
               <p className="text-gray-600 leading-relaxed mb-6">
                 Commercial VTB isn't new — it's how land, farms, and development parcels have always
-                transacted when institutional financing doesn't fit. LandMatch simply gives vendors and
+                transacted when institutional financing doesn't fit. Sel-Fi simply gives vendors and
                 buyers a structured marketplace to find each other directly.
               </p>
               <div className="space-y-4">
@@ -150,7 +150,7 @@ export default function BusinessHome() {
             {/* Quick deal comparison */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <p className="font-bold text-gray-900 text-lg mb-1">Vendor on a $2,000,000 Property</p>
-              <p className="text-sm text-gray-500 mb-5">LandMatch VTB vs. traditional brokered sale</p>
+              <p className="text-sm text-gray-500 mb-5">Sel-Fi VTB vs. traditional brokered sale</p>
               <div className="space-y-3 text-sm">
                 {[
                   { l: "Vendor commission (3% + HST)",    t: "-$67,800", m: "$0",          win: true  },

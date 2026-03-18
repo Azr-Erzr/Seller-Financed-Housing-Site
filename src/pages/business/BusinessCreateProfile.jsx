@@ -120,7 +120,7 @@ export default function BusinessCreateProfile() {
         avatar:         "",
       };
       const saved = await saveCommProfile(profile);
-      if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Buyer profile live on LandMatch Business!"); }
+      if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Buyer profile live on Sel-Fi Business!"); }
       else toast.error("Something went wrong. Please try again.");
     } finally { setSubmitting(false); }
   };
@@ -301,7 +301,7 @@ export default function BusinessCreateProfile() {
 
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
             <strong>Privacy Note:</strong> Your financial details are used for matching only and are not visible publicly.
-            LandMatch Business does not share your information with third parties.
+            Sel-Fi Business does not share your information with third parties.
           </div>
 
           <div className="flex gap-3 pb-8">

@@ -29,7 +29,7 @@ const SELLER_STEPS = [
   },
   {
     num: 2, icon: "🔍", title: "Browse Matched Buyers",
-    body: "LandMatch shows you buyer profiles scored against your terms — budget, down payment capacity, debt-to-income ratio, and deal preference alignment. You review them privately. No one contacts you without your permission.",
+    body: "Sel-Fi shows you buyer profiles scored against your terms — budget, down payment capacity, debt-to-income ratio, and deal preference alignment. You review them privately. No one contacts you without your permission.",
   },
   {
     num: 3, icon: "🤝", title: "Connect and Qualify",
@@ -99,7 +99,7 @@ const SELLER_FAQS = [
   },
   {
     q: "Is the interest I earn taxed?",
-    a: `Yes — interest income from a VTB mortgage is generally taxable in the year it's received. Some sellers structure VTBs to spread capital gains over multiple years. This is a conversation for your accountant, not LandMatch.`,
+    a: `Yes — interest income from a VTB mortgage is generally taxable in the year it's received. Some sellers structure VTBs to spread capital gains over multiple years. This is a conversation for your accountant, not Sel-Fi.`,
   },
 ];
 
@@ -118,7 +118,7 @@ const BUYER_FAQS = [
   },
   {
     q: "Can I use a realtor to help me?",
-    a: `Yes. You can have a buyer's agent represent you throughout the process. Their commission is your negotiation with them — it does not come from the seller. Having a realtor does not prevent the seller from using LandMatch or offering seller financing.`,
+    a: `Yes. You can have a buyer's agent represent you throughout the process. Their commission is your negotiation with them — it does not come from the seller. Having a realtor does not prevent the seller from using Sel-Fi or offering seller financing.`,
   },
   {
     q: "What interest rate should I expect?",
@@ -128,12 +128,12 @@ const BUYER_FAQS = [
 
 const PARTNER_FAQS = [
   {
-    q: "I'm a realtor. Can I work with LandMatch buyers?",
-    a: `Absolutely. LandMatch supports buyer-side realtor representation. Your buyer finds a seller-financed home on LandMatch, you represent them, and you earn a buyer-side commission negotiated with your client. The seller saves their listing commission. You still get paid. Contact us to discuss how to refer your buyer clients to our platform.`,
+    q: "I'm a realtor. Can I work with Sel-Fi buyers?",
+    a: `Absolutely. Sel-Fi supports buyer-side realtor representation. Your buyer finds a seller-financed home on Sel-Fi, you represent them, and you earn a buyer-side commission negotiated with your client. The seller saves their listing commission. You still get paid. Contact us to discuss how to refer your buyer clients to our platform.`,
   },
   {
     q: "I'm a real estate lawyer. How do I get listed?",
-    a: `Apply through our Partner Directory. We vet all listed professionals and list you with your name, firm, areas of practice, and contact info. VTB transactions require a real estate lawyer — being visible on LandMatch puts you in front of sellers and buyers who specifically need your services.`,
+    a: `Apply through our Partner Directory. We vet all listed professionals and list you with your name, firm, areas of practice, and contact info. VTB transactions require a real estate lawyer — being visible on Sel-Fi puts you in front of sellers and buyers who specifically need your services.`,
   },
 ];
 
@@ -144,8 +144,8 @@ export default function HowItWorks() {
   const bg          = isBusiness ? "bg-emerald-600" : "bg-blue-600";
   const heroBg      = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-700 to-blue-900";
   const heroCopy    = isBusiness
-    ? "How LandMatch Business Works"
-    : "How LandMatch Works";
+    ? "How Sel-Fi Business Works"
+    : "How Sel-Fi Works";
   const heroSub     = isBusiness
     ? "Direct seller-financed commercial land deals — step by step."
     : "Seller financing in plain English — what happens, why it works, and what you need to know.";
@@ -224,7 +224,7 @@ export default function HowItWorks() {
               No conflict, no problem.
             </p>
             <p className="text-xs text-gray-400">
-              LandMatch does not prohibit buyer-agent representation. We simply remove the listing agent from the equation.
+              Sel-Fi does not prohibit buyer-agent representation. We simply remove the listing agent from the equation.
             </p>
           </div>
         </div>
@@ -329,7 +329,7 @@ export default function HowItWorks() {
       </section>
 
       <p className="text-xs text-gray-400 leading-relaxed text-center py-6 px-6 max-w-3xl mx-auto">
-        LandMatch is a marketplace only. Nothing on this site constitutes legal, financial, or mortgage advice.
+        Sel-Fi is a marketplace only. Nothing on this site constitutes legal, financial, or mortgage advice.
         Always consult a licensed Ontario real estate lawyer and, where appropriate, a certified financial planner or
         accountant before entering into any real estate transaction.
       </p>

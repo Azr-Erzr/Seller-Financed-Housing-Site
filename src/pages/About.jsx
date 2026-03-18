@@ -13,7 +13,7 @@ export default function About() {
       <div className="bg-white">
         <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 py-16">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <h1 className="text-4xl font-bold mb-4" style={{color:"#fff"}}>About LandMatch Business</h1>
+            <h1 className="text-4xl font-bold mb-4" style={{color:"#fff"}}>About Sel-Fi Business</h1>
             <p className="text-lg max-w-2xl mx-auto" style={{color:"#a7f3d0"}}>
               Canada's marketplace for direct seller-financed commercial land, farm, and development deals.
               No intermediaries. No bank approval. Seller sets the terms.
@@ -25,7 +25,7 @@ export default function About() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Do</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              LandMatch Business connects commercial property owners — landowners, farmers, developers, and investors —
+              Sel-Fi Business connects commercial property owners — landowners, farmers, developers, and investors —
               with qualified buyers who want to transact directly, without a bank in the middle. Every deal is seller-financed:
               the seller holds a registered mortgage on the property and receives monthly payments at a negotiated rate.
             </p>
@@ -45,7 +45,7 @@ export default function About() {
               or foreclosure (reclaiming full title).
             </p>
             <p className="text-gray-600 leading-relaxed">
-              These are not informal arrangements. Every deal on LandMatch Business should be documented by a
+              These are not informal arrangements. Every deal on Sel-Fi Business should be documented by a
               real estate lawyer. The registered charge on title means the buyer cannot simply walk away — the
               consequences of default are real, enforceable, and well-established under Ontario law.
             </p>
@@ -65,7 +65,7 @@ export default function About() {
           </div>
 
           <p className="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-6">
-            LandMatch facilitates introductions between buyers and sellers. We are not a mortgage broker, real estate agent, or legal advisor.
+            Sel-Fi facilitates introductions between buyers and sellers. We are not a mortgage broker, real estate agent, or legal advisor.
             All transactions require independent legal counsel. Consult a licensed Ontario real estate lawyer before entering any agreement.
           </p>
         </section>
@@ -81,7 +81,7 @@ export default function About() {
       <section className="bg-gradient-to-br from-blue-700 to-blue-900 py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{color:"#fff"}}>
-            About LandMatch
+            About Sel-Fi
           </h1>
           <p className="text-lg max-w-2xl mx-auto" style={{color:"#bfdbfe"}}>
             We built the platform that cuts banks and listing agents out of the residential real estate transaction —
@@ -102,7 +102,7 @@ export default function About() {
             doesn't buy at all.
           </p>
           <p className="text-gray-600 leading-relaxed mb-4">
-            LandMatch was built on a different premise: two people who want to make a deal should be able to make it
+            Sel-Fi was built on a different premise: two people who want to make a deal should be able to make it
             directly, with legal protections, without a bank or an agent in between. The technology to facilitate that
             exists. The legal framework for it has existed in Ontario for decades. We simply built the marketplace.
           </p>
@@ -152,7 +152,7 @@ export default function About() {
           </div>
           <p className="text-sm text-gray-500 leading-relaxed">
             These are not empty threats on paper — they are the established legal infrastructure of Ontario mortgage law.
-            Every deal on LandMatch should be documented by a licensed real estate lawyer to ensure your charge is
+            Every deal on Sel-Fi should be documented by a licensed real estate lawyer to ensure your charge is
             properly registered and your remedies are clearly defined in the agreement.
           </p>
           <p className="text-sm text-gray-500 leading-relaxed mt-3">
@@ -166,7 +166,7 @@ export default function About() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Realtors Are Welcome — on the Buy Side</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
-            LandMatch is not anti-realtor. Buyers on our platform can absolutely use a buyer's agent. In fact, we
+            Sel-Fi is not anti-realtor. Buyers on our platform can absolutely use a buyer's agent. In fact, we
             actively support hybrid deals: the seller lists and manages their side directly (saving their listing commission),
             while the buyer engages a realtor for professional representation on their end.
           </p>
@@ -189,8 +189,8 @@ export default function About() {
             </div>
           </div>
           <p className="text-gray-600 leading-relaxed">
-            For realtors reading this: LandMatch is a source of deals, not a competitor. If your buyer finds a
-            seller-financed home on LandMatch, you can still represent them, earn your buyer-side commission, and
+            For realtors reading this: Sel-Fi is a source of deals, not a competitor. If your buyer finds a
+            seller-financed home on Sel-Fi, you can still represent them, earn your buyer-side commission, and
             provide value throughout the transaction. We simply remove the listing agent from the equation — because
             the seller chose to manage that side themselves.
           </p>
@@ -206,7 +206,7 @@ export default function About() {
           </p>
           <p className="text-gray-600 leading-relaxed mb-4">
             Seller-financed deals let sellers use judgment. They can ask for income documentation, bank statements,
-            a reference letter, or a personal conversation. They can see a buyer's LandMatch profile — including
+            a reference letter, or a personal conversation. They can see a buyer's Sel-Fi profile — including
             calculated debt-to-income ratios and deal preferences — before ever speaking to them.
           </p>
           <p className="text-gray-600 leading-relaxed">
@@ -253,7 +253,7 @@ export default function About() {
         </section>
 
         <p className="text-xs text-gray-400 leading-relaxed text-center">
-          LandMatch facilitates introductions only. All financial, legal, and mortgage decisions should be made with
+          Sel-Fi facilitates introductions only. All financial, legal, and mortgage decisions should be made with
           qualified licensed professionals. Nothing on this site constitutes legal or financial advice.
           Consult a licensed Ontario real estate lawyer before signing any agreement.
         </p>

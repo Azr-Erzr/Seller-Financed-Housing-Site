@@ -78,7 +78,7 @@ export default function PartnerDetail() {
                 <h1 className="text-2xl font-bold text-gray-900">{partner.name}</h1>
                 {partner.badge && (
                   <span className="flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">
-                    <Star className="w-3 h-3" /> LandMatch Partner
+                    <Star className="w-3 h-3" /> Sel-Fi Partner
                   </span>
                 )}
               </div>
@@ -146,7 +146,7 @@ export default function PartnerDetail() {
             ))}
 
             <a
-              href={`mailto:${partner.email}?subject=LandMatch Inquiry`}
+              href={`mailto:${partner.email}?subject=Sel-Fi Inquiry`}
               className={`w-full flex items-center justify-center gap-2 py-3 font-semibold text-sm rounded-xl transition-colors mt-2 ${primaryBtnCls}`}
             >
               Send a Message
@@ -156,7 +156,7 @@ export default function PartnerDetail() {
 
         {/* Disclaimer */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
-          <strong>Note:</strong> LandMatch lists these professionals as a convenience for users.
+          <strong>Note:</strong> Sel-Fi lists these professionals as a convenience for users.
           We do not endorse or guarantee any professional's services. Always verify credentials
           and conduct your own due diligence before engaging any professional.
           Partner status indicates a verified, paid listing placement only.

@@ -17,7 +17,7 @@ const CATEGORIES = [
     id: "lawyer",
     label: "Real Estate Lawyers",
     icon: "⚖️",
-    description: "A real estate lawyer is not optional in a seller-financed deal — it's the foundation. They register your VTB mortgage on title, draft the Agreement of Purchase and Sale with proper default provisions, conduct the title search, and handle the closing. Without proper registration, your charge is unenforceable. Every deal on LandMatch should involve a lawyer on both sides.",
+    description: "A real estate lawyer is not optional in a seller-financed deal — it's the foundation. They register your VTB mortgage on title, draft the Agreement of Purchase and Sale with proper default provisions, conduct the title search, and handle the closing. Without proper registration, your charge is unenforceable. Every deal on Sel-Fi should involve a lawyer on both sides.",
     whyNeed: [
       "Registers your VTB mortgage charge on the buyer's title",
       "Drafts default provisions and enforcement rights into the agreement",
@@ -42,7 +42,7 @@ const CATEGORIES = [
     id: "stager",
     label: "Home Stagers",
     icon: "🛋️",
-    description: "Without a listing agent, you control your staging budget. You hire the stager directly — no referral kickbacks, no inflated invoices. Well-staged homes sell faster and at higher prices. On LandMatch, that means more buyers reaching out sooner.",
+    description: "Without a listing agent, you control your staging budget. You hire the stager directly — no referral kickbacks, no inflated invoices. Well-staged homes sell faster and at higher prices. On Sel-Fi, that means more buyers reaching out sooner.",
     whyNeed: [
       "Faster buyer interest — staged homes get more enquiries",
       "Higher perceived value supports your asking price",
@@ -54,7 +54,7 @@ const CATEGORIES = [
     id: "photographer",
     label: "Photographers",
     icon: "📸",
-    description: "Your listing photos are your first impression. On LandMatch, you upload photos directly — which means the quality of your photos determines how many buyers contact you. A professional photographer pays for themselves in buyer interest.",
+    description: "Your listing photos are your first impression. On Sel-Fi, you upload photos directly — which means the quality of your photos determines how many buyers contact you. A professional photographer pays for themselves in buyer interest.",
     whyNeed: [
       "First impression in a buyer's search results is your photos",
       "Professional photos get 3-4x more enquiries than phone shots",
@@ -83,7 +83,7 @@ const CATEGORIES = [
       "CVOR registered — legal to operate commercially in Ontario",
       "Cargo insurance — your belongings are covered during the move",
       "WSIB coverage — workers are protected, you're not liable",
-      "Vetted by LandMatch — not random marketplace listings",
+      "Vetted by Sel-Fi — not random marketplace listings",
     ],
   },
 ];
@@ -343,11 +343,11 @@ export default function Partners() {
         <div className="mt-12 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
           <h3 className="font-bold text-gray-900 text-xl mb-2">Are You a Real Estate Professional?</h3>
           <p className="text-gray-500 text-sm max-w-md mx-auto mb-4">
-            Join the LandMatch Partner Directory to connect with buyers and sellers in the Durham Region
+            Join the Sel-Fi Partner Directory to connect with buyers and sellers in the Durham Region
             who specifically need your expertise in seller-financed transactions.
           </p>
           <p className="text-xs text-gray-400 max-w-md mx-auto mb-6">
-            LandMatch does not charge referral fees or take commissions from professionals listed in this directory.
+            Sel-Fi does not charge referral fees or take commissions from professionals listed in this directory.
             Our directory is free, unbiased, and based solely on expertise in seller-financed deals.
           </p>
           <Link to="/partner-apply"
