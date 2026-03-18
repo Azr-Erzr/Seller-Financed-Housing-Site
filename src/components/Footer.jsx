@@ -3,9 +3,11 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Home, Building2 } from "lucide-react";
 import { useSite } from "../context/SiteContext";
+import { useRequireAuth } from "../context/AuthContext";
 
 export default function Footer() {
   const { mode, setMode, MODES } = useSite();
+  const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
   const navigate = useNavigate();
 
@@ -66,7 +68,7 @@ export default function Footer() {
                 <>
                   <li><Link to="/business/listings"      className={linkCls}>Browse Properties</Link></li>
                   <li><Link to="/business/map"           className={linkCls}>Map Search</Link></li>
-                  <li><Link to="/business/create-profile" className={linkCls}>Buyer Profile</Link></li>
+                  <li><button onClick={() => requireAuth("/business/create-profile")} className={linkCls}>Buyer Profile</button></li>
                   <li><Link to="/how-it-works"           className={linkCls}>How It Works</Link></li>
                   <li><Link to="/partners"               className={linkCls}>Find a Lawyer</Link></li>
                 </>
@@ -74,7 +76,7 @@ export default function Footer() {
                 <>
                   <li><Link to="/listings"       className={linkCls}>Browse Homes</Link></li>
                   <li><Link to="/map"            className={linkCls}>Map Search</Link></li>
-                  <li><Link to="/create-profile" className={linkCls}>Create Profile</Link></li>
+                  <li><button onClick={() => requireAuth("/create-profile")} className={linkCls}>Create Profile</button></li>
                   <li><Link to="/how-it-works"   className={linkCls}>How It Works</Link></li>
                   <li><Link to="/partners"       className={linkCls}>Find a Lawyer</Link></li>
                 </>
@@ -90,14 +92,14 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-gray-500">
               {isBusiness ? (
                 <>
-                  <li><Link to="/business/list-property" className={linkCls}>List a Property</Link></li>
+                  <li><button onClick={() => requireAuth("/business/list-property")} className={linkCls}>List a Property</button></li>
                   <li><Link to="/business/profiles"      className={linkCls}>Find Buyers</Link></li>
                   <li><Link to="/partners"               className={linkCls}>Find a Lawyer</Link></li>
                   <li><Link to="/partners"               className={linkCls}>Find an Inspector</Link></li>
                 </>
               ) : (
                 <>
-                  <li><Link to="/list-home"                      className={linkCls}>List Your Home</Link></li>
+                  <li><button onClick={() => requireAuth("/list-home")} className={linkCls}>List Your Home</button></li>
                   <li><Link to="/profiles"                       className={linkCls}>Find Buyers</Link></li>
                   <li><Link to="/partners?category=stager"       className={linkCls}>Find a Stager</Link></li>
                   <li><Link to="/partners?category=photographer" className={linkCls}>Find a Photographer</Link></li>
