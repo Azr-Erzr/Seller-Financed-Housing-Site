@@ -1,16 +1,20 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Map, Home, Building2, User, BookOpen } from "lucide-react";
+import { Menu, X, Map, Home, Building2, User, BookOpen, LogOut, ChevronDown } from "lucide-react";
 import { useSite } from "../context/SiteContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
-  const loc      = useLocation();
-  const navigate = useNavigate();
+  const loc       = useLocation();
+  const navigate  = useNavigate();
   const { mode, setMode, config, MODES } = useSite();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
-  useEffect(() => { setMobileOpen(false); }, [loc.pathname]);
+  const [mobileOpen,  setMobileOpen]  = useState(false);
+  const [userMenuOpen,setUserMenuOpen]= useState(false);
+
+  useEffect(() => { setMobileOpen(false); setUserMenuOpen(false); }, [loc.pathname]);
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -24,22 +28,28 @@ export default function Navbar() {
     navigate(newMode === MODES.business ? "/business" : "/");
   };
 
+  const handleSignOut = async () => {
+    setUserMenuOpen(false);
+    await signOut();
+    navigate("/");
+  };
+
   const HOMES_LINKS = [
     { to: "/listings",     label: "Browse Homes" },
-    { to: "/map",          label: "Map", icon: <Map className="w-3.5 h-3.5" /> },
+    { to: "/map",          label: "Map",   icon: <Map       className="w-3.5 h-3.5"/> },
     { to: "/profiles",     label: "Browse Buyers" },
     { to: "/partners",     label: "Find a Pro" },
     { to: "/how-it-works", label: "How It Works" },
-    { to: "/guide",        label: "Guide", icon: <BookOpen className="w-3.5 h-3.5" /> },
+    { to: "/guide",        label: "Guide", icon: <BookOpen  className="w-3.5 h-3.5"/> },
   ];
 
   const BUSINESS_LINKS = [
     { to: "/business/listings",  label: "Browse Properties" },
-    { to: "/business/map",       label: "Map", icon: <Map className="w-3.5 h-3.5" /> },
+    { to: "/business/map",       label: "Map",   icon: <Map      className="w-3.5 h-3.5"/> },
     { to: "/business/profiles",  label: "Browse Buyers" },
     { to: "/partners",           label: "Find a Pro" },
     { to: "/how-it-works",       label: "How It Works" },
-    { to: "/guide",              label: "Guide", icon: <BookOpen className="w-3.5 h-3.5" /> },
+    { to: "/guide",              label: "Guide", icon: <BookOpen className="w-3.5 h-3.5"/> },
   ];
 
   const NAV_LINKS = isHomes ? HOMES_LINKS : BUSINESS_LINKS;
@@ -55,6 +65,13 @@ export default function Navbar() {
   const primaryCta = isBusiness
     ? "bg-amber-500 hover:bg-amber-600 text-white hover:text-white"
     : "bg-orange-500 hover:bg-orange-600 text-white hover:text-white";
+
+  // Shortened email for display
+  const displayEmail = user?.email
+    ? user.email.length > 20
+      ? user.email.slice(0, 18) + "…"
+      : user.email
+    : "";
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -89,19 +106,66 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop CTAs */}
+        {/* Desktop right-side CTAs */}
         <div className="hidden md:flex items-center gap-2 ml-auto">
           <Link to={isHomes?"/saved":"/business/saved"}
             className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${outlineCta}`}>
             Saved
           </Link>
-          <Link to="/account"
-            className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${outlineCta}`}>
-            <User className="w-3.5 h-3.5"/>Sign In
-          </Link>
+
+          {/* Auth — signed in shows dropdown, signed out shows Sign In */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-colors border ${
+                  isBusiness
+                    ? "border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                    : "border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100"
+                }`}>
+                <User className="w-3.5 h-3.5"/>
+                <span className="max-w-[140px] truncate">{displayEmail}</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${userMenuOpen?"rotate-180":""}`}/>
+              </button>
+
+              {userMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)}/>
+                  <div className="absolute right-0 top-full mt-1 w-52 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-gray-50">
+                      <p className="text-xs text-gray-400">Signed in as</p>
+                      <p className="text-sm font-semibold text-gray-900 truncate">{user.email}</p>
+                    </div>
+                    <div className="py-1">
+                      <Link to="/account" onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <User className="w-4 h-4 text-gray-400"/> My Account
+                      </Link>
+                      <Link to={isHomes?"/saved":"/business/saved"} onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <BookOpen className="w-4 h-4 text-gray-400"/> My Saved
+                      </Link>
+                    </div>
+                    <div className="border-t border-gray-50 py-1">
+                      <button onClick={handleSignOut}
+                        className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors">
+                        <LogOut className="w-4 h-4"/> Sign Out
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <Link to="/account"
+              className={`flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${outlineCta}`}>
+              <User className="w-3.5 h-3.5"/>Sign In
+            </Link>
+          )}
+
           <Link to={isHomes?"/list-home":"/business/list-property"}
             className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${primaryCta}`}>
-            {isHomes?"List a Home":"List a Property"}
+            {isHomes ? "List a Home" : "List a Property"}
           </Link>
         </div>
 
@@ -125,21 +189,35 @@ export default function Navbar() {
             </NavLink>
           ))}
           <div className="pt-4 flex flex-col gap-2">
-            <Link to="/account" className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
-              Sign In / Account
-            </Link>
+            {user ? (
+              <>
+                <div className="px-3 py-2 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-400">Signed in as</p>
+                  <p className="text-sm font-semibold text-gray-800 truncate">{user.email}</p>
+                </div>
+                <Link to="/account" className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+                  My Account
+                </Link>
+                <button onClick={handleSignOut} className="w-full text-center px-4 py-2.5 border border-red-200 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link to="/account" className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+                Sign In / Create Account
+              </Link>
+            )}
             <Link to={isHomes?"/saved":"/business/saved"} className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
               My Saved
             </Link>
             <Link to={isHomes?"/list-home":"/business/list-property"}
               className={`w-full text-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${primaryCta}`}>
-              {isHomes?"List a Home":"List a Property"}
+              {isHomes ? "List a Home" : "List a Property"}
             </Link>
           </div>
         </div>
       )}
 
-      {/* Subbanner on home pages */}
       {(loc.pathname==="/" || loc.pathname==="/business") && (
         <div className={`border-t text-center text-xs py-1.5 font-medium ${config.subbannerBg}`}>
           {config.subbanner}
