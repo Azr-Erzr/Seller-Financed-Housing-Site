@@ -139,6 +139,7 @@ function profileToRow(p) {
     is_active:           true,
     owner_email:         p.ownerEmail || null,
   };
+}
 
 function rowToProfile(r) {
   return {
