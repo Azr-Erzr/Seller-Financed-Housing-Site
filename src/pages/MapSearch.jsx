@@ -215,6 +215,8 @@ export default function MapSearch() {
   useEffect(() => { if (mapRef.current) setTimeout(()=>{mapRef.current?.resize();handleMapMove();},50); }, [view,mapReady,handleMapMove]);
 
   // ── Update markers (with hover interaction) ──
+  // pill is a CHILD of the marker element so MapLibre's positioning
+  // transform on the outer wrapper is never overwritten.
   useEffect(() => {
     if (!mapRef.current||!mapReady) return;
     markersRef.current.forEach(({marker})=>marker.remove());
@@ -223,9 +225,12 @@ export default function MapSearch() {
     filtered.forEach((listing) => {
       const color = getDealColor(listing.dealType);
       const el = document.createElement("div");
-      el.dataset.listingId = listing.id;
-      el.style.cssText = `background:${color};color:white;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;cursor:pointer;transform:translate(-50%,-50%);transition:transform 0.15s,box-shadow 0.15s,padding 0.15s,font-size 0.15s;`;
-      el.textContent = `$${Math.round(listing.price/1000)}K`;
+      el.style.cssText = "cursor:pointer;";
+      const pill = document.createElement("div");
+      pill.dataset.listingId = listing.id;
+      pill.style.cssText = `background:${color};color:white;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;transform:translate(-50%,-50%);transition:transform 0.15s,box-shadow 0.15s,padding 0.15s,font-size 0.15s;`;
+      pill.textContent = listing.price>=1000000?`$${(listing.price/1000000).toFixed(1).replace(/\.0$/,"")}M`:`$${Math.round(listing.price/1000)}K`;
+      el.appendChild(pill);
 
       el.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -236,34 +241,34 @@ export default function MapSearch() {
       el.addEventListener("mouseleave", () => setHoveredId(null));
 
       const marker = new maplibregl.Marker({element:el,anchor:"center"}).setLngLat([listing.lng,listing.lat]).addTo(mapRef.current);
-      markersRef.current.set(listing.id, { marker, el });
+      markersRef.current.set(listing.id, { marker, el, pill });
     });
   }, [filtered,mapReady]);
 
   // ── Selection styling on markers (no recreation) ──
   useEffect(() => {
-    markersRef.current.forEach(({el}, id) => {
+    markersRef.current.forEach(({pill}, id) => {
       if (id === selected?.id) {
-        el.style.padding = "6px 12px"; el.style.fontSize = "12px"; el.style.borderWidth = "3px";
-        el.style.zIndex = "10";
+        pill.style.padding = "6px 12px"; pill.style.fontSize = "12px"; pill.style.borderWidth = "3px";
+        pill.style.zIndex = "10";
       } else {
-        el.style.padding = "4px 9px"; el.style.fontSize = "11px"; el.style.borderWidth = "2px";
-        if (id !== hoveredId) el.style.zIndex = "auto";
+        pill.style.padding = "4px 9px"; pill.style.fontSize = "11px"; pill.style.borderWidth = "2px";
+        if (id !== hoveredId) pill.style.zIndex = "auto";
       }
     });
   }, [selected, hoveredId]);
 
-  // ── Hover highlight on markers from list ──
+  // ── Hover highlight on markers — targets pill, never touches outer el's transform ──
   useEffect(() => {
-    markersRef.current.forEach(({el}, id) => {
+    markersRef.current.forEach(({pill}, id) => {
       if (id === hoveredId) {
-        el.style.transform = "translate(-50%,-50%) scale(1.3)";
-        el.style.boxShadow = "0 4px 16px rgba(0,0,0,.4)";
-        el.style.zIndex = "10";
+        pill.style.transform = "translate(-50%,-50%) scale(1.3)";
+        pill.style.boxShadow = "0 4px 16px rgba(0,0,0,.4)";
+        pill.style.zIndex = "10";
       } else {
-        el.style.transform = "translate(-50%,-50%) scale(1)";
-        el.style.boxShadow = "0 2px 8px rgba(0,0,0,.3)";
-        el.style.zIndex = "auto";
+        pill.style.transform = "translate(-50%,-50%) scale(1)";
+        pill.style.boxShadow = "0 2px 8px rgba(0,0,0,.3)";
+        pill.style.zIndex = "auto";
       }
     });
   }, [hoveredId]);
