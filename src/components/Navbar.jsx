@@ -73,30 +73,30 @@ export default function Navbar() {
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div className="max-w-[1400px] mx-auto px-5 py-3.5 flex items-center gap-4">
 
         {/* Brand + mode switcher */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Link to={isHomes ? "/" : "/business"} className="flex items-center gap-2 hover:opacity-80 transition-opacity no-underline">
-            <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${config.logoGradient} flex items-center justify-center shrink-0`}>
-              {isHomes ? <Home className="w-[18px] h-[18px] text-white"/> : <Building2 className="w-[18px] h-[18px] text-white"/>}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Link to={isHomes ? "/" : "/business"} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity no-underline">
+            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${config.logoGradient} flex items-center justify-center shrink-0`}>
+              {isHomes ? <Home className="w-5 h-5 text-white"/> : <Building2 className="w-5 h-5 text-white"/>}
             </div>
-            <span className="text-lg font-extrabold text-gray-900 tracking-tight hidden sm:block">LandMatch</span>
+            <span className="text-xl font-extrabold text-gray-900 tracking-tight hidden sm:block">LandMatch</span>
           </Link>
           <div className="flex items-center bg-gray-100 rounded-lg p-0.5 ml-1">
             <button onClick={() => handleModeSwitch(MODES.homes)}
-              className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500 hover:text-gray-700"}`}>
-              <Home className="w-3 h-3"/><span>Homes</span>
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500 hover:text-gray-700"}`}>
+              <Home className="w-3.5 h-3.5"/><span>Homes</span>
             </button>
             <button onClick={() => handleModeSwitch(MODES.business)}
-              className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all flex items-center gap-1 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500 hover:text-gray-700"}`}>
-              <Building2 className="w-3 h-3"/><span>Business</span>
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500 hover:text-gray-700"}`}>
+              <Building2 className="w-3.5 h-3.5"/><span>Business</span>
             </button>
           </div>
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-5 ml-2">
+        <nav className="hidden lg:flex items-center gap-6 ml-3">
           {NAV_LINKS.map(({ to, label, icon }) => (
             <NavLink key={to} to={to} className={activeNavCls}>
               {icon}{label}
@@ -105,7 +105,7 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop right-side CTAs */}
-        <div className="hidden md:flex items-center gap-2 ml-auto">
+        <div className="hidden md:flex items-center gap-2.5 ml-auto">
           <Link to={isHomes?"/saved":"/business/saved"}
             className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${outlineCta}`}>
             Saved
@@ -162,7 +162,7 @@ export default function Navbar() {
           )}
 
           <Link to={isHomes?"/list-home":"/business/list-property"}
-            className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${primaryCta}`}>
+            className={`px-5 py-2.5 text-sm font-semibold rounded-lg transition-colors ${primaryCta}`}>
             {isHomes ? "List a Home" : "List a Property"}
           </Link>
         </div>
