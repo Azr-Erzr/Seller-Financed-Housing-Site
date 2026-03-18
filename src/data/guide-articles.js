@@ -1,10 +1,10 @@
 // src/data/guide-articles.js
-// LandMatch Guide — educational articles explaining seller financing,
-// VTB mortgages, buyer and seller benefits, and the legal framework.
 
 export const ARTICLES = [
+  // ── Residential articles ───────────────────────────────────────────
   {
     id: "what-is-seller-financing",
+    mode: "homes",
     category: "Basics",
     categoryColor: "bg-blue-100 text-blue-700",
     title: "What Is Seller Financing? A Plain-English Guide",
@@ -20,26 +20,15 @@ export const ARTICLES = [
 
 Seller financing cuts the bank out entirely. Instead of the bank lending the money, the seller lends it. The buyer still gets the home on closing day. Title still transfers. But instead of writing a cheque to the bank every month, the buyer sends payments directly to the seller.
 
-The seller holds a registered mortgage on the property — the same kind of legal charge that a bank holds — until the balance is paid in full. At that point, the seller discharges the mortgage from the title, just like a bank would.`,
+The seller holds a registered mortgage on the property — the same kind of legal charge that a bank holds — until the balance is paid in full.`,
       },
       {
         heading: "What Makes It Legal and Binding",
         body: `A seller-financed deal is governed by the same legal framework as any mortgage in Ontario. The seller registers a charge against the property's title at the Land Registry Office. This registration is public record and gives the seller the same legal protections a bank has.
 
-If the buyer defaults — stops making payments, fails to maintain insurance, or doesn't pay property taxes — the seller can pursue the same remedies as any lender: Power of Sale (selling the property to recover what's owed) or foreclosure (reclaiming ownership outright). Ontario law requires a notice period before these proceedings begin, giving the buyer a chance to correct the default first.
+If the buyer defaults, the seller can pursue Power of Sale (selling the property to recover what's owed) or foreclosure (reclaiming ownership outright). Ontario law requires a notice period before these proceedings begin, giving the buyer a chance to correct the default first.
 
 This is precisely why every LandMatch deal should involve a real estate lawyer. A lawyer registers the charge correctly, drafts the promissory note, and makes sure both parties' rights are protected.`,
-      },
-      {
-        heading: "Who Uses Seller Financing?",
-        body: `Seller financing has been used in real estate for decades. It tends to show up in situations where:
-
-• A buyer has real income but doesn't fit a bank's rigid approval formulas (self-employed, new to Canada, recent career change)
-• A seller owns their home free and clear and prefers steady monthly income over a lump sum
-• A property is unique — rural, commercial, or non-standard — and traditional financing is harder to get
-• Both parties want to close faster and with fewer moving parts than a conventional bank deal requires
-
-On LandMatch, seller financing is the default deal structure — but sellers can also offer Rent-to-Own, Lease Options, and Private Sales (where the buyer arranges their own financing).`,
       },
       {
         heading: "Can the Buyer Also Use a Realtor?",
@@ -53,6 +42,7 @@ This means a seller on LandMatch saves their side of the commission regardless o
 
   {
     id: "the-true-cost-of-selling-with-an-agent",
+    mode: "homes",
     category: "For Sellers",
     categoryColor: "bg-orange-100 text-orange-700",
     title: "The True Cost of Selling With an Agent",
@@ -64,35 +54,24 @@ This means a seller on LandMatch saves their side of the commission regardless o
     sections: [
       {
         heading: "The Commission Math",
-        body: `In a traditional sale, the seller typically pays commission on both sides of the transaction — their agent and the buyer's agent. In Ontario, this is commonly 5% total (2.5% per side), though it varies.
+        body: `In a traditional sale, the seller typically pays commission on both sides of the transaction — their agent and the buyer's agent. In Ontario, this is commonly 5% total (2.5% per side).
 
-On a $600,000 home: 5% commission = $30,000. Plus HST on the commission: $30,000 × 13% = $3,900. Total commission cost: approximately $33,900.
+On a $600,000 home: 5% commission = $30,000. Plus HST: $3,900. Total: approximately $33,900 — paid by you, from your proceeds.
 
-That $33,900 comes out of your proceeds. It's not paid by the buyer — it's paid by you, from the money you receive at closing.
-
-On a $900,000 home, that number climbs to roughly $50,800. On a $1.2M home, it's close to $68,000.`,
+On a $900,000 home that climbs to roughly $50,800.`,
       },
       {
         heading: "What You're Not Told About Referrals",
-        body: `When your agent recommends a stager, a photographer, or a home inspector, there's something you may not know: agents in Ontario are legally prohibited from receiving undisclosed referral fees. But "disclosed" can mean a line in a contract that most sellers never read.
-
-On LandMatch, you find your own stager, photographer, and inspector from our vetted Partner Directory. You see exactly what you're paying and exactly who you're paying it to. No kickbacks, no hidden markups, no conflicts of interest.`,
-      },
-      {
-        heading: "Control of Your Own Negotiation",
-        body: `When you sell through an agent, every offer goes through them. They advise you on what to accept, what to counter, and when to walk away. That advice isn't necessarily wrong — but it's filtered through someone whose commission depends on the deal closing, not on you getting the best possible price.
-
-On LandMatch, you set your own terms. You decide the minimum down payment, the interest rate range, and who you want to work with. You review buyer profiles directly. You choose who to engage with and who to pass on. The negotiation is yours.`,
+        body: `When your agent recommends a stager, a photographer, or a home inspector, there's something you may not know: there may be referral arrangements in place. On LandMatch, you find your own professionals from our vetted Partner Directory. You see exactly what you're paying and exactly who you're paying it to.`,
       },
       {
         heading: "What Sellers Actually Keep on LandMatch",
         body: `By selling on LandMatch instead of through a traditional agent:
-
-• You keep the listing commission (~2.5%): $15,000 on a $600K home
-• You keep the buyer's side commission (~2.5%): $15,000
-• You keep the HST on commissions: ~$3,900
-• You choose your own service providers with no hidden referrals
-• You control the negotiation from start to finish
+• Listing agent commission saved (~2.5%): $15,000 on $600K
+• Buyer's agent commission saved (~2.5%): $15,000
+• HST on commissions: ~$3,900
+• You choose your own service providers
+• You control the negotiation
 
 Total estimated savings: $30,000–$34,000 on a $600,000 home. Before the interest income from the VTB.`,
       },
@@ -102,6 +81,7 @@ Total estimated savings: $30,000–$34,000 on a $600,000 home. Before the intere
 
   {
     id: "become-the-bank",
+    mode: "homes",
     category: "For Sellers",
     categoryColor: "bg-orange-100 text-orange-700",
     title: "How to Be Your Own Bank: The Seller as Lender",
@@ -109,7 +89,7 @@ Total estimated savings: $30,000–$34,000 on a $600,000 home. Before the intere
     readTime: "7 min read",
     icon: "🏦",
     heroColor: "from-purple-600 to-purple-800",
-    summary: "When a seller holds a VTB mortgage, they don't just sell their property — they become an investor. The unpaid balance earns interest every month. On a $500,000 VTB at 7% over 5 years, a seller earns roughly $96,000 in interest payments. This is income that banks normally capture. You can capture it instead.",
+    summary: "When a seller holds a VTB mortgage, they don't just sell their property — they become an investor. The unpaid balance earns interest every month. On a $500,000 VTB at 7% over 5 years, a seller earns roughly $150,000 in interest payments. This is income a bank would normally capture.",
     sections: [
       {
         heading: "You Are the Lender",
@@ -117,53 +97,33 @@ Total estimated savings: $30,000–$34,000 on a $600,000 home. Before the intere
 • A registered charge on the property's title
 • The right to collect monthly principal and interest payments
 • The right to enforce the mortgage if the buyer defaults
-• Legal remedies including Power of Sale if payments stop
-
-The difference is you negotiated the rate, the terms, and the down payment — not a committee at a financial institution.`,
+• Legal remedies including Power of Sale if payments stop`,
       },
       {
         heading: "The Interest Income Is Real",
-        body: `Here's what most sellers don't realize until they sit down with a mortgage calculator.
-
-On a $500,000 VTB at 7% interest over a 5-year term, with 25-year amortization:
+        body: `On a $500,000 VTB at 7% over a 5-year term, 25-year amortization:
 • Monthly payment: approximately $3,493
-• Total paid over 5 years: approximately $209,580
-• Principal paid over 5 years: approximately $59,000
-• Interest earned by the seller in 5 years: approximately $150,000
+• Interest earned in 5 years: approximately $150,000
 
-That is interest income the bank would normally take. You get it instead — every month, like clockwork, from a secured investment backed by a property you once owned.
-
-Compared to a GIC or savings account, this return is exceptional. And unlike stocks, it's secured against real property that you know intimately.`,
+That is interest income the bank would normally take. You get it instead — every month, secured against a property you know intimately.`,
       },
       {
         heading: "Your Legal Protections",
-        body: `Ontario's Mortgage Act and the common law framework give sellers holding VTB mortgages the same enforcement tools as any lender. If a buyer stops paying:
-
-1. The seller sends a formal Notice of Default
+        body: `If a buyer stops paying:
+1. You send a formal Notice of Default
 2. The buyer has a statutory redemption period (minimum 35 days in Ontario) to bring the mortgage current
-3. If the buyer fails to remedy the default, the seller can initiate Power of Sale — the property is sold, the seller recovers the outstanding balance plus costs, and any surplus goes to the buyer
-4. Alternatively, the seller can pursue foreclosure, which results in full title being transferred back to the seller
+3. If they fail, you can initiate Power of Sale — the property is sold, you recover the balance plus costs
+4. Alternatively you can pursue foreclosure (full title transfer back to you)
 
-This is not an informal arrangement. It is a registered, legally enforceable mortgage. The buyer cannot simply walk away from it without consequences — just as they couldn't walk away from a bank mortgage.
-
-One important note: if the buyer also has a first-position bank mortgage, that lender has priority in a default. This is why the deal structure — specifically the down payment and whether a bank is also involved — matters, and why your lawyer's role in structuring it is critical.`,
-      },
-      {
-        heading: "Qualifying Your Buyer",
-        body: `Unlike a bank, you get to use judgment. You can ask for:
-• Proof of down payment funds (bank statements)
-• Income documentation (pay stubs, NOAs, business financials)
-• A reference letter from an employer or previous landlord
-• A personal conversation to assess character and intent
-
-LandMatch buyer profiles show you budget, down payment capacity, monthly income, existing debt load, and a calculated debt-to-income ratio. You can see who's financially capable before you ever speak to them. You can request an NDA and share financial documents in both directions privately. You decide who gets to buy your home.`,
+One important note: if the buyer also has a first-position bank mortgage, that lender has priority in a default. Deal structure and your lawyer's advice are critical.`,
       },
     ],
-    cta: { label: "See How the Calculator Works", href: "/guide/seller-savings-calculator" },
+    cta: { label: "Calculate Your Savings", href: "/guide" },
   },
 
   {
     id: "buyer-guide-vtb",
+    mode: "homes",
     category: "For Buyers",
     categoryColor: "bg-green-100 text-green-700",
     title: "A Buyer's Complete Guide to VTB Mortgages",
@@ -171,58 +131,28 @@ LandMatch buyer profiles show you budget, down payment capacity, monthly income,
     readTime: "8 min read",
     icon: "🔑",
     heroColor: "from-green-600 to-green-800",
-    summary: "A Vendor Take-Back (VTB) mortgage is when the person selling the home lends you some or all of the purchase price directly. You still get the house. You still get the keys. You just make payments to the seller instead of the bank — and the seller can say yes when the bank says no.",
+    summary: "A Vendor Take-Back (VTB) mortgage is when the person selling the home lends you some or all of the purchase price directly. You still get the house. You still get the keys. You just make payments to the seller instead of the bank.",
     sections: [
       {
         heading: "Why the Bank Said No",
-        body: `Banks use a rigid formula called the mortgage stress test. It requires you to qualify at either 5.25% or your contract rate plus 2%, whichever is higher. It counts only T4 employment income. It ignores context.
-
-That means:
-• Self-employed Canadians with real income but variable T4s get rejected
-• New Canadians without 2 years of Canadian credit history get rejected
-• People who've recently changed careers get rejected
-• People whose total income is just below the threshold get rejected
-
-None of these people are bad risks. They simply don't fit the formula. Seller financing lets a human make the call instead.`,
+        body: `Banks use a rigid formula called the mortgage stress test. It counts only T4 employment income and ignores context. That means self-employed Canadians, new Canadians without 2 years of Canadian credit history, recent career changers, and people whose income is just below the threshold all get rejected — none of whom are necessarily bad risks.`,
       },
       {
         heading: "What You're Actually Agreeing To",
-        body: `A VTB mortgage is a real, registered mortgage on the property. When you close:
+        body: `A VTB mortgage is a real, registered mortgage. When you close:
 • Title transfers to you — you own the home
-• The seller registers a charge (mortgage) on your title
-• You make monthly payments to the seller according to your agreed terms
-• When the balance is fully paid, the seller discharges the charge and you own the home outright
+• The seller registers a charge on your title
+• You make monthly payments to the seller
+• When the balance is fully paid, the seller discharges the charge
 
-The terms you negotiate — interest rate, down payment, amortization period, payment schedule — are all written into a legal document drafted by your lawyer. This is not informal. It is as binding as any bank mortgage.`,
-      },
-      {
-        heading: "What Happens If You Can't Pay",
-        body: `This is important to understand going in. If you default on a seller-financed mortgage, the seller has the same legal remedies as a bank. They can initiate Power of Sale (sell the property to recover what you owe) or pursue foreclosure (reclaim ownership entirely).
-
-Ontario law gives you a redemption period — typically 35 days minimum after a formal Notice of Default — during which you can bring the mortgage current and stop the process. But if you cannot, the seller can move to sell the property.
-
-This is why you should only enter a VTB arrangement if your monthly payment is genuinely within your budget with room to spare, and why independent legal advice for the buyer is not optional.`,
+The terms are written into a legal document drafted by your lawyer. This is as binding as any bank mortgage.`,
       },
       {
         heading: "The Real Cost Comparison",
-        body: `People assume seller-financed deals are more expensive. They're often not.
+        body: `Bank mortgage at 6.8% on $480,000: ~$3,338/month
+VTB at 7.5% on $480,000: ~$3,522/month
 
-Bank mortgage at 6.8% on $480,000 ($600K home, $120K down): ~$3,338/month
-Seller-financed VTB at 7.5% on $480,000: ~$3,522/month
-
-The difference is about $184/month — or $2,208/year. In exchange, you avoid:
-• Months of mortgage application process
-• Potential rejection
-• The stress of not knowing whether you'll qualify
-• Potentially losing the home you wanted to someone with better bank paperwork
-
-For many buyers, that $2,208 is a bargain for certainty and access.`,
-      },
-      {
-        heading: "Can I Use a Realtor?",
-        body: `Yes. You can absolutely have a buyer's agent represent you in a LandMatch deal. Your agent helps you evaluate the property, negotiate terms, and understand the agreement. Their commission is between you and your agent — it doesn't come from the seller's side.
-
-Having a buyer's agent doesn't change the seller's decision to use LandMatch or offer seller financing. The seller still saves their listing commission. You still get professional representation. Both sides win.`,
+Difference: ~$184/month — or $2,208/year. In exchange, you avoid months of application process, potential rejection, and potentially losing the home to someone with better bank paperwork.`,
       },
     ],
     cta: { label: "Create Your Buyer Profile", href: "/create-profile" },
@@ -230,6 +160,7 @@ Having a buyer's agent doesn't change the seller's decision to use LandMatch or 
 
   {
     id: "closing-without-a-bank",
+    mode: "homes",
     category: "The Process",
     categoryColor: "bg-teal-100 text-teal-700",
     title: "The Closing Process Without a Bank",
@@ -237,55 +168,26 @@ Having a buyer's agent doesn't change the seller's decision to use LandMatch or 
     readTime: "5 min read",
     icon: "✍️",
     heroColor: "from-teal-600 to-teal-800",
-    summary: "Closing a seller-financed deal uses the same legal process as any real estate transaction in Ontario — just without a bank in the middle. A real estate lawyer handles the paperwork, registers the mortgage, and transfers the title. Here's exactly what that looks like.",
+    summary: "Closing a seller-financed deal uses the same legal process as any real estate transaction in Ontario — just without a bank in the middle. A real estate lawyer handles the paperwork, registers the mortgage, and transfers the title.",
     sections: [
       {
-        heading: "Step 1: Find Your Match",
-        body: `On LandMatch, sellers list their property with financing terms. Buyers create profiles with their financial details. The platform calculates a match score based on deal type alignment, interest rate compatibility, down payment capacity, monthly affordability, and location. When both sides are interested, they connect — optionally after signing a mutual NDA to protect financial details.`,
+        heading: "Step 1–3: Match, Qualify, Negotiate",
+        body: `Find each other on LandMatch. Exchange financials behind a mutual NDA. Negotiate terms directly: purchase price, down payment, interest rate, amortization, and any special conditions.`,
       },
       {
-        heading: "Step 2: Negotiate Terms Directly",
-        body: `Unlike a bank negotiation, seller-financed terms are flexible. You negotiate:
-• Down payment amount (usually 10–30%)
-• Interest rate (the seller's return on their investment)
-• Amortization period (how long until the balance is fully paid)
-• Term (how long before the mortgage comes up for renewal or balloon payment)
-• Any special conditions (prepayment rights, renewal options, etc.)
-
-Both parties should approach this with their own legal counsel present or available.`,
+        heading: "Step 4: Agreement of Purchase and Sale",
+        body: `Your lawyer drafts an APS that includes the VTB terms. Once signed by both parties it is legally binding. It specifies the property, purchase price, VTB terms, any conditions, and the closing date.`,
       },
       {
-        heading: "Step 3: Agreement of Purchase and Sale",
-        body: `Your lawyer drafts or reviews an Agreement of Purchase and Sale (APS) that includes the seller-financing terms as a condition. This document is legally binding once signed by both parties. The APS specifies:
-• The property being sold
-• The purchase price
-• The VTB mortgage terms
-• Any conditions (inspection, title search, etc.)
-• The closing date`,
-      },
-      {
-        heading: "Step 4: Due Diligence",
-        body: `Before closing, the buyer should:
-• Get a home inspection (use a vetted inspector from our Partner Directory)
-• Have a lawyer conduct a title search
-• Confirm property tax status
-• Review any existing liens or encumbrances on the title
-
-The seller should:
-• Verify the buyer's income and financial capacity
-• Review the buyer's LandMatch profile and DTI ratio
-• Conduct their own financial due diligence`,
-      },
-      {
-        heading: "Step 5: The Lawyer Closes It",
-        body: `On closing day, your lawyers:
-1. Transfer the title from seller to buyer
-2. Register the VTB mortgage (charge) on the title in the seller's name
-3. Handle any existing mortgage discharge (if the seller had a mortgage to pay out)
+        heading: "Step 5: Closing Day",
+        body: `Your lawyers:
+1. Transfer title from seller to buyer
+2. Register the VTB mortgage charge on the title in the seller's name
+3. Handle any existing mortgage discharge
 4. Register title insurance for both parties
-5. Exchange funds — the buyer's down payment goes to the seller; the seller's registered mortgage secures their outstanding balance
+5. Exchange funds
 
-After closing, the buyer sends monthly payments to the seller. When the balance reaches zero, the seller signs a discharge of mortgage, which removes their charge from the title. The buyer owns the property free and clear.`,
+After closing, the buyer sends monthly payments to the seller. When the balance reaches zero, the seller signs a discharge. The buyer owns the property free and clear.`,
       },
     ],
     cta: { label: "Find a Real Estate Lawyer", href: "/partners?category=lawyer" },
@@ -293,51 +195,162 @@ After closing, the buyer sends monthly payments to the seller. When the balance 
 
   {
     id: "rent-to-own-vs-seller-finance",
+    mode: "homes",
     category: "Comparisons",
     categoryColor: "bg-purple-100 text-purple-700",
-    title: "Rent-to-Own vs. Seller Finance: Which One Is Right for You?",
-    subtitle: "Two paths to homeownership without a bank. Different tools for different situations.",
+    title: "Rent-to-Own vs. Seller Finance: Which Is Right for You?",
+    subtitle: "Two paths to homeownership without a bank.",
     readTime: "5 min read",
     icon: "⚖️",
     heroColor: "from-purple-600 to-purple-800",
-    summary: "Both rent-to-own and seller financing let buyers get into a home without traditional bank approval. But they work very differently, have different legal implications, and suit different buyer situations. Here's how to choose.",
+    summary: "Both rent-to-own and seller financing let buyers get into a home without traditional bank approval. But they work very differently and suit different buyer situations.",
     sections: [
       {
-        heading: "Seller Finance (VTB): The Buyer Owns the Home at Closing",
-        body: `With a VTB mortgage, title transfers to the buyer on closing day. You own the home. You pay property taxes. You maintain insurance. The seller holds a registered mortgage charge — but the home is yours.
-
-This is the stronger path if you have a solid down payment and stable income, because ownership brings full equity building from day one. Every payment reduces your debt and builds your net worth. If the home appreciates, all of that appreciation is yours.`,
+        heading: "Seller Finance: You Own From Day One",
+        body: `With a VTB mortgage, title transfers on closing day. You own the home. Every payment builds your equity. If the home appreciates, all of that is yours.`,
       },
       {
-        heading: "Rent-to-Own: The Buyer Earns the Right to Purchase",
-        body: `In a rent-to-own, the buyer rents the property for a set period (typically 1–3 years) and has the option (but not the obligation) to purchase at a pre-agreed price at the end of the term. A portion of each monthly payment is credited toward the eventual purchase price or down payment.
+        heading: "Rent-to-Own: You Earn the Right to Buy",
+        body: `You rent for 1–3 years with an option to purchase at a pre-agreed price. A portion of each payment credits toward the future purchase. During the rental period the seller still owns the home.
 
-During the rental period, the seller still owns the home. You do not build equity in the traditional sense — you build a credit toward the future purchase. If you choose not to buy at the end of the term, you walk away (though you typically forfeit the credits accumulated).`,
-      },
-      {
-        heading: "Which Buyer Suits Which Structure",
-        body: `Consider seller financing (VTB) if:
-• You have a meaningful down payment (10–30%)
-• Your income is stable but perhaps not recognized by a bank
-• You want full ownership from day one
-• You're confident in your ability to maintain monthly payments
-
-Consider rent-to-own if:
-• You need time to save a larger down payment
-• Your credit situation is improving but not yet strong
-• You want to "test" the home and neighborhood before committing
-• Your income may stabilize but isn't consistent today`,
-      },
-      {
-        heading: "The Legal Difference Matters",
-        body: `Because title transfers in a VTB deal, sellers have the stronger legal position. Their mortgage is registered on the title, and enforcement follows Ontario's established mortgage remedies.
-
-Rent-to-own agreements are governed more by contract law than mortgage law. The buyer's rights depend heavily on how the agreement is drafted. This is another reason a real estate lawyer is essential — the way a rent-to-own agreement is written determines what happens if either party doesn't follow through.`,
+Consider rent-to-own if you need time to save a larger down payment or your credit situation is improving but not yet strong.`,
       },
     ],
-    cta: { label: "Browse Rent-to-Own and VTB Listings", href: "/listings" },
+    cta: { label: "Browse All Deal Types", href: "/listings" },
+  },
+
+  // ── Business / Commercial articles ────────────────────────────────
+  {
+    id: "commercial-vtb-fundamentals",
+    mode: "business",
+    category: "Commercial Basics",
+    categoryColor: "bg-emerald-100 text-emerald-700",
+    title: "VTB in Commercial Real Estate: Why Vendors Use It",
+    subtitle: "Seller financing closes deals banks can't — and earns you a secured return.",
+    readTime: "5 min read",
+    icon: "🏗️",
+    heroColor: "from-emerald-600 to-emerald-800",
+    summary: "Vendor Take-Back financing is far more common in commercial real estate than most residential buyers realize. Land, farms, development parcels, and commercial buildings regularly transact with the vendor holding a registered mortgage — because it benefits both sides and bypasses the delays and rigidity of institutional commercial lending.",
+    sections: [
+      {
+        heading: "Why Commercial VTB Is Already Common",
+        body: `Commercial banks apply their most conservative underwriting to land, development land, and agricultural properties. Environmental liability, zoning uncertainty, and the absence of income-producing improvements all reduce lender appetite. Many legitimate commercial transactions simply can't get conventional bank financing.
+
+Vendor Take-Back fills this gap. The vendor (seller) knows the asset better than any bank does. They've owned it, farmed it, or developed it. They can assess the risk with more context than a lender in a downtown office. And they can structure terms that reflect that context.
+
+This is not a workaround. VTB financing on commercial property has been used in Canadian real estate for decades and is fully supported by Ontario's Mortgage Act and standard commercial real estate practice.`,
+      },
+      {
+        heading: "The Vendor's Position: Secured Lender",
+        body: `When you hold a VTB mortgage on a commercial property, you register a charge on the title — the same charge a bank would register. Your security is the property itself. You have the same enforcement rights as any institutional lender: Power of Sale, foreclosure, and Writ of Possession.
+
+On a $2M commercial transaction with 30% down and a 5-year VTB at 8%, you're earning approximately $91,000 per year in interest on a secured asset. That's better than most fixed-income investments — at a rate you negotiated.`,
+      },
+      {
+        heading: "Balloon Structures and Exit Planning",
+        body: `Commercial VTBs commonly use a balloon structure: the buyer makes monthly payments on a longer amortization (say 20 years) but the full balance comes due at the end of a shorter term (3–5 years). This gives the buyer time to develop the asset, secure conventional financing, or arrange a refinance — while giving the vendor a defined exit.
+
+The balloon balance at term end is typically refinanced by the buyer. Your lawyer will ensure the mortgage terms clearly define what happens if the balloon isn't paid, and what your remedies are.`,
+      },
+      {
+        heading: "When a Buyer Also Uses a Broker",
+        body: `Commercial buyers frequently use their own broker or agent. This is entirely compatible with a LandMatch deal. You still save your side of the commission (typically 2–3% + HST on commercial transactions). The buyer's broker is the buyer's expense. You close faster because the buyer has professional deal support — and you keep your margin.`,
+      },
+    ],
+    cta: { label: "List a Commercial Property", href: "/business/list-property" },
+  },
+
+  {
+    id: "capital-gains-deferral-vtb",
+    mode: "business",
+    category: "Tax Strategy",
+    categoryColor: "bg-amber-100 text-amber-700",
+    title: "Capital Gains Deferral: The Vendor's Hidden Advantage",
+    subtitle: "Structuring a VTB correctly can defer a significant tax liability over the payment term.",
+    readTime: "6 min read",
+    icon: "📊",
+    heroColor: "from-amber-500 to-amber-700",
+    summary: "Under Canada's Income Tax Act, a vendor who accepts payment for a property over multiple years may be able to use the 'capital gains reserve' to defer recognizing the full gain until proceeds are actually received. A VTB mortgage, by its nature, creates exactly this kind of installment structure.",
+    sections: [
+      {
+        heading: "The Capital Gains Reserve",
+        body: `When you sell a capital property (land, commercial building, farm) and don't receive the full proceeds in the year of sale, section 40(1)(a)(iii) of the Income Tax Act may allow you to claim a reserve — deferring a portion of the capital gain to future years as proceeds are received.
+
+A VTB, by definition, is a structure where you don't receive full proceeds at closing. You receive a down payment, then installment payments (principal + interest) over the term. This can qualify for the reserve, allowing you to spread the taxable gain over up to 5 years.
+
+This is a material advantage. On a $3M land sale with a $1.5M gain, proper structuring could defer $100,000+ in tax in Year 1 alone — while you're still earning interest on the balance.`,
+      },
+      {
+        heading: "What the Reserve Doesn't Do",
+        body: `The capital gains reserve defers tax — it does not eliminate it. Each year you receive proceeds, you recognize a proportionate share of the gain. You still pay tax, just spread over time.
+
+Also: the reserve is not available in all situations. It doesn't apply if you sold to a corporation you controlled, or in certain arm's-length exceptions. And the maximum reserve period is 5 years for most properties (10 years for qualifying farm or fishing property and small business shares).
+
+This is exactly why a CPA who understands real estate transactions is essential. The numbers are large enough that getting this wrong is expensive.`,
+      },
+      {
+        heading: "Interest Income Is Separate",
+        body: `The interest portion of your VTB payments is ordinary income — not capital gains. It's taxed at your marginal rate in the year received. Some vendors structure VTBs to optimize the split between interest income (taxed fully) and capital gain (50% inclusion). Your accountant can model the most tax-efficient structure for your situation.`,
+      },
+    ],
+    cta: { label: "Use the Capital Gains Calculator", href: "/guide" },
+  },
+
+  {
+    id: "due-diligence-commercial-land",
+    mode: "business",
+    category: "For Buyers",
+    categoryColor: "bg-blue-100 text-blue-700",
+    title: "Commercial Land Due Diligence: What to Verify Before You Close",
+    subtitle: "The bank would do all of this before approving a loan. You need to do it too.",
+    readTime: "6 min read",
+    icon: "🔍",
+    heroColor: "from-blue-600 to-blue-800",
+    summary: "In a seller-financed commercial land transaction, there's no bank forcing a Phase 1 ESA or title search. That means the buyer and their lawyer must drive the due diligence process. Here's what a responsible buyer verifies before closing on a VTB deal.",
+    sections: [
+      {
+        heading: "Environmental Status",
+        body: `Environmental liability is the single biggest risk in commercial land transactions. A Phase 1 Environmental Site Assessment (ESA) reviews historical land use records and identifies potential contamination risks without physical testing. If a Phase 1 identifies concerns, a Phase 2 involves physical sampling.
+
+On LandMatch, sellers can indicate their environmental status (Phase 1 Complete — Clean, Phase 2 Required, No Assessment, etc.). But the buyer must independently verify. A Phase 1 costs $1,500–$4,000 and can save you from acquiring a remediation liability that exceeds the land value.`,
+      },
+      {
+        heading: "Zoning and Permitted Uses",
+        body: `Verify the current zoning with the municipality — not just what the seller's listing says. Zoning designations determine what you can build, operate, or do with the land. Also check:
+• Official Plan designation (longer-term land use policy)
+• Whether any rezoning or OPA is pending
+• Whether existing structures are legal non-conforming
+• Severance history and any restrictions on further division`,
+      },
+      {
+        heading: "Title Search and Encumbrances",
+        body: `Your lawyer conducts a title search before closing. This reveals:
+• Any existing mortgages (which must be discharged at closing or consented to)
+• Liens, judgments, or executions against the seller
+• Easements and rights-of-way (utility corridors, drainage easements, road allowances)
+• Conservation authority restrictions or floodplain designations
+• Development charges or lot levies already attached
+
+None of these are necessarily deal-killers — but all must be understood before you sign.`,
+      },
+      {
+        heading: "Utilities and Access",
+        body: `For vacant land and farms, confirm:
+• Whether utilities are on-site or require extension (and who pays for that)
+• Road access type (municipal road, private road, right-of-way only)
+• Whether a road allowance exists but is unopened
+• Well and septic status if applicable
+• Power, natural gas, municipal water/sewer availability
+
+A site that appears to have road frontage on a map may only have access via an unopened municipal road allowance — a critical distinction.`,
+      },
+    ],
+    cta: { label: "Find a Commercial Real Estate Lawyer", href: "/partners?category=lawyer" },
   },
 ];
+
+export const ARTICLES_HOMES    = ARTICLES.filter((a) => a.mode === "homes");
+export const ARTICLES_BUSINESS = ARTICLES.filter((a) => a.mode === "business");
 
 export function getArticleById(id) {
   return ARTICLES.find((a) => a.id === id) || null;
