@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { saveCommProfile } from "../../lib/commercial-storage";
 import { useToast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
+import { generateAlias } from "../../lib/alias";
 import { Users, CheckCircle } from "lucide-react";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS, INTENDED_USES,
@@ -79,6 +80,7 @@ export default function BusinessCreateProfile() {
     intendedUses: [], propertyCategories: [],
     zoningPreferences: [], utilitiesRequired: [],
     minAcreage: "", maxAcreage: "", timelineMonths: "12",
+    useAlias: true,
   });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
@@ -134,6 +136,8 @@ export default function BusinessCreateProfile() {
         timelineMonths: Number(form.timelineMonths),
         badges:         ["New"],
         avatar:         "",
+        use_alias:      form.useAlias,
+        alias:          form.useAlias ? generateAlias("buyer") : null,
       };
       const saved = await saveCommProfile(profile);
       if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Buyer profile live on Sel-Fi Business!"); }
@@ -315,8 +319,37 @@ export default function BusinessCreateProfile() {
             </div>
           </div>
 
+          {/* Privacy Settings */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+            <h2 className="font-semibold text-gray-900 text-base">Privacy Settings</h2>
+
+            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Use an alias on your public profile</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Your real name and contact will only be revealed after a vendor contacts you through Sel-Fi.</p>
+                </div>
+                <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                  <span className="text-xs text-gray-500 font-medium">{form.useAlias ? "Alias on" : "Real name"}</span>
+                  <div
+                    onClick={() => set("useAlias", !form.useAlias)}
+                    className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${form.useAlias ? "bg-emerald-600" : "bg-gray-300"}`}
+                  >
+                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.useAlias ? "translate-x-5" : "translate-x-0.5"}`} />
+                  </div>
+                </label>
+              </div>
+              <p className="text-xs text-emerald-600 mt-2">
+                {form.useAlias
+                  ? "🔒 Your profile will display a generated alias (e.g. \"Granite Buyer #BD91\"). Your real identity stays private until contact."
+                  : "Your real name will be visible on your public profile."}
+              </p>
+            </div>
+          </div>
+
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-800 leading-relaxed">
             <strong>Privacy Note:</strong> Your financial details are used for matching only and are not visible publicly.
+            Your real name is hidden behind an alias by default and only revealed when a vendor contacts you through the platform.
             Sel-Fi Business does not share your information with third parties.
           </div>
 
