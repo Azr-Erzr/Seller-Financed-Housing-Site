@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ModeRedirect from "./components/ModeRedirect";
 import SupportChat from "./components/SupportChat";
+import ScrollToTop from "./components/ScrollToTop";
 
 // ── Homes ─────────────────────────────────────────────────────────────
 import Home from "./pages/Home";
@@ -43,6 +44,7 @@ import BusinessSaved from "./pages/business/BusinessSaved";
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       {/* AuthProvider wraps everything so useAuth() works anywhere */}
       <AuthProvider>
         <SiteProvider>
