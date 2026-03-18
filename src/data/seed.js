@@ -264,6 +264,8 @@ export const PROFILES = [
   {
     id: "p1",
     name: "Alyssa T.",
+    alias: "Lakeshore Buyer #A7KP",
+    useAlias: true,
     avatar: "",
     city: "Whitby",
     budget: 600000,
@@ -282,6 +284,8 @@ export const PROFILES = [
   {
     id: "p2",
     name: "Daniel R.",
+    alias: "Oakwood Buyer #D3RN",
+    useAlias: false,
     avatar: "",
     city: "Oshawa",
     budget: 520000,
@@ -300,6 +304,8 @@ export const PROFILES = [
   {
     id: "p3",
     name: "Maria & Jose V.",
+    alias: "Summit Buyer #MJ42",
+    useAlias: true,
     avatar: "",
     city: "Ajax",
     budget: 680000,

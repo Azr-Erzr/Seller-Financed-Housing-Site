@@ -233,6 +233,8 @@ export const COMMERCIAL_PROFILES = [
   {
     id: "cp1",
     name: "Brampton Dev Group",
+    alias: "Granite Buyer #BD91",
+    useAlias: false,
     contact: "Raj Patel",
     avatar: "",
     city: "Brampton",
@@ -259,6 +261,8 @@ export const COMMERCIAL_PROFILES = [
   {
     id: "cp2",
     name: "Heritage Farms Ltd",
+    alias: "Pinecrest Buyer #HF56",
+    useAlias: true,
     contact: "Doug & Carol MacIntyre",
     avatar: "",
     city: "Kawartha Lakes",
@@ -285,6 +289,8 @@ export const COMMERCIAL_PROFILES = [
   {
     id: "cp3",
     name: "King & Associates",
+    alias: "Harbour Buyer #KA77",
+    useAlias: true,
     contact: "Alan King",
     avatar: "",
     city: "Toronto",
