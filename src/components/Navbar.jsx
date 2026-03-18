@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Home, Building2, User, BookOpen, LogOut, ChevronDown } from "lucide-react";
 import { useSite } from "../context/SiteContext";
-import { useAuth } from "../context/AuthContext";
+import { useAuth, useRequireAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const loc       = useLocation();
   const navigate  = useNavigate();
   const { mode, setMode, config, MODES } = useSite();
   const { user, signOut } = useAuth();
+  const requireAuth = useRequireAuth();
 
   const [mobileOpen,  setMobileOpen]  = useState(false);
   const [userMenuOpen,setUserMenuOpen]= useState(false);
@@ -161,10 +162,10 @@ export default function Navbar() {
             </Link>
           )}
 
-          <Link to={isHomes?"/list-home":"/business/list-property"}
+          <button onClick={() => requireAuth(isHomes?"/list-home":"/business/list-property")}
             className={`px-5 py-2.5 text-sm font-semibold rounded-lg transition-colors ${primaryCta}`}>
             {isHomes ? "List a Home" : "List a Property"}
-          </Link>
+          </button>
         </div>
 
         {/* Mobile hamburger */}
@@ -220,10 +221,10 @@ export default function Navbar() {
             <Link to={isHomes?"/saved":"/business/saved"} className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
               My Saved
             </Link>
-            <Link to={isHomes?"/list-home":"/business/list-property"}
+            <button onClick={() => requireAuth(isHomes?"/list-home":"/business/list-property")}
               className={`w-full text-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${primaryCta}`}>
               {isHomes ? "List a Home" : "List a Property"}
-            </Link>
+            </button>
           </div>
         </div>
       )}
