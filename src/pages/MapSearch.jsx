@@ -1,6 +1,5 @@
 // src/pages/MapSearch.jsx
-// MapLibre GL JS — renders to WebGL canvas, immune to Tailwind Preflight.
-// CARTO Voyager tiles — clean, modern look, free, no API key.
+// MapLibre GL JS — editable radius, freeform polygon draw, viewport filtering.
 
 import maplibregl from "maplibre-gl";
 import React, { useEffect, useRef, useState, useCallback } from "react";
@@ -64,7 +63,6 @@ function haversine(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// Generate a GeoJSON circle polygon (64 points)
 function geoCircle(centerLng, centerLat, radiusKm) {
   const coords = [];
   for (let i = 0; i <= 64; i++) {
@@ -74,6 +72,55 @@ function geoCircle(centerLng, centerLat, radiusKm) {
     coords.push([centerLng + dx * Math.cos(angle), centerLat + dy * Math.sin(angle)]);
   }
   return { type: "Feature", geometry: { type: "Polygon", coordinates: [coords] } };
+}
+
+// Point-in-polygon (ray casting)
+function pointInPolygon(lng, lat, polygon) {
+  const coords = polygon[0]; // outer ring
+  let inside = false;
+  for (let i = 0, j = coords.length - 1; i < coords.length; j = i++) {
+    const xi = coords[i][0], yi = coords[i][1];
+    const xj = coords[j][0], yj = coords[j][1];
+    if (((yi > lat) !== (yj > lat)) && (lng < (xj - xi) * (lat - yi) / (yj - yi) + xi)) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+// ── Editable Radius Input ─────────────────────────────────────────────
+function RadiusInput({ value, onChange }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(String(value));
+  const inputRef = useRef(null);
+
+  useEffect(() => { setDraft(String(value)); }, [value]);
+  useEffect(() => { if (editing && inputRef.current) inputRef.current.select(); }, [editing]);
+
+  const commit = () => {
+    const n = Math.max(1, Math.min(200, Number(draft) || value));
+    onChange(n);
+    setDraft(String(n));
+    setEditing(false);
+  };
+
+  if (editing) {
+    return (
+      <input ref={inputRef} type="number" min={1} max={200} value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => { if (e.key === "Enter") commit(); if (e.key === "Escape") setEditing(false); }}
+        className="w-14 px-1.5 py-0.5 text-xs font-bold text-center border border-blue-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
+    );
+  }
+
+  return (
+    <button onClick={() => setEditing(true)}
+      className="text-xs font-bold text-white underline decoration-dotted underline-offset-2 hover:decoration-solid cursor-text"
+      title="Click to type a distance">
+      {value}km
+    </button>
+  );
 }
 
 export default function MapSearch() {
@@ -99,11 +146,12 @@ export default function MapSearch() {
   const [radiusKm,     setRadiusKm]     = useState(10);
   const [radiusActive, setRadiusActive] = useState(false);
   const [drawMode,     setDrawMode]     = useState(false);
-  const [drawnBounds,  setDrawnBounds]  = useState(null); // { sw: [lng,lat], ne: [lng,lat] }
+  const [drawnPoly,    setDrawnPoly]    = useState(null); // [[lng,lat], ...] closed polygon
   const [locating,     setLocating]     = useState(false);
+  const [mapBounds,    setMapBounds]    = useState(null); // { sw: [lng,lat], ne: [lng,lat] }
 
-  // Draw state refs
-  const drawStart = useRef(null);
+  // Freeform draw state
+  const drawPoints = useRef([]);
 
   // Load listings
   useEffect(() => {
@@ -117,7 +165,7 @@ export default function MapSearch() {
     });
   }, []);
 
-  // Apply filters
+  // Apply filters (including viewport bounds)
   useEffect(() => {
     const p = PRICE_PRESETS[pricePreset];
     let r = listings.filter((l) => {
@@ -129,16 +177,32 @@ export default function MapSearch() {
     });
     if (radiusActive && userLat != null)
       r = r.filter((l) => haversine(userLat, userLng, l.lat, l.lng) <= radiusKm);
-    if (drawnBounds) {
-      const { sw, ne } = drawnBounds;
+    if (drawnPoly && drawnPoly.length >= 3) {
+      const ring = [...drawnPoly, drawnPoly[0]]; // close the ring
+      r = r.filter((l) => pointInPolygon(l.lng, l.lat, [ring]));
+    }
+    // Viewport filtering — only show listings visible on current map view
+    if (mapBounds && !radiusActive && !drawnPoly) {
+      const { sw, ne } = mapBounds;
       r = r.filter((l) => l.lng >= sw[0] && l.lng <= ne[0] && l.lat >= sw[1] && l.lat <= ne[1]);
     }
     setFiltered(r);
-  }, [listings, pricePreset, dealTypes, propTypes, minBeds, radiusActive, userLat, userLng, radiusKm, drawnBounds]);
+  }, [listings, pricePreset, dealTypes, propTypes, minBeds, radiusActive, userLat, userLng, radiusKm, drawnPoly, mapBounds]);
 
   // Measure top bar
   useEffect(() => {
     if (topBarRef.current) setTopBarH(topBarRef.current.offsetHeight);
+  }, []);
+
+  // Update map bounds on move
+  const handleMapMove = useCallback(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const b = map.getBounds();
+    setMapBounds({
+      sw: [b.getWest(), b.getSouth()],
+      ne: [b.getEast(), b.getNorth()],
+    });
   }, []);
 
   // ── Init MapLibre ──────────────────────────────────────────────────
@@ -150,7 +214,7 @@ export default function MapSearch() {
     const map = new maplibregl.Map({
       container: mapDivRef.current,
       style: MAP_STYLE,
-      center: [-78.93, 43.89], // [lng, lat]
+      center: [-78.93, 43.89],
       zoom: 10.5,
       attributionControl: true,
     });
@@ -163,12 +227,26 @@ export default function MapSearch() {
       map.addLayer({ id: "radius-fill", type: "fill", source: "radius-circle", paint: { "fill-color": "#2563EB", "fill-opacity": 0.07 } });
       map.addLayer({ id: "radius-line", type: "line", source: "radius-circle", paint: { "line-color": "#2563EB", "line-width": 2 } });
 
-      // Draw rectangle source
-      map.addSource("draw-rect", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-      map.addLayer({ id: "draw-fill", type: "fill", source: "draw-rect", paint: { "fill-color": "#059669", "fill-opacity": 0.08 } });
-      map.addLayer({ id: "draw-line", type: "line", source: "draw-rect", paint: { "line-color": "#059669", "line-width": 2 } });
+      // Freeform polygon source
+      map.addSource("draw-poly", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      map.addLayer({ id: "draw-fill", type: "fill", source: "draw-poly", paint: { "fill-color": "#059669", "fill-opacity": 0.08 } });
+      map.addLayer({ id: "draw-line", type: "line", source: "draw-poly", paint: { "line-color": "#059669", "line-width": 2.5 } });
+
+      // Draw points source (small circles at each click)
+      map.addSource("draw-points", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      map.addLayer({ id: "draw-dots", type: "circle", source: "draw-points", paint: { "circle-radius": 5, "circle-color": "#059669", "circle-stroke-color": "#fff", "circle-stroke-width": 2 } });
 
       setMapReady(true);
+
+      // Initial bounds
+      const b = map.getBounds();
+      setMapBounds({ sw: [b.getWest(), b.getSouth()], ne: [b.getEast(), b.getNorth()] });
+    });
+
+    // Update bounds on pan/zoom
+    map.on("moveend", () => {
+      const b = map.getBounds();
+      setMapBounds({ sw: [b.getWest(), b.getSouth()], ne: [b.getEast(), b.getNorth()] });
     });
 
     mapRef.current = map;
@@ -180,39 +258,31 @@ export default function MapSearch() {
     };
   }, [view]);
 
-  // Resize map when view toggles (split↔map)
+  // Resize on view toggle
   useEffect(() => {
-    if (mapRef.current) {
-      setTimeout(() => mapRef.current?.resize(), 50);
-    }
-  }, [view, mapReady]);
+    if (mapRef.current) setTimeout(() => { mapRef.current?.resize(); handleMapMove(); }, 50);
+  }, [view, mapReady, handleMapMove]);
 
   // ── Update markers ─────────────────────────────────────────────────
   useEffect(() => {
     if (!mapRef.current || !mapReady) return;
-
-    // Remove old markers
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
     filtered.forEach((listing) => {
       const color = getDealColor(listing.dealType);
       const isSel = selected?.id === listing.id;
-
       const el = document.createElement("div");
       el.style.cssText = `background:${color};color:white;padding:${isSel ? "5px 10px" : "4px 8px"};border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:${isSel ? "3px" : "2px"} solid white;cursor:pointer;transform:translate(-50%,-50%);`;
       el.textContent = `$${Math.round(listing.price / 1000)}K`;
-
       el.addEventListener("click", (e) => {
         e.stopPropagation();
         setSelected((p) => p?.id === listing.id ? null : listing);
         mapRef.current?.flyTo({ center: [listing.lng, listing.lat], duration: 600 });
       });
-
       const marker = new maplibregl.Marker({ element: el, anchor: "center" })
         .setLngLat([listing.lng, listing.lat])
         .addTo(mapRef.current);
-
       markersRef.current.push(marker);
     });
   }, [filtered, mapReady, selected]);
@@ -223,7 +293,6 @@ export default function MapSearch() {
     if (!map || !mapReady) return;
     const src = map.getSource("radius-circle");
     if (!src) return;
-
     if (radiusActive && userLat != null) {
       src.setData({ type: "FeatureCollection", features: [geoCircle(userLng, userLat, radiusKm)] });
       map.flyTo({ center: [userLng, userLat], zoom: 11, duration: 800 });
@@ -232,51 +301,65 @@ export default function MapSearch() {
     }
   }, [radiusActive, userLat, userLng, radiusKm, mapReady]);
 
-  // ── Draw mode ──────────────────────────────────────────────────────
+  // ── Freeform polygon draw mode ─────────────────────────────────────
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady || !drawMode) return;
 
     const canvas = map.getCanvasContainer();
     canvas.style.cursor = "crosshair";
+    drawPoints.current = [];
 
-    const onMouseDown = (e) => {
+    const updatePreview = () => {
+      const pts = drawPoints.current;
+      // Update dots
+      map.getSource("draw-points")?.setData({
+        type: "FeatureCollection",
+        features: pts.map((p) => ({ type: "Feature", geometry: { type: "Point", coordinates: p } })),
+      });
+      // Update polygon preview (need at least 2 points for a line, 3 for polygon)
+      if (pts.length >= 2) {
+        const ring = [...pts, pts[0]]; // close it for preview
+        map.getSource("draw-poly")?.setData({
+          type: "FeatureCollection",
+          features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [ring] } }],
+        });
+      }
+    };
+
+    const onClick = (e) => {
+      drawPoints.current.push([e.lngLat.lng, e.lngLat.lat]);
+      updatePreview();
+    };
+
+    const onDblClick = (e) => {
       e.preventDefault();
-      drawStart.current = [e.lngLat.lng, e.lngLat.lat];
-      map.dragPan.disable();
-    };
-    const onMouseMove = (e) => {
-      if (!drawStart.current) return;
-      const [lng1, lat1] = drawStart.current;
-      const lng2 = e.lngLat.lng, lat2 = e.lngLat.lat;
-      const sw = [Math.min(lng1, lng2), Math.min(lat1, lat2)];
-      const ne = [Math.max(lng1, lng2), Math.max(lat1, lat2)];
-      const rect = { type: "Feature", geometry: { type: "Polygon", coordinates: [[sw, [ne[0], sw[1]], ne, [sw[0], ne[1]], sw]] } };
-      map.getSource("draw-rect")?.setData({ type: "FeatureCollection", features: [rect] });
-    };
-    const onMouseUp = (e) => {
-      if (!drawStart.current) return;
-      const [lng1, lat1] = drawStart.current;
-      const lng2 = e.lngLat.lng, lat2 = e.lngLat.lat;
-      const sw = [Math.min(lng1, lng2), Math.min(lat1, lat2)];
-      const ne = [Math.max(lng1, lng2), Math.max(lat1, lat2)];
-      setDrawnBounds({ sw, ne });
+      const pts = drawPoints.current;
+      if (pts.length >= 3) {
+        setDrawnPoly([...pts]);
+        // Final polygon display
+        const ring = [...pts, pts[0]];
+        map.getSource("draw-poly")?.setData({
+          type: "FeatureCollection",
+          features: [{ type: "Feature", geometry: { type: "Polygon", coordinates: [ring] } }],
+        });
+      }
+      drawPoints.current = [];
+      map.getSource("draw-points")?.setData({ type: "FeatureCollection", features: [] });
       setDrawMode(false);
-      drawStart.current = null;
-      map.dragPan.enable();
     };
 
-    map.on("mousedown", onMouseDown);
-    map.on("mousemove", onMouseMove);
-    map.on("mouseup", onMouseUp);
+    map.on("click", onClick);
+    map.on("dblclick", onDblClick);
+    map.doubleClickZoom.disable();
 
     return () => {
       canvas.style.cursor = "";
-      map.off("mousedown", onMouseDown);
-      map.off("mousemove", onMouseMove);
-      map.off("mouseup", onMouseUp);
-      map.dragPan.enable();
-      drawStart.current = null;
+      map.off("click", onClick);
+      map.off("dblclick", onDblClick);
+      map.doubleClickZoom.enable();
+      drawPoints.current = [];
+      map.getSource("draw-points")?.setData({ type: "FeatureCollection", features: [] });
     };
   }, [drawMode, mapReady]);
 
@@ -291,12 +374,13 @@ export default function MapSearch() {
   };
   const clearRadius = () => { setRadiusActive(false); setUserLat(null); setUserLng(null); };
   const clearDraw = () => {
-    mapRef.current?.getSource("draw-rect")?.setData({ type: "FeatureCollection", features: [] });
-    setDrawnBounds(null);
+    mapRef.current?.getSource("draw-poly")?.setData({ type: "FeatureCollection", features: [] });
+    mapRef.current?.getSource("draw-points")?.setData({ type: "FeatureCollection", features: [] });
+    setDrawnPoly(null);
   };
   const toggle   = (arr, setArr, val) => setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
   const clearAll = () => { setPricePreset(0); setDealTypes([]); setPropTypes([]); setMinBeds(0); clearRadius(); clearDraw(); };
-  const activeN  = (pricePreset > 0 ? 1 : 0) + dealTypes.length + propTypes.length + (minBeds > 0 ? 1 : 0) + (radiusActive ? 1 : 0) + (drawnBounds ? 1 : 0);
+  const activeN  = (pricePreset > 0 ? 1 : 0) + dealTypes.length + propTypes.length + (minBeds > 0 ? 1 : 0) + (radiusActive ? 1 : 0) + (drawnPoly ? 1 : 0);
   const mapAreaH = `calc(100vh - ${NAVBAR_HEIGHT}px - ${topBarH}px)`;
 
   return (
@@ -311,21 +395,21 @@ export default function MapSearch() {
           <button onClick={locateMe} disabled={locating}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${radiusActive ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
             <LocateFixed className="w-3.5 h-3.5" />
-            {locating ? "Locating..." : radiusActive ? `Within ${radiusKm}km` : "Near Me"}
+            {locating ? "Locating..." : radiusActive ? (<>Within <RadiusInput value={radiusKm} onChange={setRadiusKm} /></>) : "Near Me"}
           </button>
           {radiusActive && (
             <>
-              <input type="range" min={2} max={50} step={2} value={radiusKm}
-                onChange={(e) => setRadiusKm(Number(e.target.value))} className="w-20 accent-blue-600" />
+              <input type="range" min={1} max={100} step={1} value={radiusKm}
+                onChange={(e) => setRadiusKm(Number(e.target.value))} className="w-24 accent-blue-600" />
               <button onClick={clearRadius} className="p-1 hover:bg-gray-100 rounded-full"><X className="w-3.5 h-3.5 text-gray-400" /></button>
             </>
           )}
-          <button onClick={() => !drawMode && setDrawMode(true)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${drawMode ? "bg-green-600 text-white" : drawnBounds ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+          <button onClick={() => { if (!drawMode) { clearDraw(); setDrawMode(true); } }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${drawMode ? "bg-green-600 text-white" : drawnPoly ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
             <PenTool className="w-3.5 h-3.5" />
-            {drawMode ? "Drawing — drag on map" : drawnBounds ? "Boundary Active" : "Draw Area"}
+            {drawMode ? "Click to add points, double-click to finish" : drawnPoly ? "Boundary Active" : "Draw Area"}
           </button>
-          {drawnBounds && <button onClick={clearDraw} className="p-1 hover:bg-gray-100 rounded-full"><X className="w-3.5 h-3.5 text-gray-400" /></button>}
+          {drawnPoly && <button onClick={clearDraw} className="p-1 hover:bg-gray-100 rounded-full"><X className="w-3.5 h-3.5 text-gray-400" /></button>}
         </div>
 
         <div className="flex items-center bg-gray-100 rounded-lg p-0.5 ml-auto gap-0.5">
@@ -422,8 +506,8 @@ export default function MapSearch() {
           <div style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: view === "list" ? "100%" : "320px", overflowY: "auto", background: "#f9fafb", borderRight: "1px solid #e5e7eb", zIndex: 10 }}>
             {filtered.length === 0 ? (
               <div className="text-center py-16 text-gray-400 px-6">
-                <p className="font-medium mb-1">No listings found</p>
-                <p className="text-sm">Try adjusting filters</p>
+                <p className="font-medium mb-1">No listings in this area</p>
+                <p className="text-sm">Try zooming out or adjusting filters</p>
               </div>
             ) : (
               <div className="p-3 space-y-2">
@@ -461,18 +545,11 @@ export default function MapSearch() {
 
         {/* Map container */}
         {(view === "map" || view === "split") && (
-          <div
-            ref={mapDivRef}
-            style={{
-              position: "absolute",
-              top: 0, right: 0, bottom: 0,
-              left: view === "split" ? "320px" : "0",
-            }}
-          >
+          <div ref={mapDivRef} style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: view === "split" ? "320px" : "0" }}>
             {drawMode && (
               <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 10, pointerEvents: "none" }}
                 className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">
-                Click and drag to draw a search boundary
+                Click to add points — double-click to close boundary
               </div>
             )}
             {selected && (
