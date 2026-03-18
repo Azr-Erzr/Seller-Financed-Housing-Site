@@ -1,265 +1,263 @@
 // src/pages/About.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import { Shield, Users, TrendingUp, Heart, Building2, Tractor, Star, CheckCircle } from "lucide-react";
 import { useSite } from "../context/SiteContext";
+import { ArrowRight, Shield, Scale, DollarSign, Users, Building2, Home } from "lucide-react";
 
-// ── Homes version ────────────────────────────────────────────────────
-function AboutHomes() {
-  return (
-    <div className="bg-white">
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-blue-100 mb-5">
-            LandMatch Homes
+export default function About() {
+  const { mode, MODES } = useSite();
+  const isBusiness = mode === MODES.business;
+
+  if (isBusiness) {
+    return (
+      <div className="bg-white">
+        <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 py-16">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <h1 className="text-4xl font-bold mb-4" style={{color:"#fff"}}>About LandMatch Business</h1>
+            <p className="text-lg max-w-2xl mx-auto" style={{color:"#a7f3d0"}}>
+              Canada's marketplace for direct seller-financed commercial land, farm, and development deals.
+              No intermediaries. No bank approval. Seller sets the terms.
+            </p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-5" style={{ color: "#fff" }}>About LandMatch Homes</h1>
-          <p className="text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: "#bfdbfe" }}>
-            We built LandMatch because the traditional mortgage system locks out too many good people
-            from homeownership — and leaves too many sellers with no good way to pass on property
-            they've spent a lifetime building equity in.
-          </p>
-        </div>
-      </section>
+        </section>
 
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">The Problem We're Solving</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <p className="text-gray-600 leading-relaxed">Banks approve or reject buyers based on rigid formulas — credit scores, employment type, income documentation. They don't account for context. A self-employed person with real income gets rejected. A family that's been saving for years can't qualify because they can't show two years of T4s.</p>
-              <p className="text-gray-600 leading-relaxed">Meanwhile, sellers — especially older homeowners who've owned their homes outright for decades — have no good platform to find the right buyer. They end up on Facebook Marketplace pushing them toward a conventional sale, even though holding the mortgage themselves would earn them far better returns.</p>
-            </div>
-            <div className="space-y-4">
-              <p className="text-gray-600 leading-relaxed">Seller financing — also called a Vendor Take-Back (VTB) mortgage — solves both problems. The seller becomes the bank. The buyer gets a path to ownership that the traditional system closed. Terms are negotiated directly, human to human.</p>
-              <p className="text-gray-600 leading-relaxed">The problem is there's never been a dedicated, safe, organized place to make these connections. Until LandMatch.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">What We Stand For</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: <Shield className="w-6 h-6 text-blue-600" />, bg: "bg-blue-100", title: "Trust & Safety", text: "Verified profiles, NDA-protected documents, and transparent terms before any conversation happens." },
-              { icon: <Users className="w-6 h-6 text-green-600" />, bg: "bg-green-100", title: "Access", text: "Homeownership should not be gated by a bank's algorithm. We create a path for people who've been shut out." },
-              { icon: <TrendingUp className="w-6 h-6 text-orange-600" />, bg: "bg-orange-100", title: "Fairness", text: "No realtors taking commissions on both sides. No outside investors inflating prices. Direct deals." },
-              { icon: <Heart className="w-6 h-6 text-purple-600" />, bg: "bg-purple-100", title: "Community", text: "Housing moves wealth between generations. We want that movement to stay local and benefit real people." },
-            ].map(({ icon, bg, title, text }) => (
-              <div key={title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-                <div className={`w-12 h-12 ${bg} rounded-full flex items-center justify-center mx-auto mb-4`}>{icon}</div>
-                <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <PartnerSection isBusiness={false} />
-      <WhatWeAreSection isBusiness={false} />
-
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4" style={{ color: "#fff" }}>Ready to Get Started?</h2>
-          <p className="mb-8" style={{ color: "#bfdbfe" }}>Whether you own a home and want to pass it on your terms, or you're a buyer who's been shut out by the banks — there's a place for you here.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/list-home"      className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</Link>
-            <Link to="/create-profile" className="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Create Buyer Profile</Link>
-          </div>
-          <p className="mt-6 text-sm" style={{ color: "#93c5fd" }}>
-            Looking for commercial & land deals?{" "}
-            <Link to="/business" className="underline font-medium text-white">Switch to LandMatch Business →</Link>
-          </p>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-// ── Business version ─────────────────────────────────────────────────
-function AboutBusiness() {
-  return (
-    <div className="bg-white">
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-emerald-100 mb-5">
-            <Building2 className="w-4 h-4" /> LandMatch Business
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-5" style={{ color: "#fff" }}>About LandMatch Business</h1>
-          <p className="text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: "#a7f3d0" }}>
-            Commercial real estate and land transactions are complex, opaque, and dominated by brokers
-            who take large commissions on both sides. LandMatch Business cuts through that.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">The Problem We're Solving</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <p className="text-gray-600 leading-relaxed">A retiring farmer with 200 acres of Class 1 soil has no good way to find a serious buyer directly. A developer looking for serviced development land spends months working through agents who don't actually know the properties. A small business owner selling their building has to pay a broker 4–5% for an introduction they could have made themselves.</p>
-              <p className="text-gray-600 leading-relaxed">Commercial banks are even more restrictive than residential lenders. They require 30–40% down on commercial properties, refuse non-traditional operators, and make the process take months. Seller-financing in commercial real estate is common — but there's no organized place to find it.</p>
-            </div>
-            <div className="space-y-4">
-              <p className="text-gray-600 leading-relaxed">LandMatch Business creates a direct marketplace for commercial and land transactions. Sellers list their property with full zoning, utility, and permitted-use details. Buyers create profiles with their intended use, acreage needs, and financial capacity. The matching engine connects them directly.</p>
-              <p className="text-gray-600 leading-relaxed">No listing agent. No buyer's agent. No commission. A real estate lawyer closes it — and they cost a fraction of what a broker takes.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">What We Stand For</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: <Shield className="w-6 h-6 text-emerald-600" />, bg: "bg-emerald-100", title: "Transparency", text: "Full zoning details, utility access, permitted uses, and environmental status visible before any conversation." },
-              { icon: <Tractor className="w-6 h-6 text-amber-600" />, bg: "bg-amber-100", title: "Landowners First", text: "Farmers, retiring business owners, and long-time landowners deserve a better path to exit than a broker." },
-              { icon: <TrendingUp className="w-6 h-6 text-blue-600" />, bg: "bg-blue-100", title: "Serious Buyers", text: "Buyer profiles show intended use, capital, zoning flexibility, and timeline — so sellers can qualify quickly." },
-              { icon: <Building2 className="w-6 h-6 text-purple-600" />, bg: "bg-purple-100", title: "No Middlemen", text: "Direct seller-to-buyer transactions. The only professionals involved are the ones you actually need." },
-            ].map(({ icon, bg, title, text }) => (
-              <div key={title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-                <div className={`w-12 h-12 ${bg} rounded-full flex items-center justify-center mx-auto mb-4`}>{icon}</div>
-                <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Property types */}
-      <section className="py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">What You Can List or Buy</h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: "🌾", title: "Agricultural / Farmland", desc: "Working farms, raw land, hobby farms, orchards." },
-              { icon: "🏗️", title: "Development Land", desc: "Serviced and un-serviced development parcels, zoned or pending." },
-              { icon: "🏢", title: "Commercial Buildings", desc: "Retail units, office space, strip plazas, mixed-use." },
-              { icon: "🏭", title: "Industrial / Warehouse", desc: "Manufacturing, logistics, storage, flex industrial." },
-              { icon: "🌊", title: "Waterfront & Recreational", desc: "Cottage country, lakefront lots, recreational land." },
-              { icon: "🏘️", title: "Multi-Unit Properties", desc: "Apartment buildings, fourplexes, multi-residential." },
-              { icon: "🌳", title: "Vacant Land", desc: "Unimproved lots, bush parcels, rural acreage." },
-              { icon: "⭐", title: "Special Purpose", desc: "Hospitality, institutional, unique-use properties." },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <div className="text-2xl mb-2">{icon}</div>
-                <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
-                <p className="text-xs text-gray-500">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <PartnerSection isBusiness={true} />
-      <WhatWeAreSection isBusiness={true} />
-
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4" style={{ color: "#fff" }}>Ready to Make a Deal?</h2>
-          <p className="mb-8" style={{ color: "#a7f3d0" }}>Whether you're listing commercial land or looking to buy your next investment — LandMatch Business connects you directly.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/business/list-property"   className="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors">List a Property</Link>
-            <Link to="/business/create-profile"  className="px-8 py-3 bg-white text-emerald-800 font-semibold rounded-lg hover:bg-emerald-50 transition-colors">Create Buyer Profile</Link>
-          </div>
-          <p className="mt-6 text-sm" style={{ color: "#6ee7b7" }}>
-            Looking for residential homes?{" "}
-            <Link to="/" className="underline font-medium text-white">Switch to LandMatch Homes →</Link>
-          </p>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-// ── Shared sections ───────────────────────────────────────────────────
-function PartnerSection({ isBusiness }) {
-  const primary = isBusiness ? "text-emerald-600" : "text-blue-600";
-  const btnCls  = isBusiness ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
-  return (
-    <section className="py-16">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <section className="py-16 max-w-4xl mx-auto px-6 space-y-12">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">A Complete Transaction Ecosystem</h2>
-            <p className="text-gray-600 leading-relaxed mb-4">Finding the right buyer or seller is only the first step. Closing a deal requires lawyers, inspectors, stagers, and {isBusiness ? "environmental consultants." : "photographers — and someone to move your belongings when it's all done."}</p>
-            <p className="text-gray-600 leading-relaxed mb-6">LandMatch brings all of that together. Our Partner Directory connects you with vetted local professionals who understand {isBusiness ? "commercial and land transactions" : "seller-financed transactions"}.</p>
-            <Link to="/partners" className={`inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-lg transition-colors ${btnCls}`}>
-              Browse the Partner Directory →
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Do</h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              LandMatch Business connects commercial property owners — landowners, farmers, developers, and investors —
+              with qualified buyers who want to transact directly, without a bank in the middle. Every deal is seller-financed:
+              the seller holds a registered mortgage on the property and receives monthly payments at a negotiated rate.
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              Buyers can also engage their own commercial real estate broker if they choose. The seller still saves
+              their side of the commission — typically 2–3% of a multi-million-dollar transaction — and still earns
+              interest on the VTB they hold. Both sides win.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Legal Protections for Sellers</h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              A VTB mortgage on a commercial property is governed by Ontario's Mortgage Act and registered at the
+              Land Registry Office. This gives the seller the same legal standing as any institutional lender.
+              If a buyer defaults, the seller can pursue Power of Sale (selling the property to recover the outstanding balance)
+              or foreclosure (reclaiming full title).
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              These are not informal arrangements. Every deal on LandMatch Business should be documented by a
+              real estate lawyer. The registered charge on title means the buyer cannot simply walk away — the
+              consequences of default are real, enforceable, and well-established under Ontario law.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6">
+            <Link to="/business/listings" className="p-6 bg-emerald-50 rounded-xl border border-emerald-100 hover:border-emerald-300 transition-colors">
+              <Building2 className="w-6 h-6 text-emerald-600 mb-3"/>
+              <p className="font-semibold text-gray-900">Browse Commercial Properties</p>
+              <p className="text-sm text-gray-500 mt-1">Vacant land, farms, development parcels, and commercial buildings</p>
+            </Link>
+            <Link to="/partners?category=lawyer" className="p-6 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-300 transition-colors">
+              <Scale className="w-6 h-6 text-amber-600 mb-3"/>
+              <p className="font-semibold text-gray-900">Find a Real Estate Lawyer</p>
+              <p className="text-sm text-gray-500 mt-1">Required for all VTB transactions — protect both sides</p>
             </Link>
           </div>
-          <div className="space-y-3">
+
+          <p className="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-6">
+            LandMatch facilitates introductions between buyers and sellers. We are not a mortgage broker, real estate agent, or legal advisor.
+            All transactions require independent legal counsel. Consult a licensed Ontario real estate lawyer before entering any agreement.
+          </p>
+        </section>
+      </div>
+    );
+  }
+
+  // ── Homes mode ──────────────────────────────────────────────────────
+  return (
+    <div className="bg-white">
+
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-700 to-blue-900 py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{color:"#fff"}}>
+            About LandMatch
+          </h1>
+          <p className="text-lg max-w-2xl mx-auto" style={{color:"#bfdbfe"}}>
+            We built the platform that cuts banks and listing agents out of the residential real estate transaction —
+            and puts the money back where it belongs. In your pocket.
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-4xl mx-auto px-6 py-16 space-y-14">
+
+        {/* Mission */}
+        <section>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Why We Exist</h2>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            In a traditional real estate sale, a $600,000 home comes with roughly $33,900 in commission costs —
+            paid by the seller, split between two agents, neither of whom owns the property or took the financial risk.
+            The seller gets a cheque for less than they should have received. The buyer qualifies at a bank's rules or
+            doesn't buy at all.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            LandMatch was built on a different premise: two people who want to make a deal should be able to make it
+            directly, with legal protections, without a bank or an agent in between. The technology to facilitate that
+            exists. The legal framework for it has existed in Ontario for decades. We simply built the marketplace.
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            Seller financing — also called a Vendor Take-Back (VTB) mortgage — is not a loophole or a grey area.
+            It is a registered, legally enforceable mortgage governed by Ontario's Mortgage Act. The seller registers
+            a charge on the property's title, just like a bank. The buyer makes monthly payments, just like a bank mortgage.
+            The difference is the seller sets the terms — and keeps the interest income the bank would have taken.
+          </p>
+        </section>
+
+        {/* For sellers */}
+        <section>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">For Sellers: You Are the Bank</h2>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            When you hold a VTB mortgage, you are in the same legal position as any lender. You hold a registered
+            charge on the property's title. You receive monthly principal and interest payments. And if the buyer
+            fails to meet their obligations, you have real, enforceable remedies:
+          </p>
+          <div className="bg-orange-50 border border-orange-200 rounded-xl p-5 space-y-3 mb-4">
+            <div className="flex items-start gap-3">
+              <span className="text-xl shrink-0">⚡</span>
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">Power of Sale (Ontario's preferred remedy)</p>
+                <p className="text-sm text-gray-600">If a buyer defaults, you issue a Notice of Default. After a minimum 35-day
+                  redemption period — during which the buyer can bring the mortgage current — you can sell the property to
+                  recover the outstanding balance, without going through a full court proceeding. Any surplus after your
+                  costs are covered goes to the buyer.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-xl shrink-0">🏛️</span>
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">Foreclosure</p>
+                <p className="text-sm text-gray-600">A longer court process that results in full title transfer back to you.
+                  Less common in Ontario because Power of Sale is faster and achieves the same goal.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="text-xl shrink-0">📜</span>
+              <div>
+                <p className="font-semibold text-gray-900 text-sm">Writ of Possession</p>
+                <p className="text-sm text-gray-600">If the buyer refuses to vacate, a court-issued Writ of Possession directs
+                  the Sheriff to enforce your right to regain the property. This is the same mechanism a bank would use.</p>
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            These are not empty threats on paper — they are the established legal infrastructure of Ontario mortgage law.
+            Every deal on LandMatch should be documented by a licensed real estate lawyer to ensure your charge is
+            properly registered and your remedies are clearly defined in the agreement.
+          </p>
+          <p className="text-sm text-gray-500 leading-relaxed mt-3">
+            <strong>Note:</strong> If the buyer also has a first-position bank mortgage, the bank's claim is senior to yours
+            in a default. This is why down payment size and deal structure matter — your lawyer will advise you on
+            the right setup for your specific situation.
+          </p>
+        </section>
+
+        {/* Realtor angle */}
+        <section>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Realtors Are Welcome — on the Buy Side</h2>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            LandMatch is not anti-realtor. Buyers on our platform can absolutely use a buyer's agent. In fact, we
+            actively support hybrid deals: the seller lists and manages their side directly (saving their listing commission),
+            while the buyer engages a realtor for professional representation on their end.
+          </p>
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-4">
+            <p className="font-semibold text-gray-900 mb-3">How a hybrid deal works on a $650,000 home</p>
+            <div className="space-y-2 text-sm">
+              {[
+                { role: "Seller pays", item: "Listing agent commission", traditional: "$16,250 (2.5%)", landmatch: "$0", highlight: true },
+                { role: "Seller pays", item: "Buyer's agent commission", traditional: "$16,250 (2.5%)", landmatch: "$0 — paid by buyer / negotiated separately", highlight: true },
+                { role: "Seller earns", item: "Interest on VTB mortgage", traditional: "$0", landmatch: "~$163K over 5 yrs at 7%", highlight: true },
+                { role: "Buyer gets", item: "Professional realtor representation", traditional: "Yes", landmatch: "Yes — their choice", highlight: false },
+              ].map(({ role, item, traditional, landmatch, highlight }) => (
+                <div key={item} className="grid grid-cols-4 gap-2 items-start py-1.5 border-b border-blue-100 last:border-0">
+                  <span className="text-blue-500 text-xs font-medium">{role}</span>
+                  <span className="text-gray-700 text-xs col-span-1">{item}</span>
+                  <span className="text-gray-400 text-xs line-through">{traditional}</span>
+                  <span className={`text-xs font-semibold ${highlight ? "text-green-600" : "text-gray-700"}`}>{landmatch}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            For realtors reading this: LandMatch is a source of deals, not a competitor. If your buyer finds a
+            seller-financed home on LandMatch, you can still represent them, earn your buyer-side commission, and
+            provide value throughout the transaction. We simply remove the listing agent from the equation — because
+            the seller chose to manage that side themselves.
+          </p>
+        </section>
+
+        {/* For buyers */}
+        <section>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">For Buyers: When the Bank Said No</h2>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            Canada's mortgage stress test is designed to protect banks from defaults — not to help buyers get into
+            homes. It disqualifies people who are genuinely creditworthy but don't fit a narrow formula: the self-employed,
+            new Canadians, people with variable income, or anyone just below the threshold.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            Seller-financed deals let sellers use judgment. They can ask for income documentation, bank statements,
+            a reference letter, or a personal conversation. They can see a buyer's LandMatch profile — including
+            calculated debt-to-income ratios and deal preferences — before ever speaking to them.
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            A VTB mortgage is a real, registered mortgage. The buyer owns the home from closing day. The seller
+            holds a charge on the title until the balance is paid. It is not a lease, a rent arrangement, or an
+            informal agreement — it is secured lending with the same legal weight as any bank mortgage.
+          </p>
+        </section>
+
+        {/* Team / values */}
+        <section className="border-t border-gray-100 pt-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Are (and Are Not)</h2>
+          <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { icon: "⚖️", title: "Real Estate Lawyers", desc: "Essential for drafting promissory notes, VTB agreements, and title transfers." },
-              { icon: "🔍", title: "Home Inspectors", desc: isBusiness ? "Property inspections and environmental assessments." : "Pre-listing inspections give confidence to both sides." },
-              { icon: "🏦", title: "Mortgage Brokers", desc: "For buyers who want to compare seller-finance against traditional options." },
-              { icon: "🚛", title: "Verified Movers", desc: "CVOR-registered, cargo-insured, WSIB-covered movers." },
-            ].map(({ icon, title, desc }) => (
-              <div key={title} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
-                <span className="text-2xl shrink-0">{icon}</span>
+              { icon: "✅", title: "A marketplace", body: "We connect buyers and sellers. We provide tools to evaluate matches, share documents privately, and initiate contact." },
+              { icon: "✅", title: "An education platform", body: "We explain how seller financing works, what the legal framework looks like, and what both parties should expect." },
+              { icon: "✅", title: "A partner directory", body: "We vet and list real estate lawyers, inspectors, stagers, photographers, and movers — so you can build your team independently." },
+              { icon: "❌", title: "Not a mortgage broker", body: "We do not arrange financing, provide mortgage advice, or act as an intermediary in your transaction." },
+              { icon: "❌", title: "Not a real estate agent", body: "We are not licensed to represent buyers or sellers. All negotiations happen directly between parties." },
+              { icon: "❌", title: "Not a legal advisor", body: "We strongly recommend — and will repeatedly remind you — to engage a licensed Ontario real estate lawyer for every deal." },
+            ].map(({ icon, title, body }) => (
+              <div key={title} className="flex items-start gap-3">
+                <span className="text-lg shrink-0 mt-0.5">{icon}</span>
                 <div>
                   <p className="font-semibold text-gray-900 text-sm">{title}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">{body}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+        </section>
 
-function WhatWeAreSection({ isBusiness }) {
-  return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-4xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">What LandMatch {isBusiness ? "Business" : "Homes"} Is — and Isn't</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-            <h3 className="font-semibold text-green-800 mb-4">✓ What we are</h3>
-            <ul className="space-y-2.5 text-sm text-green-700">
-              <li>A marketplace connecting sellers and buyers directly</li>
-              <li>A matching system that surfaces compatible deals</li>
-              <li>A safe space with NDA-protected document sharing</li>
-              <li>A tool for organizing and comparing deal terms</li>
-              {isBusiness
-                ? <><li>A home for commercial, land, and development deals</li><li>A directory of vetted professional services</li></>
-                : <><li>A home for private sales, rent-to-own, and VTB deals</li><li>A directory of vetted local professionals</li></>
-              }
-            </ul>
+        {/* CTA */}
+        <section className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-10 text-center">
+          <h2 className="text-2xl font-bold mb-3" style={{color:"#fff"}}>Ready to Make Your Move?</h2>
+          <p className="mb-6" style={{color:"#bfdbfe"}}>
+            Read our guides, browse listings, or list your home today.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/guide" className="px-6 py-2.5 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Read the Guide</Link>
+            <Link to="/list-home" className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</Link>
+            <Link to="/create-profile" className="px-6 py-2.5 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">Create Buyer Profile</Link>
           </div>
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6">
-            <h3 className="font-semibold text-red-800 mb-4">✗ What we are not</h3>
-            <ul className="space-y-2.5 text-sm text-red-700">
-              <li>A licensed mortgage broker or lender</li>
-              <li>A law firm or legal advisor</li>
-              <li>A financial or investment advisor</li>
-              <li>A guarantor of any transaction</li>
-              <li>A title search or due diligence service</li>
-              {isBusiness && <li>An environmental assessment firm</li>}
-            </ul>
-          </div>
-        </div>
-        <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5 text-sm text-amber-800 leading-relaxed">
-          <strong>Important:</strong> {isBusiness
-            ? "Commercial and land transactions are legally and financially complex. Always engage a real estate lawyer, accountant, and where relevant, an environmental consultant before signing any agreement."
-            : "Seller-financed real estate transactions are legally complex. We strongly recommend both parties engage a real estate lawyer before signing any agreement."
-          } LandMatch facilitates introductions — the due diligence is yours to complete.
-        </div>
-      </div>
-    </section>
-  );
-}
+        </section>
 
-// ── Main export ───────────────────────────────────────────────────────
-export default function About() {
-  const { mode, MODES } = useSite();
-  return mode === MODES.business ? <AboutBusiness /> : <AboutHomes />;
+        <p className="text-xs text-gray-400 leading-relaxed text-center">
+          LandMatch facilitates introductions only. All financial, legal, and mortgage decisions should be made with
+          qualified licensed professionals. Nothing on this site constitutes legal or financial advice.
+          Consult a licensed Ontario real estate lawyer before signing any agreement.
+        </p>
+      </div>
+    </div>
+  );
 }
