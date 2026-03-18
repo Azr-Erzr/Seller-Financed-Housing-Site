@@ -46,7 +46,7 @@ function RadiusInput({value,onChange}){
 
 function MapCommCard({listing,isSelected,isHovered,onClick,onHover,onLeave}){
   const color=getCategoryColor(listing.propertyCategory);
-  const priceStr=listing.price>=1000000?`$${(listing.price/1000000).toFixed(1)}M`:`$${listing.price?.toLocaleString()}`;
+  const priceStr=listing.price>=1000000?`$${(listing.price/1000000).toFixed(1).replace(/\.0$/,"")}M`:`$${listing.price?.toLocaleString()}`;
   return(
     <button onClick={onClick} onMouseEnter={onHover} onMouseLeave={onLeave}
       className={`w-full text-left bg-white rounded-xl overflow-hidden transition-all duration-200 ${isSelected?"ring-2 ring-emerald-500 shadow-lg":isHovered?"ring-2 ring-emerald-300 shadow-md":"shadow-sm hover:shadow-md"}`}>
@@ -117,25 +117,27 @@ export default function BusinessMapSearch(){
 
   useEffect(()=>{if(mapRef.current)setTimeout(()=>{mapRef.current?.resize();handleMapMove();},50);},[view,mapReady,handleMapMove]);
 
-  // Markers with hover
+  // Markers with hover — pill is a CHILD of the marker element so MapLibre's
+  // positioning transform on the outer wrapper is never overwritten.
   useEffect(()=>{if(!mapRef.current||!mapReady)return;markersRef.current.forEach(({marker})=>marker.remove());markersRef.current=new Map();
     filtered.forEach((listing)=>{const color=getCategoryColor(listing.propertyCategory);
-      const el=document.createElement("div");el.dataset.listingId=listing.id;
-      const priceStr=listing.price>=1000000?`$${(listing.price/1000000).toFixed(1)}M`:`$${Math.round(listing.price/1000)}K`;
-      el.style.cssText=`background:${color};color:white;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;cursor:pointer;transform:translate(-50%,-50%);transition:transform 0.15s,box-shadow 0.15s,padding 0.15s,font-size 0.15s;`;
-      el.textContent=priceStr;
+      const el=document.createElement("div");el.style.cssText="cursor:pointer;";
+      const pill=document.createElement("div");pill.dataset.listingId=listing.id;
+      const priceStr=listing.price>=1000000?`$${(listing.price/1000000).toFixed(1).replace(/\.0$/,"")}M`:`$${Math.round(listing.price/1000)}K`;
+      pill.style.cssText=`background:${color};color:white;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid white;transform:translate(-50%,-50%);transition:transform 0.15s,box-shadow 0.15s,padding 0.15s,font-size 0.15s;`;
+      pill.textContent=priceStr;el.appendChild(pill);
       el.addEventListener("click",(e)=>{e.stopPropagation();setSelected((p)=>p?.id===listing.id?null:listing);mapRef.current?.flyTo({center:[listing.lng,listing.lat],duration:600});});
       el.addEventListener("mouseenter",()=>setHoveredId(listing.id));el.addEventListener("mouseleave",()=>setHoveredId(null));
       const marker=new maplibregl.Marker({element:el,anchor:"center"}).setLngLat([listing.lng,listing.lat]).addTo(mapRef.current);
-      markersRef.current.set(listing.id,{marker,el});
+      markersRef.current.set(listing.id,{marker,el,pill});
     });
   },[filtered,mapReady]);
 
   // Selection styling (no marker recreation)
-  useEffect(()=>{markersRef.current.forEach(({el},id)=>{if(id===selected?.id){el.style.padding="6px 12px";el.style.fontSize="12px";el.style.borderWidth="3px";el.style.zIndex="10";}else{el.style.padding="4px 9px";el.style.fontSize="11px";el.style.borderWidth="2px";if(id!==hoveredId)el.style.zIndex="auto";}});},[selected,hoveredId]);
+  useEffect(()=>{markersRef.current.forEach(({pill},id)=>{if(id===selected?.id){pill.style.padding="6px 12px";pill.style.fontSize="12px";pill.style.borderWidth="3px";pill.style.zIndex="10";}else{pill.style.padding="4px 9px";pill.style.fontSize="11px";pill.style.borderWidth="2px";if(id!==hoveredId)pill.style.zIndex="auto";}});},[selected,hoveredId]);
 
-  // Hover highlight
-  useEffect(()=>{markersRef.current.forEach(({el},id)=>{if(id===hoveredId){el.style.transform="translate(-50%,-50%) scale(1.3)";el.style.boxShadow="0 4px 16px rgba(0,0,0,.4)";el.style.zIndex="10";}else{el.style.transform="translate(-50%,-50%) scale(1)";el.style.boxShadow="0 2px 8px rgba(0,0,0,.3)";el.style.zIndex="auto";}});},[hoveredId]);
+  // Hover highlight — targets pill, never touches outer el's transform
+  useEffect(()=>{markersRef.current.forEach(({pill},id)=>{if(id===hoveredId){pill.style.transform="translate(-50%,-50%) scale(1.3)";pill.style.boxShadow="0 4px 16px rgba(0,0,0,.4)";pill.style.zIndex="10";}else{pill.style.transform="translate(-50%,-50%) scale(1)";pill.style.boxShadow="0 2px 8px rgba(0,0,0,.3)";pill.style.zIndex="auto";}});},[hoveredId]);
 
   useEffect(()=>{const map=mapRef.current;if(!map||!mapReady)return;const src=map.getSource("radius-circle");if(!src)return;
     if(radiusActive&&userLat!=null){src.setData({type:"FeatureCollection",features:[geoCircle(userLng,userLat,radiusKm)]});map.flyTo({center:[userLng,userLat],zoom:10,duration:800});}
