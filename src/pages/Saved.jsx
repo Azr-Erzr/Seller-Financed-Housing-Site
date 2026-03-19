@@ -5,7 +5,7 @@ import { Bookmark, Home, Users, Trash2, ArrowRight } from "lucide-react";
 import { getAllListings, getAllProfiles } from "../lib/storage";
 import ListingCard from "../components/ListingCard";
 import ProfileCard from "../components/ProfileCard";
-import AIRecommendations from "../components/AIRecommendations";
+import { ListingRecommendations, BuyerRecommendations } from "../components/AIRecommendations";
 
 const SAVED_LISTINGS_KEY = "hm_saved_listings";
 const SAVED_PROFILES_KEY = "hm_saved_profiles";
@@ -20,6 +20,7 @@ export default function Saved() {
   const [savedListings,   setSavedListings]   = useState([]);
   const [savedProfiles,   setSavedProfiles]   = useState([]);
   const [allListings,     setAllListings]     = useState([]);
+  const [allProfiles,     setAllProfiles]     = useState([]);
   const [loading,         setLoading]         = useState(true);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function Saved() {
     setSavedProfileIds(pIds);
     Promise.all([getAllListings(), getAllProfiles()]).then(([allL, allP]) => {
       setAllListings(allL);
+      setAllProfiles(allP);
       setSavedListings(allL.filter((l) => lIds.includes(String(l.id))));
       setSavedProfiles(allP.filter((p) => pIds.includes(String(p.id))));
       setLoading(false);
@@ -85,10 +87,17 @@ export default function Saved() {
           <div className="text-center py-16 text-gray-400">Loading your saved items...</div>
         ) : tab === "listings" ? (
           <>
-            {/* AI Recommendations — shows when 2+ listings saved */}
-            <AIRecommendations
+            {/* AI: Recommend more listings based on saved listings */}
+            <ListingRecommendations
               savedListings={savedListings}
               allListings={allListings}
+              isBusiness={false}
+            />
+
+            {/* AI: Recommend buyers who match saved listings (seller flow) */}
+            <BuyerRecommendations
+              savedListings={savedListings}
+              allProfiles={allProfiles}
               isBusiness={false}
             />
 
