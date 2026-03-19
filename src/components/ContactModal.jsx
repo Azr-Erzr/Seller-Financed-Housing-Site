@@ -2,11 +2,12 @@
 // LinkedIn-style compose modal for contacting a seller or inviting a buyer.
 // Saves message to Supabase messages table. No real-time needed at MVP.
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Send, MessageSquare, ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useToast } from "./Toast";
 import { useSite } from "../context/SiteContext";
+import { useAuth } from "../context/AuthContext";
 
 // Template message suggestions
 const BUYER_TEMPLATES = [
@@ -38,6 +39,7 @@ export default function ContactModal({
 }) {
   const { toast } = useToast();
   const { mode, MODES } = useSite();
+  const { user } = useAuth();
   const isBusiness = mode === MODES.business;
 
   const [senderName,  setSenderName]  = useState("");
@@ -47,6 +49,11 @@ export default function ContactModal({
   const [sent,        setSent]        = useState(false);
   const [showTemplates, setShowTemplates] = useState(true);
   const [agreedToConfidentiality, setAgreedToConfidentiality] = useState(false);
+
+  // Pre-fill email when user is logged in
+  useEffect(() => {
+    if (user?.email && !senderEmail) setSenderEmail(user.email);
+  }, [user]);
 
   const templates = recipientType === "buyer" ? SELLER_TEMPLATES : BUYER_TEMPLATES;
 
