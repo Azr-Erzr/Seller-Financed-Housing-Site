@@ -6,12 +6,13 @@ import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
 
 export default function Footer() {
-  const { mode, setMode, MODES } = useSite();
+  const { mode, setMode, MODES, modeLocked } = useSite();
   const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
   const navigate = useNavigate();
 
   const handleModeSwitch = () => {
+    if (modeLocked) return;
     const newMode = isBusiness ? MODES.homes : MODES.business;
     setMode(newMode);
     navigate(newMode === MODES.business ? "/business" : "/");
@@ -118,22 +119,24 @@ export default function Footer() {
               <li><Link to="/partner-apply" className={linkCls}>Become a Partner</Link></li>
               <li><Link to="/how-it-works"  className={linkCls}>FAQ</Link></li>
               <li><Link to="/account"       className={linkCls}>Sign In</Link></li>
-              <li>
-                {/* Mode switcher — calls setMode + navigate so ModeRedirect doesn't bounce back */}
-                <button
-                  onClick={handleModeSwitch}
-                  className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
-                    isBusiness
-                      ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                      : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                  }`}
-                >
-                  {isBusiness
-                    ? <><Home className="w-3 h-3" /> Switch to Sel-Fi Homes</>
-                    : <><Building2 className="w-3 h-3" /> Switch to Sel-Fi Business</>
-                  }
-                </button>
-              </li>
+              {/* Mode switcher — hidden when mode is locked by subdomain */}
+              {!modeLocked && (
+                <li>
+                  <button
+                    onClick={handleModeSwitch}
+                    className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+                      isBusiness
+                        ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                        : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                    }`}
+                  >
+                    {isBusiness
+                      ? <><Home className="w-3 h-3" /> Switch to Sel-Fi Homes</>
+                      : <><Building2 className="w-3 h-3" /> Switch to Sel-Fi Business</>
+                    }
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

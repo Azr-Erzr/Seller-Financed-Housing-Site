@@ -8,7 +8,7 @@ import { useAuth, useRequireAuth } from "../context/AuthContext";
 export default function Navbar() {
   const loc       = useLocation();
   const navigate  = useNavigate();
-  const { mode, setMode, config, MODES } = useSite();
+  const { mode, setMode, config, MODES, modeLocked } = useSite();
   const { user, signOut } = useAuth();
   const requireAuth = useRequireAuth();
 
@@ -25,6 +25,7 @@ export default function Navbar() {
   const isBusiness = mode === MODES.business;
 
   const handleModeSwitch = (newMode) => {
+    if (modeLocked) return; // subdomain locks mode
     setMode(newMode);
     navigate(newMode === MODES.business ? "/business" : "/");
   };
@@ -84,16 +85,20 @@ export default function Navbar() {
             </div>
             <span className="text-xl font-extrabold text-gray-900 tracking-tight hidden sm:block">Sel-Fi</span>
           </Link>
-          <div className="flex items-center bg-gray-100 rounded-lg p-0.5 ml-1">
-            <button onClick={() => handleModeSwitch(MODES.homes)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500 hover:text-gray-700"}`}>
-              <Home className="w-3.5 h-3.5"/><span>Homes</span>
-            </button>
-            <button onClick={() => handleModeSwitch(MODES.business)}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500 hover:text-gray-700"}`}>
-              <Building2 className="w-3.5 h-3.5"/><span>Business</span>
-            </button>
-          </div>
+
+          {/* Mode switcher — hidden when mode is locked by subdomain */}
+          {!modeLocked && (
+            <div className="flex items-center bg-gray-100 rounded-lg p-0.5 ml-1">
+              <button onClick={() => handleModeSwitch(MODES.homes)}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500 hover:text-gray-700"}`}>
+                <Home className="w-3.5 h-3.5"/><span>Homes</span>
+              </button>
+              <button onClick={() => handleModeSwitch(MODES.business)}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500 hover:text-gray-700"}`}>
+                <Building2 className="w-3.5 h-3.5"/><span>Business</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Desktop nav */}
@@ -188,17 +193,19 @@ export default function Navbar() {
             </NavLink>
           ))}
           <div className="pt-4 flex flex-col gap-2">
-            {/* Mode switcher — mobile */}
-            <div className="flex items-center bg-gray-100 rounded-lg p-0.5 mb-2">
-              <button onClick={() => handleModeSwitch(MODES.homes)}
-                className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500"}`}>
-                <Home className="w-3 h-3"/><span>Homes</span>
-              </button>
-              <button onClick={() => handleModeSwitch(MODES.business)}
-                className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500"}`}>
-                <Building2 className="w-3 h-3"/><span>Business</span>
-              </button>
-            </div>
+            {/* Mode switcher — mobile (hidden when locked) */}
+            {!modeLocked && (
+              <div className="flex items-center bg-gray-100 rounded-lg p-0.5 mb-2">
+                <button onClick={() => handleModeSwitch(MODES.homes)}
+                  className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1 ${isHomes?"bg-white shadow text-blue-600":"text-gray-500"}`}>
+                  <Home className="w-3 h-3"/><span>Homes</span>
+                </button>
+                <button onClick={() => handleModeSwitch(MODES.business)}
+                  className={`flex-1 py-2 rounded-md text-xs font-semibold transition-all flex items-center justify-center gap-1 ${isBusiness?"bg-white shadow text-emerald-600":"text-gray-500"}`}>
+                  <Building2 className="w-3 h-3"/><span>Business</span>
+                </button>
+              </div>
+            )}
 
             {user ? (
               <>
