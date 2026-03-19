@@ -5,6 +5,7 @@ import { Bookmark, Building2, Users, Trash2, ArrowRight } from "lucide-react";
 import { getAllCommListings, getAllCommProfiles } from "../../lib/commercial-storage";
 import CommListingCard from "../../components/business/CommListingCard";
 import CommProfileCard from "../../components/business/CommProfileCard";
+import AIRecommendations from "../../components/AIRecommendations";
 
 const SAVED_LISTINGS_KEY = "hm_comm_saved_listings";
 const SAVED_PROFILES_KEY = "hm_comm_saved_profiles";
@@ -18,6 +19,7 @@ export default function BusinessSaved() {
   const [savedProfileIds, setSavedProfileIds] = useState([]);
   const [savedListings,   setSavedListings]   = useState([]);
   const [savedProfiles,   setSavedProfiles]   = useState([]);
+  const [allListings,     setAllListings]     = useState([]);
   const [loading,         setLoading]         = useState(true);
 
   useEffect(() => {
@@ -26,9 +28,10 @@ export default function BusinessSaved() {
     setSavedListingIds(lIds);
     setSavedProfileIds(pIds);
 
-    Promise.all([getAllCommListings(), getAllCommProfiles()]).then(([allListings, allProfiles]) => {
-      setSavedListings(allListings.filter((l) => lIds.includes(String(l.id))));
-      setSavedProfiles(allProfiles.filter((p) => pIds.includes(String(p.id))));
+    Promise.all([getAllCommListings(), getAllCommProfiles()]).then(([allL, allP]) => {
+      setAllListings(allL);
+      setSavedListings(allL.filter((l) => lIds.includes(String(l.id))));
+      setSavedProfiles(allP.filter((p) => pIds.includes(String(p.id))));
       setLoading(false);
     });
   }, []);
@@ -84,27 +87,36 @@ export default function BusinessSaved() {
         {loading ? (
           <div className="text-center py-16 text-gray-400">Loading your saved items...</div>
         ) : tab === "listings" ? (
-          savedListings.length === 0 ? (
-            <EmptyBusiness
-              icon={<Building2 className="w-10 h-10 text-gray-300" />}
-              title="No saved properties yet"
-              body="When you bookmark a commercial property, it'll appear here."
-              linkTo="/business/listings"
-              linkLabel="Browse Properties"
+          <>
+            {/* AI Recommendations — shows when 2+ properties saved */}
+            <AIRecommendations
+              savedListings={savedListings}
+              allListings={allListings}
+              isBusiness={true}
             />
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {savedListings.map((listing) => (
-                <div key={listing.id} className="relative group">
-                  <CommListingCard listing={listing} />
-                  <button onClick={() => removeListing(listing.id)} title="Remove"
-                    className="absolute top-3 right-3 w-7 h-7 bg-white/90 hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-all z-10">
-                    <Trash2 className="w-3.5 h-3.5 text-gray-500 hover:text-red-500" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )
+
+            {savedListings.length === 0 ? (
+              <EmptyBusiness
+                icon={<Building2 className="w-10 h-10 text-gray-300" />}
+                title="No saved properties yet"
+                body="When you bookmark a commercial property, it'll appear here."
+                linkTo="/business/listings"
+                linkLabel="Browse Properties"
+              />
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {savedListings.map((listing) => (
+                  <div key={listing.id} className="relative group">
+                    <CommListingCard listing={listing} />
+                    <button onClick={() => removeListing(listing.id)} title="Remove"
+                      className="absolute top-3 right-3 w-7 h-7 bg-white/90 hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-all z-10">
+                      <Trash2 className="w-3.5 h-3.5 text-gray-500 hover:text-red-500" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           savedProfiles.length === 0 ? (
             <EmptyBusiness
