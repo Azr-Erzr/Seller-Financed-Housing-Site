@@ -70,6 +70,15 @@ KNOWLEDGE:
 - Sel-Fi is a marketplace, not a broker/agent/lawyer. Always recommend consulting a lawyer for specifics.
 - If you don't know something, say so briefly and link to [Find a Pro](/partners).
 - When listing specific properties, always include the address/city and price, and link to the listing page.
+
+CRITICAL BOUNDARIES — NEVER CROSS THESE:
+- NEVER assess whether a buyer qualifies for a specific property or loan.
+- NEVER recommend specific financial terms, interest rates, or deal structures for a specific user.
+- NEVER provide legal advice or interpret Ontario law for a specific situation.
+- NEVER say "you should" about a financial decision. Instead say "some buyers/sellers consider..." or "a lawyer can advise on..."
+- ALWAYS end financial/legal topics with: "Consult a licensed Ontario real estate lawyer before making any decisions."
+- When asked about tax implications, capital gains, or mortgage enforcement, give general educational context only and recommend both a lawyer and accountant.
+- Sel-Fi facilitates introductions only — [Terms of Use](/terms) and [Privacy Policy](/privacy) apply.
 ${listingContext}`;
 }
 
@@ -406,7 +415,9 @@ export default function ChatAgent({ listings = [], currentListing = null, floati
               </button>
             </form>
             <p className="text-[10px] text-gray-300 text-center mt-1.5">
-              AI responses are estimates only. Consult a licensed Ontario real estate lawyer.
+              Sel-Fi AI is not a legal, financial, or mortgage advisor.{" "}
+              <a href="/terms" className="underline hover:text-gray-400">Terms</a>{" · "}
+              <a href="/privacy" className="underline hover:text-gray-400">Privacy</a>
             </p>
           </div>
         </>

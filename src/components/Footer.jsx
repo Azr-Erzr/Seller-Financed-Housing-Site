@@ -141,6 +141,18 @@ export default function Footer() {
           </div>
 
         </div>
+
+        {/* Legal bar */}
+        <div className="mt-10 pt-6 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-400">
+            Sel-Fi facilitates introductions only. Not a brokerage, lender, or legal advisor.
+          </p>
+          <div className="flex items-center gap-4 text-xs text-gray-400">
+            <Link to="/terms" className={linkCls}>Terms of Use</Link>
+            <Link to="/privacy" className={linkCls}>Privacy Policy</Link>
+            <Link to="/accessibility" className={linkCls}>Accessibility</Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
