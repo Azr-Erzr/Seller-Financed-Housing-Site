@@ -30,6 +30,9 @@ import Account from "./pages/Account";
 import Guide from "./pages/Guide";
 import GuideArticle from "./pages/GuideArticle";
 import NotFound from "./pages/NotFound";
+import TermsOfUse from "./pages/TermsOfUse";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Accessibility from "./pages/Accessibility";
 
 // ── Business ──────────────────────────────────────────────────────────
 import BusinessHome from "./pages/business/BusinessHome";
@@ -83,6 +86,11 @@ export default function App() {
                   <Route path="/business/create-profile"   element={<BusinessCreateProfile/>}/>
                   <Route path="/business/map"              element={<BusinessMapSearch/>}/>
                   <Route path="/business/saved"            element={<BusinessSaved/>}/>
+
+                  {/* ── Legal / Policy ── */}
+                  <Route path="/terms"          element={<TermsOfUse/>}/>
+                  <Route path="/privacy"        element={<PrivacyPolicy/>}/>
+                  <Route path="/accessibility"  element={<Accessibility/>}/>
 
                   {/* ── Catch-all ── */}
                   <Route path="*" element={<NotFound/>}/>
