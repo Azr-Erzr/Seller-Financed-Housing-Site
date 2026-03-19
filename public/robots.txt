@@ -1,0 +1,10 @@
+# Sel-Fi robots.txt
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /list-home
+Disallow: /create-profile
+Disallow: /business/list-property
+Disallow: /business/create-profile
+
+Sitemap: https://sel-fi.ca/sitemap.xml

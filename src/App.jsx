@@ -1,5 +1,9 @@
 // src/App.jsx
-import React from "react";
+// Batch 10 — Route-level code splitting with React.lazy.
+// Only Navbar, Footer, and context providers are eagerly loaded.
+// All page components are lazy-loaded on first navigation.
+
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SiteProvider } from "./context/SiteContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -11,90 +15,105 @@ import AuthModal from "./components/AuthModal";
 import ScrollToTop from "./components/ScrollToTop";
 import ChatAgentGlobal from "./components/ChatAgentGlobal";
 
-// ── Homes ─────────────────────────────────────────────────────────────
-import Home from "./pages/Home";
-import Listings from "./pages/Listings";
-import Profiles from "./pages/Profiles";
-import ListingDetail from "./pages/ListingDetail";
-import ProfileDetail from "./pages/ProfileDetail";
-import ListHome from "./pages/ListHome";
-import CreateProfile from "./pages/CreateProfile";
-import About from "./pages/About";
-import HowItWorks from "./pages/HowItWorks";
-import Partners from "./pages/Partners";
-import PartnerDetail from "./pages/PartnerDetail";
-import PartnerApply from "./pages/PartnerApply";
-import MapSearch from "./pages/MapSearch";
-import Saved from "./pages/Saved";
-import Account from "./pages/Account";
-import Guide from "./pages/Guide";
-import GuideArticle from "./pages/GuideArticle";
-import NotFound from "./pages/NotFound";
-import TermsOfUse from "./pages/TermsOfUse";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Accessibility from "./pages/Accessibility";
+// ── Lazy-loaded pages — Homes ───────────────────────────────────────
+const Home              = lazy(() => import("./pages/Home"));
+const Listings          = lazy(() => import("./pages/Listings"));
+const Profiles          = lazy(() => import("./pages/Profiles"));
+const ListingDetail     = lazy(() => import("./pages/ListingDetail"));
+const ProfileDetail     = lazy(() => import("./pages/ProfileDetail"));
+const ListHome          = lazy(() => import("./pages/ListHome"));
+const CreateProfile     = lazy(() => import("./pages/CreateProfile"));
+const About             = lazy(() => import("./pages/About"));
+const HowItWorks        = lazy(() => import("./pages/HowItWorks"));
+const Partners          = lazy(() => import("./pages/Partners"));
+const PartnerDetail     = lazy(() => import("./pages/PartnerDetail"));
+const PartnerApply      = lazy(() => import("./pages/PartnerApply"));
+const MapSearch         = lazy(() => import("./pages/MapSearch"));
+const Saved             = lazy(() => import("./pages/Saved"));
+const Account           = lazy(() => import("./pages/Account"));
+const Guide             = lazy(() => import("./pages/Guide"));
+const GuideArticle      = lazy(() => import("./pages/GuideArticle"));
+const NotFound          = lazy(() => import("./pages/NotFound"));
 
-// ── Business ──────────────────────────────────────────────────────────
-import BusinessHome from "./pages/business/BusinessHome";
-import BusinessListings from "./pages/business/BusinessListings";
-import BusinessProfiles from "./pages/business/BusinessProfiles";
-import BusinessListingDetail from "./pages/business/BusinessListingDetail";
-import BusinessProfileDetail from "./pages/business/BusinessProfileDetail";
-import BusinessListHome from "./pages/business/BusinessListHome";
-import BusinessCreateProfile from "./pages/business/BusinessCreateProfile";
-import BusinessMapSearch from "./pages/business/BusinessMapSearch";
-import BusinessSaved from "./pages/business/BusinessSaved";
+// ── Lazy-loaded pages — Legal ───────────────────────────────────────
+const TermsOfUse        = lazy(() => import("./pages/TermsOfUse"));
+const PrivacyPolicy     = lazy(() => import("./pages/PrivacyPolicy"));
+const Accessibility     = lazy(() => import("./pages/Accessibility"));
+
+// ── Lazy-loaded pages — Business ────────────────────────────────────
+const BusinessHome            = lazy(() => import("./pages/business/BusinessHome"));
+const BusinessListings        = lazy(() => import("./pages/business/BusinessListings"));
+const BusinessProfiles        = lazy(() => import("./pages/business/BusinessProfiles"));
+const BusinessListingDetail   = lazy(() => import("./pages/business/BusinessListingDetail"));
+const BusinessProfileDetail   = lazy(() => import("./pages/business/BusinessProfileDetail"));
+const BusinessListHome        = lazy(() => import("./pages/business/BusinessListHome"));
+const BusinessCreateProfile   = lazy(() => import("./pages/business/BusinessCreateProfile"));
+const BusinessMapSearch       = lazy(() => import("./pages/business/BusinessMapSearch"));
+const BusinessSaved           = lazy(() => import("./pages/business/BusinessSaved"));
+
+// ── Loading fallback ────────────────────────────────────────────────
+function PageLoading() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <p className="text-sm text-gray-400">Loading...</p>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      {/* AuthProvider wraps everything so useAuth() works anywhere */}
       <AuthProvider>
         <SiteProvider>
           <ToastProvider>
             <div className="flex flex-col min-h-screen">
               <Navbar />
               <main className="flex-grow">
-                <Routes>
-                  {/* ── Homes ── */}
-                  <Route path="/" element={<ModeRedirect targetMode="homes"><Home/></ModeRedirect>}/>
-                  <Route path="/listings"         element={<Listings/>}/>
-                  <Route path="/profiles"         element={<Profiles/>}/>
-                  <Route path="/listings/:id"     element={<ListingDetail/>}/>
-                  <Route path="/profiles/:id"     element={<ProfileDetail/>}/>
-                  <Route path="/list-home"        element={<ListHome/>}/>
-                  <Route path="/create-profile"   element={<CreateProfile/>}/>
-                  <Route path="/about"            element={<About/>}/>
-                  <Route path="/how-it-works"     element={<HowItWorks/>}/>
-                  <Route path="/partners"         element={<Partners/>}/>
-                  <Route path="/partners/:id"     element={<PartnerDetail/>}/>
-                  <Route path="/partner-apply"    element={<PartnerApply/>}/>
-                  <Route path="/map"              element={<MapSearch/>}/>
-                  <Route path="/saved"            element={<Saved/>}/>
-                  <Route path="/account"          element={<Account/>}/>
-                  <Route path="/guide"            element={<Guide/>}/>
-                  <Route path="/guide/:id"        element={<GuideArticle/>}/>
+                <Suspense fallback={<PageLoading />}>
+                  <Routes>
+                    {/* ── Homes ── */}
+                    <Route path="/" element={<ModeRedirect targetMode="homes"><Home/></ModeRedirect>}/>
+                    <Route path="/listings"         element={<Listings/>}/>
+                    <Route path="/profiles"         element={<Profiles/>}/>
+                    <Route path="/listings/:id"     element={<ListingDetail/>}/>
+                    <Route path="/profiles/:id"     element={<ProfileDetail/>}/>
+                    <Route path="/list-home"        element={<ListHome/>}/>
+                    <Route path="/create-profile"   element={<CreateProfile/>}/>
+                    <Route path="/about"            element={<About/>}/>
+                    <Route path="/how-it-works"     element={<HowItWorks/>}/>
+                    <Route path="/partners"         element={<Partners/>}/>
+                    <Route path="/partners/:id"     element={<PartnerDetail/>}/>
+                    <Route path="/partner-apply"    element={<PartnerApply/>}/>
+                    <Route path="/map"              element={<MapSearch/>}/>
+                    <Route path="/saved"            element={<Saved/>}/>
+                    <Route path="/account"          element={<Account/>}/>
+                    <Route path="/guide"            element={<Guide/>}/>
+                    <Route path="/guide/:id"        element={<GuideArticle/>}/>
 
-                  {/* ── Business ── */}
-                  <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome/></ModeRedirect>}/>
-                  <Route path="/business/listings"         element={<BusinessListings/>}/>
-                  <Route path="/business/profiles"         element={<BusinessProfiles/>}/>
-                  <Route path="/business/listings/:id"     element={<BusinessListingDetail/>}/>
-                  <Route path="/business/profiles/:id"     element={<BusinessProfileDetail/>}/>
-                  <Route path="/business/list-property"    element={<BusinessListHome/>}/>
-                  <Route path="/business/create-profile"   element={<BusinessCreateProfile/>}/>
-                  <Route path="/business/map"              element={<BusinessMapSearch/>}/>
-                  <Route path="/business/saved"            element={<BusinessSaved/>}/>
+                    {/* ── Legal ── */}
+                    <Route path="/terms"            element={<TermsOfUse/>}/>
+                    <Route path="/privacy"          element={<PrivacyPolicy/>}/>
+                    <Route path="/accessibility"    element={<Accessibility/>}/>
 
-                  {/* ── Legal / Policy ── */}
-                  <Route path="/terms"          element={<TermsOfUse/>}/>
-                  <Route path="/privacy"        element={<PrivacyPolicy/>}/>
-                  <Route path="/accessibility"  element={<Accessibility/>}/>
+                    {/* ── Business ── */}
+                    <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome/></ModeRedirect>}/>
+                    <Route path="/business/listings"         element={<BusinessListings/>}/>
+                    <Route path="/business/profiles"         element={<BusinessProfiles/>}/>
+                    <Route path="/business/listings/:id"     element={<BusinessListingDetail/>}/>
+                    <Route path="/business/profiles/:id"     element={<BusinessProfileDetail/>}/>
+                    <Route path="/business/list-property"    element={<BusinessListHome/>}/>
+                    <Route path="/business/create-profile"   element={<BusinessCreateProfile/>}/>
+                    <Route path="/business/map"              element={<BusinessMapSearch/>}/>
+                    <Route path="/business/saved"            element={<BusinessSaved/>}/>
 
-                  {/* ── Catch-all ── */}
-                  <Route path="*" element={<NotFound/>}/>
-                </Routes>
+                    {/* ── Catch-all ── */}
+                    <Route path="*" element={<NotFound/>}/>
+                  </Routes>
+                </Suspense>
               </main>
               <Footer/>
               <AuthModal/>

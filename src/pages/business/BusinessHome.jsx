@@ -12,6 +12,7 @@ import CommListingCard from "../../components/business/CommListingCard";
 import CommProfileCard from "../../components/business/CommProfileCard";
 import SavingsCalculator from "../../components/SavingsCalculator";
 import { ARTICLES_BUSINESS } from "../../data/guide-articles";
+import { usePageMeta, PAGE_META } from "../../hooks/usePageMeta";
 
 const CATEGORIES = [
   { Icon: Wheat, label: "Farmland",    cat: "Agricultural / Farm"         },
@@ -30,6 +31,7 @@ export default function BusinessHome() {
   const [search,   setSearch]   = useState("");
   const navigate   = useNavigate();
   const requireAuth = useRequireAuth();
+  usePageMeta(PAGE_META.businessHome.title, PAGE_META.businessHome.desc);
 
   useEffect(() => {
     getAllCommListings().then((l) => setListings(l.slice(0, 3)));

@@ -3,12 +3,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
+import { usePageMeta, PAGE_META } from "../hooks/usePageMeta";
 import { ArrowRight, Shield, Scale, DollarSign, Users, Building2, Home, CheckCircle, XCircle, Zap, Landmark, ScrollText } from "lucide-react";
 
 export default function About() {
   const { mode, MODES } = useSite();
   const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
+  usePageMeta(PAGE_META.about.title, PAGE_META.about.desc);
 
   if (isBusiness) {
     return (

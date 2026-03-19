@@ -14,6 +14,7 @@ import ProfileCard from "../components/ProfileCard";
 import { ListingsSkeleton } from "../components/LoadingSkeleton";
 import SavingsCalculator from "../components/SavingsCalculator";
 import { ARTICLES } from "../data/guide-articles";
+import { usePageMeta, PAGE_META } from "../hooks/usePageMeta";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -22,6 +23,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const requireAuth = useRequireAuth();
+  usePageMeta(PAGE_META.home.title, PAGE_META.home.desc);
 
   useEffect(() => {
     Promise.all([

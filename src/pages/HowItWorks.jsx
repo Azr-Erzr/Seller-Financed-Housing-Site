@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
 import { ChevronDown, ChevronUp, FileText, Search, HeartHandshake, Scale, PenLine, DollarSign, UserCircle, Map, MailOpen, FileSearch, Home as HomeIcon, Landmark, ClipboardList } from "lucide-react";
+import { usePageMeta, PAGE_META } from "../hooks/usePageMeta";
 
 function FAQ({ q, a }) {
   const [open, setOpen] = useState(false);
@@ -142,6 +143,7 @@ export default function HowItWorks() {
   const { mode, MODES } = useSite();
   const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
+  usePageMeta(PAGE_META.howItWorks.title, PAGE_META.howItWorks.desc);
   const accent      = isBusiness ? "text-emerald-600" : "text-blue-600";
   const bg          = isBusiness ? "bg-emerald-600" : "bg-blue-600";
   const heroBg      = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-700 to-blue-900";
