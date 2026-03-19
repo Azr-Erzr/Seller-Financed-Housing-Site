@@ -17,6 +17,7 @@ import NDA from "../components/NDA";
 import ContactModal from "../components/ContactModal";
 import ListingCard from "../components/ListingCard";
 import { DetailSkeleton } from "../components/LoadingSkeleton";
+import ChatAgent from "../components/ChatAgent";
 import {
   MapPin, Bed, Bath, Square, Car, Calendar, Ruler, Home, Bookmark,
   BookmarkCheck, Phone, ArrowLeft, Flame, Snowflake, Droplets, Trees,
@@ -499,6 +500,11 @@ export default function ListingDetail() {
                   Sel-Fi facilitates introductions only — we are not a mortgage broker, real estate agent, or legal advisor.
                   Always consult a licensed Ontario real estate lawyer before entering any agreement.
                 </p>
+              </div>
+
+              {/* AI Chat — listing-specific Q&A */}
+              <div className="rounded-2xl overflow-hidden" style={{ height: "480px" }}>
+                <ChatAgent currentListing={listing} floating={false} />
               </div>
             </div>
           </div>
