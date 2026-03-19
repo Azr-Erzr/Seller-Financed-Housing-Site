@@ -11,6 +11,7 @@ import NDA from "../../components/NDA";
 import ContactModal from "../../components/ContactModal";
 import CommListingCard from "../../components/business/CommListingCard";
 import { DetailSkeleton } from "../../components/LoadingSkeleton";
+import ChatAgent from "../../components/ChatAgent";
 import {
   MapPin, Ruler, Building, Building2, Truck, Phone, Bookmark, BookmarkCheck, ArrowLeft,
   Flame, Snowflake, Droplets, Trees, Shield, Clock, DollarSign, Zap, Wifi,
@@ -484,6 +485,11 @@ export default function BusinessListingDetail() {
                   Sel-Fi facilitates introductions only — we are not a mortgage broker, real estate agent, or legal advisor.
                   Always consult a licensed Ontario real estate lawyer before entering any agreement.
                 </p>
+              </div>
+
+              {/* AI Chat — property-specific Q&A */}
+              <div className="rounded-2xl overflow-hidden" style={{ height: "480px" }}>
+                <ChatAgent currentListing={listing} floating={false} />
               </div>
             </div>
           </div>
