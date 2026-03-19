@@ -10,6 +10,15 @@ import {
   PERMITTED_USES, ROAD_ACCESS,
 } from "../../data/commercial-seed";
 
+const SESSION_KEY = "selfi_browse_filters_business";
+
+function loadFilters() {
+  try { const s = sessionStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; }
+}
+function saveFilters(state) {
+  try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(state)); } catch {}
+}
+
 const DEAL_TYPES = ["Seller-Finance", "Rent-to-Own", "Lease Option", "Private Sale"];
 
 function FilterSection({ title, defaultOpen = false, count = 0, children }) {
@@ -51,19 +60,25 @@ function PillGroup({ options, selected, onToggle }) {
 export default function BusinessListings() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [allListings, setAllListings]   = useState([]);
-  const [location, setLocation]         = useState(searchParams.get("location") || "");
-  const [categories, setCategories]     = useState([]);
-  const [zonings, setZonings]           = useState([]);
-  const [utilities, setUtilities]       = useState([]);
-  const [permittedUses, setPermittedUses] = useState([]);
-  const [dealTypes, setDealTypes]       = useState([]);
-  const [minAcreage, setMinAcreage]     = useState("");
-  const [maxAcreage, setMaxAcreage]     = useState("");
-  const [maxPrice, setMaxPrice]         = useState(10000000);
-  const [roadAccess, setRoadAccess]     = useState([]);
+  const savedF = loadFilters();
+  const [location, setLocation]         = useState(searchParams.get("location") || savedF?.location || "");
+  const [categories, setCategories]     = useState(savedF?.categories || []);
+  const [zonings, setZonings]           = useState(savedF?.zonings || []);
+  const [utilities, setUtilities]       = useState(savedF?.utilities || []);
+  const [permittedUses, setPermittedUses] = useState(savedF?.permittedUses || []);
+  const [dealTypes, setDealTypes]       = useState(savedF?.dealTypes || []);
+  const [minAcreage, setMinAcreage]     = useState(savedF?.minAcreage || "");
+  const [maxAcreage, setMaxAcreage]     = useState(savedF?.maxAcreage || "");
+  const [maxPrice, setMaxPrice]         = useState(savedF?.maxPrice ?? 10000000);
+  const [roadAccess, setRoadAccess]     = useState(savedF?.roadAccess || []);
   const [mobileOpen, setMobileOpen]     = useState(false);
 
   useEffect(() => { getAllCommListings().then(setAllListings); }, []);
+
+  // Persist filters
+  useEffect(() => {
+    saveFilters({ location, categories, zonings, utilities, permittedUses, dealTypes, minAcreage, maxAcreage, maxPrice, roadAccess });
+  }, [location, categories, zonings, utilities, permittedUses, dealTypes, minAcreage, maxAcreage, maxPrice, roadAccess]);
 
   const toggle = (arr, setArr, val) =>
     setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
@@ -90,6 +105,7 @@ export default function BusinessListings() {
     setLocation(""); setCategories([]); setZonings([]); setUtilities([]);
     setPermittedUses([]); setDealTypes([]); setMinAcreage(""); setMaxAcreage("");
     setMaxPrice(10000000); setRoadAccess([]); setSearchParams({});
+    try { sessionStorage.removeItem(SESSION_KEY); } catch {}
   };
 
   const filterContent = (
