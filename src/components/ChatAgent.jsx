@@ -170,7 +170,7 @@ function ContactForm({ isBusiness, onBack }) {
 }
 
 // ── Main component ──────────────────────────────────────────────────
-export default function ChatAgent({ listings = [], currentListing = null, floating = true }) {
+export default function ChatAgent({ listings = [], currentListing = null, floating = true, recommendationContext = "" }) {
   const { mode, MODES } = useSite();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -192,8 +192,13 @@ export default function ChatAgent({ listings = [], currentListing = null, floati
   useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
   useEffect(() => { if (isOpen) setTimeout(() => inputRef.current?.focus(), 200); }, [isOpen]);
 
-  const systemPrompt = buildSystemPrompt(mode, listings, currentListing);
-  const suggestedPrompts = isBusiness ? BUSINESS_PROMPTS : HOME_PROMPTS;
+  const systemPrompt = buildSystemPrompt(mode, listings, currentListing) + (recommendationContext || "");
+
+  // Dynamic suggested prompts — add recommendation prompt when context exists
+  const baseSuggested = isBusiness ? BUSINESS_PROMPTS : HOME_PROMPTS;
+  const suggestedPrompts = recommendationContext
+    ? ["What do you recommend based on my saved properties?", ...baseSuggested.slice(0, 3)]
+    : baseSuggested;
 
   // Colors
   const headerBg = isBusiness ? "bg-gradient-to-r from-emerald-600 to-emerald-700" : "bg-gradient-to-r from-blue-600 to-blue-700";
