@@ -7,7 +7,6 @@ import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ModeRedirect from "./components/ModeRedirect";
-import SupportChat from "./components/SupportChat";
 import AuthModal from "./components/AuthModal";
 import ScrollToTop from "./components/ScrollToTop";
 import ChatAgentGlobal from "./components/ChatAgentGlobal";
@@ -90,7 +89,6 @@ export default function App() {
                 </Routes>
               </main>
               <Footer/>
-              <SupportChat/>
               <AuthModal/>
               <ChatAgentGlobal/>
             </div>
