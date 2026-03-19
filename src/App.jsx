@@ -10,6 +10,7 @@ import ModeRedirect from "./components/ModeRedirect";
 import SupportChat from "./components/SupportChat";
 import AuthModal from "./components/AuthModal";
 import ScrollToTop from "./components/ScrollToTop";
+import ChatAgentGlobal from "./components/ChatAgentGlobal";
 
 // ── Homes ─────────────────────────────────────────────────────────────
 import Home from "./pages/Home";
@@ -91,6 +92,7 @@ export default function App() {
               <Footer/>
               <SupportChat/>
               <AuthModal/>
+              <ChatAgentGlobal/>
             </div>
           </ToastProvider>
         </SiteProvider>
