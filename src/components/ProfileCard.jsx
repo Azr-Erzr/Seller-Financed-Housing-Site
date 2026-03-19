@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { DollarSign, TrendingUp, Shield } from "lucide-react";
+import { VerificationPills } from "./VerificationBadges";
 
 const getDisplayName = (profile) =>
   profile.useAlias && profile.alias ? profile.alias : profile.name;
@@ -95,6 +96,7 @@ export default function ProfileCard({ profile, matchScore }) {
             <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getRiskStyle(profile.riskTolerance)}`}>
               Risk: {profile.riskTolerance}
             </span>
+            <VerificationPills status={profile.verificationStatus} />
           </div>
 
           {/* Actions */}

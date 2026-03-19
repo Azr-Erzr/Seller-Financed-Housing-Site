@@ -166,6 +166,7 @@ function profileToRow(p, userId) {
     badges:              p.badges || [],
     is_active:           true,
     owner_email:         p.ownerEmail || null,
+    verification_status: p.verificationStatus || null,
     ...(userId ? { user_id: userId } : {}),
   };
 }
@@ -198,6 +199,7 @@ function rowToProfile(r) {
     useAlias:           r.use_alias ?? true,
     alias:              r.alias || null,
     badges:             r.badges || [],
+    verificationStatus: r.verification_status || null,
     createdAt:          r.created_at,
     isDemo:             false,
   };

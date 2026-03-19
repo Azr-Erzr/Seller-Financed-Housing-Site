@@ -5,6 +5,7 @@ import { getProfileById, getAllListings, toggleSavedProfile, isProfileSaved } fr
 import { useToast } from "../components/Toast";
 import ContactModal from "../components/ContactModal";
 import { MapPin, DollarSign, TrendingUp, Bookmark, BookmarkCheck, Send, ArrowLeft, Shield } from "lucide-react";
+import { VerificationDetailPanel, VerificationLevelBadge } from "../components/VerificationBadges";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
 const pct   = (n) => n ? `${(Number(n)*100).toFixed(1)}%` : "—";
@@ -137,6 +138,7 @@ export default function ProfileDetail() {
                     {profile.dealPreference}
                   </span>
                 )}
+                <VerificationLevelBadge status={profile.verificationStatus} />
               </div>
             </div>
           </div>
@@ -144,6 +146,9 @@ export default function ProfileDetail() {
             <p className="mt-4 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">{profile.bio}</p>
           )}
         </div>
+
+        {/* Verification Status */}
+        <VerificationDetailPanel status={profile.verificationStatus} isBusiness={false} />
 
         {/* Financial Profile */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
