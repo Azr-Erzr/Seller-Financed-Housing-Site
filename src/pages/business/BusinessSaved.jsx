@@ -5,7 +5,7 @@ import { Bookmark, Building2, Users, Trash2, ArrowRight } from "lucide-react";
 import { getAllCommListings, getAllCommProfiles } from "../../lib/commercial-storage";
 import CommListingCard from "../../components/business/CommListingCard";
 import CommProfileCard from "../../components/business/CommProfileCard";
-import AIRecommendations from "../../components/AIRecommendations";
+import { ListingRecommendations, BuyerRecommendations } from "../../components/AIRecommendations";
 
 const SAVED_LISTINGS_KEY = "hm_comm_saved_listings";
 const SAVED_PROFILES_KEY = "hm_comm_saved_profiles";
@@ -20,6 +20,7 @@ export default function BusinessSaved() {
   const [savedListings,   setSavedListings]   = useState([]);
   const [savedProfiles,   setSavedProfiles]   = useState([]);
   const [allListings,     setAllListings]     = useState([]);
+  const [allProfiles,     setAllProfiles]     = useState([]);
   const [loading,         setLoading]         = useState(true);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function BusinessSaved() {
 
     Promise.all([getAllCommListings(), getAllCommProfiles()]).then(([allL, allP]) => {
       setAllListings(allL);
+      setAllProfiles(allP);
       setSavedListings(allL.filter((l) => lIds.includes(String(l.id))));
       setSavedProfiles(allP.filter((p) => pIds.includes(String(p.id))));
       setLoading(false);
@@ -88,10 +90,17 @@ export default function BusinessSaved() {
           <div className="text-center py-16 text-gray-400">Loading your saved items...</div>
         ) : tab === "listings" ? (
           <>
-            {/* AI Recommendations — shows when 2+ properties saved */}
-            <AIRecommendations
+            {/* AI: Recommend more properties based on saved properties */}
+            <ListingRecommendations
               savedListings={savedListings}
               allListings={allListings}
+              isBusiness={true}
+            />
+
+            {/* AI: Recommend buyers who match saved properties (vendor flow) */}
+            <BuyerRecommendations
+              savedListings={savedListings}
+              allProfiles={allProfiles}
               isBusiness={true}
             />
 
