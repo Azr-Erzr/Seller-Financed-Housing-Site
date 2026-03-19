@@ -1,18 +1,40 @@
 // src/lib/storage.js
+// Batch 5 — renamed keys (selfi_*), user_id on insert, seed/live separation.
+// Demo seed data is tagged with isDemo:true and never blended silently with live data.
+
 import { LISTINGS as SEED_LISTINGS, PROFILES as SEED_PROFILES } from "../data/seed";
 import { supabase } from "./supabase";
 
 const USE_SUPABASE = true;
 
 const KEYS = {
-  listings:      "hm_listings",
-  profiles:      "hm_profiles",
-  savedListings: "hm_saved_listings",   // must match Saved.jsx
-  savedProfiles: "hm_saved_profiles",   // must match Saved.jsx
+  listings:      "selfi_listings",
+  profiles:      "selfi_profiles",
+  savedListings: "selfi_saved_listings",
+  savedProfiles: "selfi_saved_profiles",
 };
 
 const read  = (key) => { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } };
 const write = (key, data) => { try { localStorage.setItem(key, JSON.stringify(data)); return true; } catch { return false; } };
+
+// ── Migrate old hm_* keys to selfi_* (runs once, cleans up) ─────────
+(function migrateKeys() {
+  const OLD = { savedListings: "hm_saved_listings", savedProfiles: "hm_saved_profiles" };
+  try {
+    Object.entries(OLD).forEach(([newKey, oldKey]) => {
+      const old = localStorage.getItem(oldKey);
+      if (old && !localStorage.getItem(KEYS[newKey])) {
+        localStorage.setItem(KEYS[newKey], old);
+      }
+      localStorage.removeItem(oldKey);
+    });
+    // Also clean other old keys
+    ["hm_listings", "hm_profiles", "hm_site_mode"].forEach((k) => {
+      // Don't remove hm_site_mode — SiteContext migrates it separately
+      if (k !== "hm_site_mode") localStorage.removeItem(k);
+    });
+  } catch {}
+})();
 
 // ── Save / bookmark helpers ───────────────────────────────────────────
 
@@ -40,9 +62,18 @@ export function toggleSavedProfile(id) {
   return next.includes(sid);
 }
 
+// ── Auth helper — get current user ID for inserts ────────────────────
+async function getCurrentUserId() {
+  if (!supabase) return null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user?.id || null;
+  } catch { return null; }
+}
+
 // ── Field mapping helpers ────────────────────────────────────────────
 
-function listingToRow(l) {
+function listingToRow(l, userId) {
   return {
     title:          l.title,
     address:        l.address,
@@ -69,6 +100,7 @@ function listingToRow(l) {
     badges:         l.badges || [],
     is_active:      true,
     owner_email:    l.ownerEmail || null,
+    ...(userId ? { user_id: userId } : {}),
   };
 }
 
@@ -99,10 +131,11 @@ function rowToListing(r) {
     videoUrl:     r.video_url,
     badges:       r.badges || [],
     createdAt:    r.created_at,
+    isDemo:       false,
   };
 }
 
-function profileToRow(p) {
+function profileToRow(p, userId) {
   return {
     name:           p.name,
     city:           p.city,
@@ -125,6 +158,7 @@ function profileToRow(p) {
     badges:         p.badges || [],
     is_active:      true,
     owner_email:    p.ownerEmail || null,
+    ...(userId ? { user_id: userId } : {}),
   };
 }
 
@@ -150,26 +184,39 @@ function rowToProfile(r) {
     alias:          r.alias || null,
     badges:         r.badges || [],
     createdAt:      r.created_at,
+    isDemo:         false,
   };
 }
+
+// ── Demo seed data (tagged) ──────────────────────────────────────────
+// Seed items always carry isDemo:true so the UI can badge them visibly.
+const DEMO_LISTINGS = SEED_LISTINGS.map((l) => ({ ...l, isDemo: true }));
+const DEMO_PROFILES = SEED_PROFILES.map((p) => ({ ...p, isDemo: true }));
 
 // ── Public API ────────────────────────────────────────────────────────
 
 export async function getAllListings() {
+  // Live data from Supabase (never includes seed)
+  let live = [];
   if (USE_SUPABASE && supabase) {
     const { data, error } = await supabase
       .from("listings")
       .select("*")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
-    if (!error && data) return [...SEED_LISTINGS, ...data.map(rowToListing)];
+    if (!error && data) live = data.map(rowToListing);
   }
-  return [...SEED_LISTINGS, ...read(KEYS.listings)];
+  // If no live data exists yet, include demo listings so the site isn't empty
+  // Once real listings exist, demo data stops appearing in public views
+  if (live.length === 0) return [...DEMO_LISTINGS];
+  return live;
 }
 
 export async function getListingById(id) {
-  const seed = SEED_LISTINGS.find((l) => l.id === id);
-  if (seed) return seed;
+  // Check demo first (demo IDs are like "h1", "h2" etc.)
+  const demo = DEMO_LISTINGS.find((l) => l.id === id);
+  if (demo) return demo;
+  // Then check Supabase
   if (USE_SUPABASE && supabase) {
     const { data, error } = await supabase.from("listings").select("*").eq("id", id).single();
     if (!error && data) return rowToListing(data);
@@ -179,33 +226,35 @@ export async function getListingById(id) {
 
 export async function saveListing(listing) {
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("listings").insert(listingToRow(listing)).select().single();
+    const userId = await getCurrentUserId();
+    const row = listingToRow(listing, userId);
+    const { data, error } = await supabase.from("listings").insert(row).select().single();
     if (error) { console.error("Supabase listing error:", error.message); return null; }
     return rowToListing(data);
   }
   const stored = read(KEYS.listings);
-  const saved  = { ...listing, id: `ul_${Date.now()}`, userSubmitted: true };
+  const saved  = { ...listing, id: `ul_${Date.now()}`, userSubmitted: true, isDemo: false };
   write(KEYS.listings, [...stored, saved]);
   return saved;
 }
 
 export async function getAllProfiles() {
+  let live = [];
   if (USE_SUPABASE && supabase) {
-    // Query the public_profiles VIEW (not the profiles table) so that
-    // show_income masking is enforced by the database, not the client.
     const { data, error } = await supabase
       .from("public_profiles")
       .select("*")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
-    if (!error && data) return [...SEED_PROFILES, ...data.map(rowToProfile)];
+    if (!error && data) live = data.map(rowToProfile);
   }
-  return [...SEED_PROFILES, ...read(KEYS.profiles)];
+  if (live.length === 0) return [...DEMO_PROFILES];
+  return live;
 }
 
 export async function getProfileById(id) {
-  const seed = SEED_PROFILES.find((p) => p.id === id);
-  if (seed) return seed;
+  const demo = DEMO_PROFILES.find((p) => p.id === id);
+  if (demo) return demo;
   if (USE_SUPABASE && supabase) {
     const { data, error } = await supabase.from("public_profiles").select("*").eq("id", id).single();
     if (!error && data) return rowToProfile(data);
@@ -215,12 +264,14 @@ export async function getProfileById(id) {
 
 export async function saveProfile(profile) {
   if (USE_SUPABASE && supabase) {
-    const { data, error } = await supabase.from("profiles").insert(profileToRow(profile)).select().single();
+    const userId = await getCurrentUserId();
+    const row = profileToRow(profile, userId);
+    const { data, error } = await supabase.from("profiles").insert(row).select().single();
     if (error) { console.error("Supabase profile error:", error.message); return null; }
     return rowToProfile(data);
   }
   const stored = read(KEYS.profiles);
-  const saved  = { ...profile, id: `up_${Date.now()}`, userSubmitted: true };
+  const saved  = { ...profile, id: `up_${Date.now()}`, userSubmitted: true, isDemo: false };
   write(KEYS.profiles, [...stored, saved]);
   return saved;
 }

@@ -50,6 +50,7 @@ export const LISTINGS = [
     badges: ["Rent-to-Own", "Verified Seller"],
     description: "Charming craftsman on a quiet street close to the park and schools. Updated kitchen with granite counters, large backyard with mature trees, and a fully finished basement with rec room. Seller is motivated and open to flexible terms for the right buyer.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "h2",
@@ -97,6 +98,7 @@ export const LISTINGS = [
     badges: ["Low Down OK"],
     description: "Modern corner unit with lots of natural light. Steps to transit and shops. Garage parking included. Open concept main floor with 9ft ceilings. Seller open to longer amortization and will consider low down payment for verified buyers.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "h3",
@@ -146,6 +148,7 @@ export const LISTINGS = [
     badges: ["New", "Flexible"],
     description: "Solid bungalow on a large private lot. Great bones, freshly painted throughout. Main floor laundry. Separate basement entrance could suit an in-law suite. Seller retiring and prefers a buyer who will care for the property long term.",
     docsLocked: false,
+    isDemo: true,
   },
   {
     id: "h4",
@@ -194,6 +197,7 @@ export const LISTINGS = [
     badges: ["Verified Seller", "Popular"],
     description: "Spacious semi with a fully finished basement suite — great for extended family or rental income offset. 4 bedrooms, 3 full baths. Hardwood throughout main floor. Large deck backing onto green space. Seller has owned free and clear for 12 years.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "h5",
@@ -241,6 +245,7 @@ export const LISTINGS = [
     badges: ["Verified Seller"],
     description: "Bright end-unit townhome in a newer subdivision. Open concept main floor with 9ft ceilings. Private backyard with no rear neighbours. Double-car garage. Walking distance to schools and parks.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "h6",
@@ -290,6 +295,7 @@ export const LISTINGS = [
     badges: ["Verified Seller", "Popular"],
     description: "Stunning executive home on a quiet cul-de-sac. Soaring ceilings, chef's kitchen with island and premium appliances, three-car garage, and a professionally landscaped yard with in-ground pool. Finished basement with wet bar and theatre room.",
     docsLocked: true,
+    isDemo: true,
   },
 ];
 
@@ -313,6 +319,7 @@ export const PROFILES = [
     riskTolerance: "Moderate",
     badges: ["Verified", "Popular"],
     bio: "Young family looking for a 3-bedroom near parks and good schools. Comfortable with rent-to-own arrangements. Prefer steady, predictable monthly payments. Have been saving for 3 years.",
+    isDemo: true,
   },
   {
     id: "p2",
@@ -333,6 +340,7 @@ export const PROFILES = [
     riskTolerance: "Low",
     badges: ["Verified"],
     bio: "Engineer relocating for work. Seeking a townhouse with a garage. Very comfortable with classic seller-finance terms. Strong employment history and clean credit.",
+    isDemo: true,
   },
   {
     id: "p3",
@@ -353,5 +361,6 @@ export const PROFILES = [
     riskTolerance: "High",
     badges: ["Investor", "New"],
     bio: "Self-employed couple with solid income. Banks have been difficult due to variable income, but our financials are strong. Looking for a 4-bed with basement.",
+    isDemo: true,
   },
 ];

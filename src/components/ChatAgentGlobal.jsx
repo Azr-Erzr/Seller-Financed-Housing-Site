@@ -33,7 +33,7 @@ export default function ChatAgentGlobal() {
         setListings(allListings || []);
 
         // Build recommendation context from saved items
-        const savedKey = isBiz ? "hm_comm_saved_listings" : "hm_saved_listings";
+        const savedKey = isBiz ? "selfi_comm_saved_listings" : "selfi_saved_listings";
         const savedIds = readIds(savedKey);
 
         if (savedIds.length >= 2) {

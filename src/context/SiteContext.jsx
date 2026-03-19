@@ -1,10 +1,13 @@
 // src/context/SiteContext.jsx
 // Controls whether the user is in "Homes" (residential) or "Business" (commercial) mode.
 // Mode persists in localStorage so it survives page refresh.
+// Subdomain detection: if hostname starts with "business." → force Business mode, lock switcher.
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useMemo } from "react";
 
 const SiteContext = createContext(null);
+
+const STORAGE_KEY = "selfi_site_mode";
 
 export const MODES = {
   homes:    "homes",
@@ -50,20 +53,48 @@ export const SITE_CONFIG = {
   },
 };
 
+// Detect if hostname forces a specific mode
+function detectForcedMode() {
+  try {
+    const host = window.location.hostname.toLowerCase();
+    if (host.startsWith("business.")) return MODES.business;
+  } catch {}
+  return null;
+}
+
 export function SiteProvider({ children }) {
+  const forcedMode = useMemo(() => detectForcedMode(), []);
+  const modeLocked = forcedMode !== null;
+
   const [mode, setModeState] = useState(() => {
-    return localStorage.getItem("hm_site_mode") || MODES.homes;
+    // If subdomain forces a mode, use that and persist it
+    if (forcedMode) {
+      try { localStorage.setItem(STORAGE_KEY, forcedMode); } catch {}
+      return forcedMode;
+    }
+    // Otherwise read from storage (migrate old key if present)
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+        || localStorage.getItem("hm_site_mode"); // migrate old key
+      if (stored === MODES.business || stored === MODES.homes) {
+        // Ensure new key is set
+        localStorage.setItem(STORAGE_KEY, stored);
+        return stored;
+      }
+    } catch {}
+    return MODES.homes;
   });
 
   const setMode = (newMode) => {
-    localStorage.setItem("hm_site_mode", newMode);
+    if (modeLocked) return; // subdomain locks mode — ignore manual switches
+    try { localStorage.setItem(STORAGE_KEY, newMode); } catch {}
     setModeState(newMode);
   };
 
   const config = SITE_CONFIG[mode] || SITE_CONFIG.homes;
 
   return (
-    <SiteContext.Provider value={{ mode, setMode, config, MODES }}>
+    <SiteContext.Provider value={{ mode, setMode, config, MODES, modeLocked }}>
       {children}
     </SiteContext.Provider>
   );

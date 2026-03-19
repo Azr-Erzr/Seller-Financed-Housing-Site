@@ -7,8 +7,8 @@ import ListingCard from "../components/ListingCard";
 import ProfileCard from "../components/ProfileCard";
 import { ListingRecommendations, BuyerRecommendations } from "../components/AIRecommendations";
 
-const SAVED_LISTINGS_KEY = "hm_saved_listings";
-const SAVED_PROFILES_KEY = "hm_saved_profiles";
+const SAVED_LISTINGS_KEY = "selfi_saved_listings";
+const SAVED_PROFILES_KEY = "selfi_saved_profiles";
 
 const readIds  = (key) => { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } };
 const writeIds = (key, ids) => { try { localStorage.setItem(key, JSON.stringify(ids)); } catch {} };

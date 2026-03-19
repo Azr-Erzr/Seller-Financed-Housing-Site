@@ -176,16 +176,16 @@ export default function About() {
             <p className="font-semibold text-gray-900 mb-3">How a hybrid deal works on a $650,000 home</p>
             <div className="space-y-2 text-sm">
               {[
-                { role: "Seller pays", item: "Listing agent commission", traditional: "$16,250 (2.5%)", landmatch: "$0", highlight: true },
-                { role: "Seller pays", item: "Buyer's agent commission", traditional: "$16,250 (2.5%)", landmatch: "$0 — paid by buyer / negotiated separately", highlight: true },
-                { role: "Seller earns", item: "Interest on VTB mortgage", traditional: "$0", landmatch: "~$163K over 5 yrs at 7%", highlight: true },
-                { role: "Buyer gets", item: "Professional realtor representation", traditional: "Yes", landmatch: "Yes — their choice", highlight: false },
-              ].map(({ role, item, traditional, landmatch, highlight }) => (
+                { role: "Seller pays", item: "Listing agent commission", traditional: "$16,250 (2.5%)", selfi: "$0", highlight: true },
+                { role: "Seller pays", item: "Buyer's agent commission", traditional: "$16,250 (2.5%)", selfi: "$0 — paid by buyer / negotiated separately", highlight: true },
+                { role: "Seller earns", item: "Interest on VTB mortgage", traditional: "$0", selfi: "~$163K over 5 yrs at 7%", highlight: true },
+                { role: "Buyer gets", item: "Professional realtor representation", traditional: "Yes", selfi: "Yes — their choice", highlight: false },
+              ].map(({ role, item, traditional, selfi, highlight }) => (
                 <div key={item} className="grid grid-cols-4 gap-2 items-start py-1.5 border-b border-blue-100 last:border-0">
                   <span className="text-blue-500 text-xs font-medium">{role}</span>
                   <span className="text-gray-700 text-xs col-span-1">{item}</span>
                   <span className="text-gray-400 text-xs line-through">{traditional}</span>
-                  <span className={`text-xs font-semibold ${highlight ? "text-green-600" : "text-gray-700"}`}>{landmatch}</span>
+                  <span className={`text-xs font-semibold ${highlight ? "text-green-600" : "text-gray-700"}`}>{selfi}</span>
                 </div>
               ))}
             </div>

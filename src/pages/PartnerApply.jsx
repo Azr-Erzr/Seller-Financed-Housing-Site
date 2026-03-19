@@ -252,7 +252,7 @@ export default function PartnerApply() {
       toast.success("Application submitted! We'll review it within 2–3 business days.");
     } catch (err) {
       console.error(err);
-      toast.error("Submission failed. Please email us at partners@homematch.ca");
+      toast.error("Submission failed. Please email us at partners@sel-fi.ca");
     } finally {
       setSubmitting(false);
     }

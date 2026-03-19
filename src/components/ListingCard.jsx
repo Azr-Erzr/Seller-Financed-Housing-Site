@@ -78,6 +78,13 @@ export default function ListingCard({ listing, matchScore }) {
               {listing.daysOnMarket === 0 ? "Just listed" : listing.daysOnMarket === 1 ? "1 day on market" : `${listing.daysOnMarket} days on market`}
             </div>
           )}
+
+          {/* Demo badge — bottom right */}
+          {listing.isDemo && (
+            <div className="absolute bottom-3 right-3 bg-amber-500/90 text-white px-2.5 py-1 rounded-full text-[10px] font-semibold backdrop-blur-sm">
+              Sample Listing
+            </div>
+          )}
         </div>
 
         {/* Content */}

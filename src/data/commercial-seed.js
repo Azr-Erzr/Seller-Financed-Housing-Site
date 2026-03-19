@@ -80,6 +80,7 @@ export const COMMERCIAL_LISTINGS = [
     badges: ["Verified Seller", "Development Ready"],
     description: "50 acres of prime development land fronting a municipal road in the rapidly growing Clarington area. Official Plan designates this parcel for future residential development. Phase 1 environmental assessment complete and clean. Tile-drained Class 2 soil. Seller is a long-time landowner open to VTB financing for a qualified developer.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "cl2",
@@ -121,6 +122,7 @@ export const COMMERCIAL_LISTINGS = [
     badges: ["Verified Seller"],
     description: "Third-generation family farm being retired out of. 120 workable acres of Class 2 soil, productive tile-drained fields, and a full complement of farm buildings including a 4-bedroom farmhouse. Seller is motivated and willing to hold a substantial VTB for the right buyer. Capital gains reserve applicable over the payment term.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "cl3",
@@ -164,6 +166,7 @@ export const COMMERCIAL_LISTINGS = [
     badges: ["Low Down OK", "New"],
     description: "Turnkey commercial unit on high-traffic Dundas Street. 1,800 sqft with 12ft ceilings, currently vacant and ready for immediate occupancy. Phase 1 clean. Excellent visibility and signage potential. Seller is a retiring small business owner open to seller-finance or lease-option for a new operator.",
     docsLocked: false,
+    isDemo: true,
   },
   {
     id: "cl4",
@@ -206,6 +209,7 @@ export const COMMERCIAL_LISTINGS = [
     badges: ["Popular", "Verified Seller"],
     description: "220 feet of clean, private waterfront on a quiet bay. 8 acres of wooded privacy. Existing cottage and dock in place. Gentle slope to the water with southern exposure. Seller open to VTB financing. Perfect for a private retreat, family compound, or future development as permitted.",
     docsLocked: true,
+    isDemo: true,
   },
   {
     id: "cl5",
@@ -251,6 +255,7 @@ export const COMMERCIAL_LISTINGS = [
     badges: ["Verified Seller", "Phase 2 Clean"],
     description: "Well-maintained industrial property in an established business park. 6,000 sqft clear-span warehouse with 24-ft ceilings, 3 grade-level loading bays, and 1,200 sqft of office mezzanine space. Full sprinkler system. 12 outdoor parking spaces. Phase 2 environmental complete and clean. Seller has owned since new and is comfortable holding the paper.",
     docsLocked: true,
+    isDemo: true,
   },
 ];
 
@@ -284,6 +289,7 @@ export const COMMERCIAL_PROFILES = [
     timelineMonths: 12,
     badges: ["Verified", "Active Buyer"],
     bio: "Active land developer seeking shovel-ready or near-ready development parcels in the GTA and Durham Region. We have a strong track record and prefer seller-financing to preserve capital. Cash close possible for the right opportunity.",
+    isDemo: true,
   },
   {
     id: "cp2",
@@ -312,6 +318,7 @@ export const COMMERCIAL_PROFILES = [
     timelineMonths: 6,
     badges: ["Verified"],
     bio: "Family farming operation expanding acreage in the Kawartha and Durham regions. Looking for productive farmland with good soil. Seller financing preferred to preserve working capital for equipment and inputs.",
+    isDemo: true,
   },
   {
     id: "cp3",
@@ -340,5 +347,6 @@ export const COMMERCIAL_PROFILES = [
     timelineMonths: 3,
     badges: ["Active Buyer", "New"],
     bio: "Small business owner looking for owner-occupied commercial space in the Durham Region. Currently leasing and want to build equity. Open to VTB or lease-option structures.",
+    isDemo: true,
   },
 ];

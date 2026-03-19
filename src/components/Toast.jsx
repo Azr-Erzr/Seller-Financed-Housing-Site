@@ -43,7 +43,7 @@ export function useToast() {
 // Read mode directly from localStorage so Toast doesn't need SiteContext
 // (avoids circular provider dependency)
 function getStoredMode() {
-  try { return localStorage.getItem("hm_site_mode") || "homes"; } catch { return "homes"; }
+  try { return localStorage.getItem("selfi_site_mode") || "homes"; } catch { return "homes"; }
 }
 
 function ToastContainer({ toasts, onRemove }) {
