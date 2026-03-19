@@ -6,6 +6,15 @@ import { SlidersHorizontal, ChevronDown, X, Map } from "lucide-react";
 import ListingCard from "../components/ListingCard";
 import { getAllListings } from "../lib/storage";
 
+const SESSION_KEY = "selfi_browse_filters_homes";
+
+function loadFilters() {
+  try { const s = sessionStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; }
+}
+function saveFilters(state) {
+  try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(state)); } catch {}
+}
+
 const DEAL_TYPES = [
   { value: "Seller-Finance", color: "bg-blue-600" },
   { value: "Rent-to-Own",    color: "bg-purple-600" },
@@ -77,20 +86,27 @@ export default function Listings() {
   const [allListings, setAllListings] = useState([]);
   const [mobileOpen, setMobileOpen]   = useState(false);
 
-  const [location,   setLocation]   = useState(searchParams.get("location") || "");
-  const [minPrice,   setMinPrice]   = useState("");
-  const [maxPrice,   setMaxPrice]   = useState("");
-  const [dealTypes,  setDealTypes]  = useState([]);
-  const [propTypes,  setPropTypes]  = useState([]);
-  const [minBeds,    setMinBeds]    = useState(0);
-  const [minBaths,   setMinBaths]   = useState(0);
-  const [minSqft,    setMinSqft]    = useState("");
-  const [maxSqft,    setMaxSqft]    = useState("");
-  const [basement,   setBasement]   = useState("Any");
-  const [parking,    setParking]    = useState("Any");
+  const savedF = loadFilters();
+
+  const [location,   setLocation]   = useState(searchParams.get("location") || savedF?.location || "");
+  const [minPrice,   setMinPrice]   = useState(savedF?.minPrice || "");
+  const [maxPrice,   setMaxPrice]   = useState(savedF?.maxPrice || "");
+  const [dealTypes,  setDealTypes]  = useState(savedF?.dealTypes || []);
+  const [propTypes,  setPropTypes]  = useState(savedF?.propTypes || []);
+  const [minBeds,    setMinBeds]    = useState(savedF?.minBeds ?? 0);
+  const [minBaths,   setMinBaths]   = useState(savedF?.minBaths ?? 0);
+  const [minSqft,    setMinSqft]    = useState(savedF?.minSqft || "");
+  const [maxSqft,    setMaxSqft]    = useState(savedF?.maxSqft || "");
+  const [basement,   setBasement]   = useState(savedF?.basement || "Any");
+  const [parking,    setParking]    = useState(savedF?.parking || "Any");
 
   useEffect(() => { getAllListings().then(setAllListings); }, []);
   useEffect(() => { const loc = searchParams.get("location"); if (loc) setLocation(loc); }, [searchParams]);
+
+  // Persist filters to sessionStorage
+  useEffect(() => {
+    saveFilters({ location, minPrice, maxPrice, dealTypes, propTypes, minBeds, minBaths, minSqft, maxSqft, basement, parking });
+  }, [location, minPrice, maxPrice, dealTypes, propTypes, minBeds, minBaths, minSqft, maxSqft, basement, parking]);
 
   const toggle = (arr, setArr, val) => setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
 
@@ -117,6 +133,7 @@ export default function Listings() {
     setLocation(""); setMinPrice(""); setMaxPrice(""); setDealTypes([]); setPropTypes([]);
     setMinBeds(0); setMinBaths(0); setMinSqft(""); setMaxSqft(""); setBasement("Any"); setParking("Any");
     setSearchParams({});
+    try { sessionStorage.removeItem(SESSION_KEY); } catch {}
   };
 
   const handleLocationChange = (val) => {
