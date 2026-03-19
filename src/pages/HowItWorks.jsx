@@ -84,7 +84,7 @@ const SELLER_FAQS = [
   },
   {
     q: "Does the buyer need bank approval?",
-    a: `No — that's the point. In a pure seller-financed deal, you are the lender. You decide whether the buyer qualifies based on your own assessment of their income, down payment, and character. No stress test, no T4 requirement, no institutional approval process. If the buyer also has a bank mortgage for part of the purchase, the bank's qualification standards will apply to their portion. But if you're financing the full amount, it's your call.`,
+    a: `In a pure seller-financed deal, you are the lender. You decide whether the buyer's financial profile meets your comfort level — there is no institutional approval process required. However, if the buyer also has a bank mortgage for part of the purchase, the bank's qualification standards apply to their portion. A real estate lawyer should be involved in structuring any deal.`,
   },
   {
     q: "What if the buyer uses a realtor?",
@@ -106,8 +106,8 @@ const SELLER_FAQS = [
 
 const BUYER_FAQS = [
   {
-    q: "I was rejected by the bank. Can I really use this?",
-    a: `Yes — if you have a genuine income, a real down payment, and a stable situation that a bank's formula doesn't capture, a seller-financed deal may be right for you. Self-employed buyers, new Canadians, and people with unconventional income have successfully used VTB mortgages for decades in Ontario. The seller evaluates you as a person, not as a row in a spreadsheet.`,
+    q: "The bank turned me down. Is seller financing a real option?",
+    a: `It can be — if you have genuine income, a real down payment, and a stable situation that a bank's qualification formula doesn't capture well. Self-employed buyers, newcomers to Canada, and people with unconventional income histories have used VTB mortgages successfully in Ontario. However, seller financing is not automatic or guaranteed — the seller evaluates your situation individually and may have their own requirements. Only pursue a VTB if you're confident you can sustain the monthly payments long-term.`,
   },
   {
     q: "Am I really buying the home, or just renting?",
@@ -228,7 +228,8 @@ export default function HowItWorks() {
               No conflict, no problem.
             </p>
             <p className="text-xs text-gray-400">
-              Sel-Fi does not prohibit buyer-agent representation. We simply remove the listing agent from the equation.
+              Sel-Fi does not prohibit buyer-agent representation. The seller has chosen to list directly —
+              your role on the buyer's side remains valuable and welcome.
             </p>
           </div>
         </div>
@@ -282,6 +283,38 @@ export default function HowItWorks() {
               },
             ].map(({ title, body }) => (
               <div key={title} className="bg-white rounded-xl p-5 border border-amber-200">
+                <p className="font-semibold text-gray-900 text-sm mb-2">{title}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Risk awareness */}
+      <section className="py-16 bg-red-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"><ClipboardList className="w-6 h-6 text-red-500" /> What Both Sides Should Consider Carefully</h2>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              {
+                title: "Balloon payments and refinancing risk",
+                body: "Many VTB mortgages have a shorter amortization or a balloon payment due at the end of the term. Buyers must plan for how they will pay or refinance that lump sum. If market conditions or your financial situation change, refinancing may not be straightforward.",
+              },
+              {
+                title: "Higher interest rates than bank mortgages",
+                body: "VTB rates (typically 5–12%) compensate the seller for lending risk. Buyers should carefully compare the total cost of a VTB versus waiting to qualify for a bank mortgage at a lower rate. Use a calculator to understand the real numbers.",
+              },
+              {
+                title: "Seller risk is real",
+                body: "If the buyer defaults, Power of Sale is a legal remedy — but it takes time, costs money, and doesn't guarantee you'll recover everything owed. Sellers should assess each buyer carefully and consult a lawyer about protective structuring.",
+              },
+              {
+                title: "This is not a shortcut around affordability",
+                body: "Seller financing can solve structure problems (self-employment, newcomer status, credit gaps) — but it does not solve income problems. If a property's monthly payment doesn't fit your budget with room to spare, the deal structure won't save you.",
+              },
+            ].map(({ title, body }) => (
+              <div key={title} className="bg-white rounded-xl p-5 border border-red-200">
                 <p className="font-semibold text-gray-900 text-sm mb-2">{title}</p>
                 <p className="text-sm text-gray-600 leading-relaxed">{body}</p>
               </div>

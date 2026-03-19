@@ -66,7 +66,7 @@ export default function ContactModal({
       return;
     }
     if (!message.trim()) {
-      toast.error("Please write a message before sending.");
+      toast.error("Please write your inquiry before sending.");
       return;
     }
     if (!senderEmail.includes("@")) {
@@ -94,7 +94,7 @@ export default function ContactModal({
       }
 
       setSent(true);
-      toast.success("Message sent successfully!");
+      toast.success("Inquiry submitted successfully!");
     } catch (err) {
       console.error(err);
       toast.error("Failed to send. Please try emailing us directly.");
@@ -129,7 +129,7 @@ export default function ContactModal({
             <MessageSquare className="w-5 h-5 text-white" />
             <div>
               <p className="font-semibold text-white text-sm">
-                {recipientType === "buyer" ? "Invite to Deal" : "Contact Seller"}
+                {recipientType === "buyer" ? "Invite to Deal" : "Send Inquiry"}
               </p>
               <p className="text-xs text-white/70">{recipientName}</p>
             </div>
@@ -145,13 +145,18 @@ export default function ContactModal({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Send className="w-7 h-7 text-green-600" />
             </div>
-            <h3 className="font-bold text-gray-900 text-lg mb-2">Message Sent!</h3>
-            <p className="text-gray-500 text-sm leading-relaxed mb-6">
-              Your message has been delivered to <strong>{recipientName}</strong>.
-              They'll be in touch at your email address.
+            <h3 className="font-bold text-gray-900 text-lg mb-2">Inquiry Submitted</h3>
+            <p className="text-gray-500 text-sm leading-relaxed mb-4">
+              Your inquiry has been submitted to <strong>{recipientName}</strong>.
+              If they're interested, they'll reach out to you directly at the email you provided.
             </p>
-            <p className="text-xs text-gray-400 mb-6">
-              Replied to: <strong>{senderEmail}</strong>
+            <p className="text-xs text-gray-400 mb-2">
+              Reply email: <strong>{senderEmail}</strong>
+            </p>
+            <p className="text-xs text-gray-400 mb-6 leading-relaxed">
+              Note: this is an inquiry form, not real-time messaging. Sel-Fi does not guarantee
+              a response or response timeline. Both parties are encouraged to engage a lawyer
+              before discussing specific deal terms.
             </p>
             <button onClick={handleClose}
               className={`px-6 py-2.5 rounded-lg font-medium text-sm transition-colors ${primaryBtn}`}>

@@ -44,16 +44,17 @@ export default function Home() {
 
           {/* Value proposition */}
           <div className="inline-flex items-center gap-2 bg-orange-500 text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            No banks. No agents. Keep what's yours.
+            Direct seller-to-buyer deals. Agent-optional. Bank-optional.
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-5" style={{color:"#fff"}}>
-            Keep <span className="text-orange-400">$30,000+</span><br/>When You Sell Your Home
+            Sell Direct. Save <span className="text-orange-400">$30,000+</span><br/>in Commissions.
           </h1>
 
           <p className="text-xl max-w-2xl mx-auto mb-8" style={{color:"#bfdbfe"}}>
-            Sel-Fi connects sellers and buyers directly — no listing agent, no buyer's agent,
-            no bank approval required. Sellers earn interest. Buyers get access. Everyone saves.
+            Sel-Fi connects property sellers and buyers for direct deals — seller-financed,
+            rent-to-own, and private sale. Sellers keep their commission and earn interest.
+            Buyers get flexible paths to ownership. Both sides engage their own professionals.
           </p>
 
           {/* Search bar */}
@@ -97,10 +98,10 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
-              { stat: "$30K–$45K", label: "Avg. commission saved per sale" },
-              { stat: "5–12%",     label: "Interest earned by seller" },
-              { stat: "0 banks",   label: "Required for approval" },
-              { stat: "100%",      label: "Seller controls terms" },
+              { stat: "$30K–$45K", label: "Typical commission savings" },
+              { stat: "5–12%",     label: "Interest earned by sellers" },
+              { stat: "100%",      label: "Seller sets the terms" },
+              { stat: "Flexible",  label: "Bank-optional structures" },
             ].map(({ stat, label }) => (
               <div key={label}>
                 <p className="text-2xl font-extrabold text-white">{stat}</p>
@@ -116,18 +117,19 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">You Are the Bank — and That's Powerful</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Sell Direct and Earn More</h2>
               <p className="text-gray-600 leading-relaxed mb-6">
-                When you sell on Sel-Fi, you don't just sell your home — you become the lender.
-                You hold a registered mortgage, set the interest rate, and receive monthly payments
-                directly from the buyer. That's income a bank would normally take. Now you take it instead.
+                When you list on Sel-Fi, you sell directly to the buyer and hold a registered mortgage
+                on the property. You set the interest rate, choose your buyer, and receive monthly
+                payments — income that would normally go to a bank. You may also save on agent commissions
+                by managing the listing yourself.
               </p>
               <div className="space-y-4">
                 {[
-                  { Icon: Banknote, title: "Keep both sides of the commission", body: "Typically 5% + HST — that's over $36,000 saved on a $650K home." },
-                  { Icon: Landmark, title: "Earn interest like a bank", body: "At 7% on a $480K VTB, you collect ~$150K in interest over 5 years." },
-                  { Icon: CheckCircle, title: "You choose your buyer", body: "Review profiles, see income and DTI ratios, and decide who gets to buy your home." },
-                  { Icon: Scale, title: "You're legally protected", body: "Your mortgage is registered on title. If the buyer defaults, you have Power of Sale — the same right any bank has." },
+                  { Icon: Banknote, title: "Save on agent commissions", body: "Sellers who list directly can save the listing-side commission — typically 2.5% + HST. Buyers can still use their own agent if they choose." },
+                  { Icon: Landmark, title: "Earn interest on the mortgage", body: "At 7% on a $480K VTB, a seller could earn approximately $150K in interest over 5 years. Actual returns depend on deal terms." },
+                  { Icon: CheckCircle, title: "Choose your buyer", body: "Review buyer profiles, see financial details they've chosen to share, and decide who you're comfortable working with." },
+                  { Icon: Scale, title: "Legal protection on title", body: "Your VTB mortgage is registered on title — the same legal framework as any bank mortgage. Power of Sale remedies apply if a buyer defaults." },
                 ].map(({ Icon, title, body }) => (
                   <div key={title} className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
@@ -177,18 +179,18 @@ export default function Home() {
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">The Bank Said No. We Say Yes.</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">More Paths to Homeownership</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
-              Banks use rigid formulas. Sellers can use judgment. If you're self-employed, new to Canada,
-              or simply don't fit the bank's mold — there's a seller on Sel-Fi who can say yes.
+              Traditional bank financing works for most buyers — but not all. If your situation
+              doesn't fit a standard mortgage formula, seller financing may create another path.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
-              { Icon: Wrench, title: "Self-Employed", body: "Banks reject you because of T4 variability. Sellers can see your actual income and stability." },
-              { Icon: Globe, title: "New to Canada", body: "Banks want 2 years of Canadian credit history. Sellers can consider your full financial picture." },
-              { Icon: RefreshCw, title: "Career Change", body: "New job, new income — but banks want 2 years at the same employer. Sellers are more flexible." },
-              { Icon: BarChart3, title: "Just Below Threshold", body: "If you're close but not quite there on the stress test, a seller can make the call a bank won't." },
+              { Icon: Wrench, title: "Self-Employed", body: "Variable income can make bank qualification difficult. A seller can consider your full financial picture beyond a T4." },
+              { Icon: Globe, title: "New to Canada", body: "While newcomer mortgage programs exist, some buyers still face documentation or credit history gaps. Seller financing can offer additional flexibility." },
+              { Icon: RefreshCw, title: "Career Change", body: "A new role or industry switch can reset your qualification timeline at a bank. Sellers can evaluate your current situation directly." },
+              { Icon: BarChart3, title: "Near the Threshold", body: "If you're close to qualifying but fall short on the stress test, a seller-financed structure may bridge that gap." },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
@@ -200,7 +202,7 @@ export default function Home() {
             ))}
           </div>
           <div className="text-center">
-            <p className="text-sm text-gray-500 mb-4">Buyers can also use their own realtor — we support hybrid deals.</p>
+            <p className="text-sm text-gray-500 mb-4">Buyers can work with their own realtor, lawyer, or mortgage broker — Sel-Fi supports hybrid deals.</p>
             <button onClick={() => requireAuth("/create-profile")}
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
               Create a Buyer Profile <ArrowRight className="w-4 h-4" />
@@ -216,7 +218,7 @@ export default function Home() {
             {[
               { Icon: Scale, title: "Backed by Ontario Law", body: "VTB mortgages are registered on title under the same legal framework as any bank mortgage." },
               { Icon: Building, title: "Lawyer Required", body: "Every deal closes through a licensed Ontario real estate lawyer. No exceptions." },
-              { Icon: HeartHandshake, title: "No Referral Kickbacks", body: "Our partner directory is unbiased. We don't take commissions from professionals we recommend." },
+              { Icon: HeartHandshake, title: "Agent-Compatible", body: "Buyers can bring their own realtor. Sellers can engage listing support. Sel-Fi works alongside professionals, not against them." },
               { Icon: Lock, title: "Income Privacy", body: "Financial data is protected by default. Buyers choose what to share and when." },
             ].map(({ Icon, title, body }) => (
               <div key={title}>
@@ -242,7 +244,7 @@ export default function Home() {
             {[
               { num: 1, Icon: FileText, title: "List or Create a Profile", body: "Sellers post their home with financing terms. Buyers create a profile with budget, income, and deal preferences. Both take about 5 minutes." },
               { num: 2, Icon: Search, title: "Match and Connect", body: "Sel-Fi scores compatibility across 5 financial dimensions. Browse matches, sign NDAs to share documents, and connect directly." },
-              { num: 3, Icon: CheckCircle, title: "Negotiate and Close", body: "Agree on terms directly. A real estate lawyer registers the mortgage and transfers title. No bank approval, no commission." },
+              { num: 3, Icon: CheckCircle, title: "Negotiate and Close", body: "Agree on terms directly with the other party. A licensed real estate lawyer registers the mortgage and transfers title. Both sides are professionally represented." },
             ].map(({ num, Icon, title, body }) => (
               <div key={num} className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
                 <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
@@ -306,7 +308,7 @@ export default function Home() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900">Active Buyers</h2>
-                <p className="text-gray-500 mt-1">Pre-qualified buyers ready to make a deal</p>
+                <p className="text-gray-500 mt-1">Buyers with profiles on Sel-Fi looking for seller-financed deals</p>
               </div>
               <Link to="/profiles" className="text-blue-600 text-sm font-medium hover:underline flex items-center gap-1">
                 View all <ArrowRight className="w-4 h-4" />
@@ -355,8 +357,8 @@ export default function Home() {
             Ready to Make Your Move?
           </h2>
           <p className="mb-8" style={{color:"#bfdbfe"}}>
-            Whether you're selling and want to keep your commission, or buying and need a path the banks blocked —
-            Sel-Fi has a place for you.
+            Whether you're selling and want to keep your commission, or buying and exploring
+            flexible financing options — Sel-Fi is the place to start.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button onClick={() => requireAuth("/list-home")} className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors">
@@ -371,6 +373,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Disclaimer ── */}
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <p className="text-xs text-gray-400 leading-relaxed text-center">
+          Sel-Fi facilitates introductions between property sellers and buyers. Sel-Fi is not a real estate
+          brokerage, mortgage broker, lender, or legal advisor. All financial figures on this page are
+          estimates based on typical scenarios and will vary by deal structure. Consult a licensed Ontario
+          real estate lawyer and accountant before entering any agreement.{" "}
+          <a href="/terms" className="text-blue-500 hover:underline">Terms of Use</a>{" · "}
+          <a href="/privacy" className="text-blue-500 hover:underline">Privacy Policy</a>
+        </p>
+      </div>
     </div>
   );
 }

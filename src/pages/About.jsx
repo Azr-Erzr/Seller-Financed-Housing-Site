@@ -168,17 +168,17 @@ export default function About() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Realtors Are Welcome — on the Buy Side</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
-            Sel-Fi is not anti-realtor. Buyers on our platform can absolutely use a buyer's agent. In fact, we
-            actively support hybrid deals: the seller lists and manages their side directly (saving their listing commission),
+            Sel-Fi is agent-optional, not anti-agent. Buyers on our platform can absolutely use a buyer's agent. In fact, we
+            actively support hybrid deals: the seller lists and manages their side directly (potentially saving their listing commission),
             while the buyer engages a realtor for professional representation on their end.
           </p>
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-4">
             <p className="font-semibold text-gray-900 mb-3">How a hybrid deal works on a $650,000 home</p>
             <div className="space-y-2 text-sm">
               {[
-                { role: "Seller pays", item: "Listing agent commission", traditional: "$16,250 (2.5%)", selfi: "$0", highlight: true },
-                { role: "Seller pays", item: "Buyer's agent commission", traditional: "$16,250 (2.5%)", selfi: "$0 — paid by buyer / negotiated separately", highlight: true },
-                { role: "Seller earns", item: "Interest on VTB mortgage", traditional: "$0", selfi: "~$163K over 5 yrs at 7%", highlight: true },
+                { role: "Seller pays", item: "Listing agent commission", traditional: "$16,250 (2.5%)", selfi: "$0 (self-listed)", highlight: true },
+                { role: "Seller pays", item: "Buyer's agent commission", traditional: "$16,250 (2.5%)", selfi: "$0 — paid by buyer or negotiated", highlight: true },
+                { role: "Seller earns", item: "Interest on VTB mortgage", traditional: "$0", selfi: "~$163K over 5 yrs at 7%*", highlight: true },
                 { role: "Buyer gets", item: "Professional realtor representation", traditional: "Yes", selfi: "Yes — their choice", highlight: false },
               ].map(({ role, item, traditional, selfi, highlight }) => (
                 <div key={item} className="grid grid-cols-4 gap-2 items-start py-1.5 border-b border-blue-100 last:border-0">
@@ -193,8 +193,8 @@ export default function About() {
           <p className="text-gray-600 leading-relaxed">
             For realtors reading this: Sel-Fi is a source of deals, not a competitor. If your buyer finds a
             seller-financed home on Sel-Fi, you can still represent them, earn your buyer-side commission, and
-            provide value throughout the transaction. We simply remove the listing agent from the equation — because
-            the seller chose to manage that side themselves.
+            provide value throughout the transaction. The seller has chosen to manage their listing side directly —
+            your role on the buyer's side remains valuable and welcome.
           </p>
         </section>
 

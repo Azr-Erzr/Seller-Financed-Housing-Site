@@ -56,7 +56,7 @@ export default function BusinessHome() {
           </h1>
           <p className="text-xl max-w-2xl mx-auto mb-8" style={{color:"#a7f3d0"}}>
             Vacant land, farms, development parcels, commercial buildings, and industrial properties —
-            seller-financed, no banks, no agents.
+            with direct vendor financing, flexible terms, and professional support.
           </p>
           <div className="bg-white rounded-2xl shadow-2xl p-2 flex gap-2 max-w-2xl mx-auto mb-8">
             <div className="flex-1 flex items-center gap-2 px-4">
@@ -90,9 +90,9 @@ export default function BusinessHome() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
               { stat: "Established practice", label: "VTB is standard in commercial RE"    },
-              { stat: "0 banks required",     label: "for land, farm & development deals"  },
-              { stat: "30–90 days faster",    label: "close vs. institutional financing"   },
-              { stat: "Cap gains deferral",   label: "available via payment term structure" },
+              { stat: "Bank-optional",        label: "for land, farm & development deals"  },
+              { stat: "30–90 days faster",    label: "typical close vs. institutional financing" },
+              { stat: "Cap gains deferral",   label: "may be available via payment structure" },
             ].map(({ stat, label }) => (
               <div key={label}>
                 <p className="text-lg font-extrabold text-white">{stat}</p>
@@ -135,10 +135,10 @@ export default function BusinessHome() {
               </p>
               <div className="space-y-4">
                 {[
-                  { Icon: DollarSign, title: "Avoid the commission",          body: "On a $2M deal at 3% + HST that's $67,800 you keep. On a $5M deal it's $169,500." },
-                  { Icon: BarChart3, title: "Defer capital gains",           body: "Spread recognition over the payment term via the CRA capital gains reserve. Your CPA can model the structure." },
-                  { Icon: Landmark, title: "Earn secured investment income", body: "8% on a $1.5M VTB is $120,000/year in interest — secured against property you know well." },
-                  { Icon: Zap, title: "Close faster",                  body: "No bank underwriting, environmental sign-offs, or 90-day approval delays. Qualified buyer, motivated vendor, deal done." },
+                  { Icon: DollarSign, title: "Save on broker commissions",      body: "Vendors who list directly may save the listing-side commission — typically 2–3% + HST. Buyers can still engage their own broker." },
+                  { Icon: BarChart3, title: "Capital gains deferral may apply", body: "The CRA capital gains reserve may allow spreading recognition over the payment term. Consult your accountant for your specific situation." },
+                  { Icon: Landmark, title: "Earn secured investment income",    body: "A VTB mortgage earns interest secured against property you know well. Rates and returns depend on deal structure." },
+                  { Icon: Zap, title: "Potentially faster closing",            body: "Without bank underwriting timelines, motivated parties can often close significantly faster than institutional deals." },
                 ].map(({ Icon, title, body }) => (
                   <div key={title} className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
@@ -195,17 +195,17 @@ export default function BusinessHome() {
               For Commercial Buyers and Investors
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
-              Bank financing on land, development parcels, and agricultural properties is restrictive, slow,
-              and often unavailable entirely. Direct vendor financing moves deals faster and on terms
-              both sides actually want.
+              Traditional bank financing for land, development parcels, and agricultural properties
+              can be restrictive or slow. Vendor financing often offers more flexibility on terms,
+              timelines, and deal structures.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
-              { Icon: Wheat, title: "Farm & Agricultural Land", body: "Banks rarely finance raw agricultural land without production income. Vendors who know the land can finance it directly." },
-              { Icon: Hammer, title: "Development Parcels", body: "Pre-zoning or rezoning-dependent parcels are nearly impossible to bank-finance. Vendor financing bridges the gap." },
-              { Icon: Timer, title: "Time-Sensitive Deals", body: "Commercial bank approvals take 60–90 days. A motivated vendor can close in weeks with a qualified buyer." },
-              { Icon: HeartHandshake, title: "Flexible Structures", body: "Balloon terms, interest-only periods, and negotiated rates — structures a bank would never offer." },
+              { Icon: Wheat, title: "Farm & Agricultural Land", body: "Bank financing for raw agricultural land can be difficult without production history. Vendors familiar with the land may offer more workable terms." },
+              { Icon: Hammer, title: "Development Parcels", body: "Pre-zoning or rezoning-dependent parcels are often challenging to finance through institutions. VTB can bridge that gap." },
+              { Icon: Timer, title: "Time-Sensitive Deals", body: "Commercial bank approvals often take 60–90 days. Motivated parties using VTB can sometimes close significantly faster." },
+              { Icon: HeartHandshake, title: "Flexible Structures", body: "Balloon terms, interest-only periods, and negotiated rates — structures that can be tailored to both sides' needs." },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
                 <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
@@ -335,6 +335,18 @@ export default function BusinessHome() {
           </div>
         </div>
       </section>
+
+      {/* ── Disclaimer ── */}
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <p className="text-xs text-gray-400 leading-relaxed text-center">
+          Sel-Fi facilitates introductions between property vendors and buyers. Sel-Fi is not a real estate
+          brokerage, mortgage broker, lender, or legal advisor. All financial figures are estimates and will
+          vary by deal structure. Capital gains deferral depends on individual tax circumstances — consult
+          a licensed accountant. Consult a licensed Ontario real estate lawyer before entering any agreement.{" "}
+          <a href="/terms" className="text-emerald-500 hover:underline">Terms of Use</a>{" · "}
+          <a href="/privacy" className="text-emerald-500 hover:underline">Privacy Policy</a>
+        </p>
+      </div>
     </div>
   );
 }
