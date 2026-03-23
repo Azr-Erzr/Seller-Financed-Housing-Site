@@ -1,13 +1,13 @@
 // src/App.jsx
-// Batch 10 — Route-level code splitting with React.lazy.
-// Only Navbar, Footer, and context providers are eagerly loaded.
-// All page components are lazy-loaded on first navigation.
+// Mega-Batch A — Added FloatingProvider for mobile collision management.
+// All page components lazy-loaded. Only Navbar, Footer, contexts eagerly loaded.
 
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SiteProvider } from "./context/SiteContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./components/Toast";
+import { FloatingProvider } from "./components/FloatingActionManager";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ModeRedirect from "./components/ModeRedirect";
@@ -78,63 +78,65 @@ export default function App() {
       <AuthProvider>
         <SiteProvider>
           <ToastProvider>
-            <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <main className="flex-grow">
-                <Suspense fallback={<PageLoading />}>
-                  <Routes>
-                    {/* ── Homes ── */}
-                    <Route path="/" element={<ModeRedirect targetMode="homes"><Home/></ModeRedirect>}/>
-                    <Route path="/listings"         element={<Listings/>}/>
-                    <Route path="/profiles"         element={<Profiles/>}/>
-                    <Route path="/listings/:id"     element={<ListingDetail/>}/>
-                    <Route path="/profiles/:id"     element={<ProfileDetail/>}/>
-                    <Route path="/list-home"        element={<ListHome/>}/>
-                    <Route path="/create-profile"   element={<CreateProfile/>}/>
-                    <Route path="/about"            element={<About/>}/>
-                    <Route path="/how-it-works"     element={<HowItWorks/>}/>
-                    <Route path="/partners"         element={<Partners/>}/>
-                    <Route path="/partners/:id"     element={<PartnerDetail/>}/>
-                    <Route path="/partner-apply"    element={<PartnerApply/>}/>
-                    <Route path="/map"              element={<MapSearch/>}/>
-                    <Route path="/saved"            element={<Saved/>}/>
-                    <Route path="/account"          element={<Account/>}/>
-                    <Route path="/guide"            element={<Guide/>}/>
-                    <Route path="/guide/:id"        element={<GuideArticle/>}/>
+            <FloatingProvider>
+              <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <main className="flex-grow">
+                  <Suspense fallback={<PageLoading />}>
+                    <Routes>
+                      {/* ── Homes ── */}
+                      <Route path="/" element={<ModeRedirect targetMode="homes"><Home/></ModeRedirect>}/>
+                      <Route path="/listings"         element={<Listings/>}/>
+                      <Route path="/profiles"         element={<Profiles/>}/>
+                      <Route path="/listings/:id"     element={<ListingDetail/>}/>
+                      <Route path="/profiles/:id"     element={<ProfileDetail/>}/>
+                      <Route path="/list-home"        element={<ListHome/>}/>
+                      <Route path="/create-profile"   element={<CreateProfile/>}/>
+                      <Route path="/about"            element={<About/>}/>
+                      <Route path="/how-it-works"     element={<HowItWorks/>}/>
+                      <Route path="/partners"         element={<Partners/>}/>
+                      <Route path="/partners/:id"     element={<PartnerDetail/>}/>
+                      <Route path="/partner-apply"    element={<PartnerApply/>}/>
+                      <Route path="/map"              element={<MapSearch/>}/>
+                      <Route path="/saved"            element={<Saved/>}/>
+                      <Route path="/account"          element={<Account/>}/>
+                      <Route path="/guide"            element={<Guide/>}/>
+                      <Route path="/guide/:id"        element={<GuideArticle/>}/>
 
-                    {/* ── Legal ── */}
-                    <Route path="/terms"            element={<TermsOfUse/>}/>
-                    <Route path="/privacy"          element={<PrivacyPolicy/>}/>
-                    <Route path="/accessibility"    element={<Accessibility/>}/>
-                    <Route path="/pricing"          element={<Pricing/>}/>
+                      {/* ── Legal ── */}
+                      <Route path="/terms"            element={<TermsOfUse/>}/>
+                      <Route path="/privacy"          element={<PrivacyPolicy/>}/>
+                      <Route path="/accessibility"    element={<Accessibility/>}/>
+                      <Route path="/pricing"          element={<Pricing/>}/>
 
-                    {/* ── Tools ── */}
-                    <Route path="/tools/buyer-readiness"    element={<BuyerReadiness/>}/>
-                    <Route path="/tools/seller-assessment"  element={<SellerAssessment/>}/>
-                    <Route path="/tools/newcomer-guide"     element={<NewcomerGuide/>}/>
-                    <Route path="/tools/foreign-buyer-guide" element={<ForeignBuyerGuide/>}/>
-                    <Route path="/tools/investor-onboarding" element={<InvestorOnboarding/>}/>
+                      {/* ── Tools ── */}
+                      <Route path="/tools/buyer-readiness"    element={<BuyerReadiness/>}/>
+                      <Route path="/tools/seller-assessment"  element={<SellerAssessment/>}/>
+                      <Route path="/tools/newcomer-guide"     element={<NewcomerGuide/>}/>
+                      <Route path="/tools/foreign-buyer-guide" element={<ForeignBuyerGuide/>}/>
+                      <Route path="/tools/investor-onboarding" element={<InvestorOnboarding/>}/>
 
-                    {/* ── Business ── */}
-                    <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome/></ModeRedirect>}/>
-                    <Route path="/business/listings"         element={<BusinessListings/>}/>
-                    <Route path="/business/profiles"         element={<BusinessProfiles/>}/>
-                    <Route path="/business/listings/:id"     element={<BusinessListingDetail/>}/>
-                    <Route path="/business/profiles/:id"     element={<BusinessProfileDetail/>}/>
-                    <Route path="/business/list-property"    element={<BusinessListHome/>}/>
-                    <Route path="/business/create-profile"   element={<BusinessCreateProfile/>}/>
-                    <Route path="/business/map"              element={<BusinessMapSearch/>}/>
-                    <Route path="/business/saved"            element={<BusinessSaved/>}/>
+                      {/* ── Business ── */}
+                      <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome/></ModeRedirect>}/>
+                      <Route path="/business/listings"         element={<BusinessListings/>}/>
+                      <Route path="/business/profiles"         element={<BusinessProfiles/>}/>
+                      <Route path="/business/listings/:id"     element={<BusinessListingDetail/>}/>
+                      <Route path="/business/profiles/:id"     element={<BusinessProfileDetail/>}/>
+                      <Route path="/business/list-property"    element={<BusinessListHome/>}/>
+                      <Route path="/business/create-profile"   element={<BusinessCreateProfile/>}/>
+                      <Route path="/business/map"              element={<BusinessMapSearch/>}/>
+                      <Route path="/business/saved"            element={<BusinessSaved/>}/>
 
-                    {/* ── Catch-all ── */}
-                    <Route path="*" element={<NotFound/>}/>
-                  </Routes>
-                </Suspense>
-              </main>
-              <Footer/>
-              <AuthModal/>
-              <ChatAgentGlobal/>
-            </div>
+                      {/* ── Catch-all ── */}
+                      <Route path="*" element={<NotFound/>}/>
+                    </Routes>
+                  </Suspense>
+                </main>
+                <Footer/>
+                <AuthModal/>
+                <ChatAgentGlobal/>
+              </div>
+            </FloatingProvider>
           </ToastProvider>
         </SiteProvider>
       </AuthProvider>

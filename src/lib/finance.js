@@ -1,3 +1,7 @@
+// src/lib/finance.js
+// Batch 13e — Standardized number formatting added.
+// All existing functions unchanged; new formatters at bottom.
+
 // Monthly mortgage payment (principal + interest only)
 export function monthlyPayment({ price, down, rateAnnual, termYears }) {
   const P = Math.max(0, Number(price || 0) - Number(down || 0));
@@ -44,6 +48,61 @@ export function rentToOwn({ price, optionFee = 0, monthlyRent = 0, creditPct = 0
     termMonths,
     credits,
     totalCredit,
-    netPriceAtClose: Math.max(0, Number(price || 0) - optionFee - totalCredit)
+    netPriceAtClose: Math.max(0, Number(price || 0) - optionFee - totalCredit),
   };
+}
+
+// ── Batch 13e — Standardized Formatters ─────────────────────────────
+// No false precision: $489,000 not $489,000.00
+// Consistent everywhere: map pins, cards, calculators, detail pages.
+
+/**
+ * Format currency — whole dollars, no decimals.
+ * $489,000 — not $489,000.00
+ */
+export function fmtCurrency(n) {
+  if (n == null || isNaN(n)) return "—";
+  return `$${Math.round(Number(n)).toLocaleString("en-CA")}`;
+}
+
+/**
+ * Format currency with cents — only for monthly payments where cents matter.
+ * $2,847.33
+ */
+export function fmtCurrencyExact(n) {
+  if (n == null || isNaN(n)) return "—";
+  return `$${Number(n).toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+/**
+ * Compact price for map pins and tight spaces.
+ * ≥1M → $1.3M (with .0 cleanup)
+ * <1M → $480K
+ */
+export function fmtPinPrice(price) {
+  if (!price) return "—";
+  const n = Number(price);
+  if (n >= 1000000) return `$${(n / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
+  return `$${Math.round(n / 1000)}K`;
+}
+
+/**
+ * Format percentage — no false precision.
+ * 7% not 7.00%, but 7.5% keeps the decimal.
+ */
+export function fmtPct(n, maxDecimals = 1) {
+  if (n == null || isNaN(n)) return "—";
+  const val = Number(n);
+  // If it's a whole number, show no decimals
+  if (val === Math.round(val)) return `${val}%`;
+  return `${val.toFixed(maxDecimals)}%`;
+}
+
+/**
+ * Compact number for stats (e.g. sqft).
+ * 1,800 sqft
+ */
+export function fmtNum(n) {
+  if (n == null || isNaN(n)) return "—";
+  return Number(n).toLocaleString("en-CA");
 }
