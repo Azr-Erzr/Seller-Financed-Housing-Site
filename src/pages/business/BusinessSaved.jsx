@@ -167,3 +167,11 @@ function EmptyBusiness({ icon, title, body, linkTo, linkLabel }) {
     </div>
   );
 }
+export default function ProfileDetail() {
+  return (
+    <AuthGate title="Sign in to view buyer details" icon={Users}
+      message="Buyer profiles contain financial information. Create a free account to view details and make contact.">
+      <ProfileDetailContent />
+    </AuthGate>
+  );
+}
