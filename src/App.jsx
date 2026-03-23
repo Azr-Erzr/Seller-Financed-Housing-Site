@@ -40,6 +40,13 @@ const TermsOfUse        = lazy(() => import("./pages/TermsOfUse"));
 const PrivacyPolicy     = lazy(() => import("./pages/PrivacyPolicy"));
 const Accessibility     = lazy(() => import("./pages/Accessibility"));
 
+// ── Lazy-loaded pages — Tools (Batch 11) ────────────────────────────
+const BuyerReadiness    = lazy(() => import("./pages/tools/BuyerReadiness"));
+const SellerAssessment  = lazy(() => import("./pages/tools/SellerAssessment"));
+const NewcomerGuide     = lazy(() => import("./pages/tools/NewcomerGuide"));
+const ForeignBuyerGuide = lazy(() => import("./pages/tools/ForeignBuyerGuide"));
+const InvestorOnboarding= lazy(() => import("./pages/tools/InvestorOnboarding"));
+
 // ── Lazy-loaded pages — Business ────────────────────────────────────
 const BusinessHome            = lazy(() => import("./pages/business/BusinessHome"));
 const BusinessListings        = lazy(() => import("./pages/business/BusinessListings"));
@@ -98,6 +105,13 @@ export default function App() {
                     <Route path="/terms"            element={<TermsOfUse/>}/>
                     <Route path="/privacy"          element={<PrivacyPolicy/>}/>
                     <Route path="/accessibility"    element={<Accessibility/>}/>
+
+                    {/* ── Tools ── */}
+                    <Route path="/tools/buyer-readiness"    element={<BuyerReadiness/>}/>
+                    <Route path="/tools/seller-assessment"  element={<SellerAssessment/>}/>
+                    <Route path="/tools/newcomer-guide"     element={<NewcomerGuide/>}/>
+                    <Route path="/tools/foreign-buyer-guide" element={<ForeignBuyerGuide/>}/>
+                    <Route path="/tools/investor-onboarding" element={<InvestorOnboarding/>}/>
 
                     {/* ── Business ── */}
                     <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome/></ModeRedirect>}/>
