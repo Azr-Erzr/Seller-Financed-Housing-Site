@@ -1,7 +1,8 @@
 // src/lib/pricing.js
-// Batch 12 — Monetization plan definitions and pricing constants.
-// All pricing is flat-fee (not commission-based) to stay on the
-// "simple referral" side of Ontario's MBLAA.
+// Mega-Batch D — Updated pricing per market research.
+// All pricing is flat-fee (not commission-based) to stay on
+// the "simple referral" side of Ontario's MBLAA.
+// Stripe price IDs are placeholders — set after Stripe Products setup.
 
 export const LISTING_PLANS = {
   free: {
@@ -42,7 +43,7 @@ export const LISTING_PLANS = {
     badge: "Featured",
     sortBoost: 100,
     mapHighlight: true,
-    stripePriceId: null, // Set after Stripe setup: "price_xxxx"
+    stripePriceId: null, // → "price_featured_listing" after Stripe setup
   },
   premium: {
     id: "premium",
@@ -54,16 +55,21 @@ export const LISTING_PLANS = {
       { label: "Everything in Featured", included: true },
       { label: "\"Premium\" badge with gold accent", included: true },
       { label: "Top of all search results", included: true },
-      { label: "Featured on homepage carousel (when built)", included: true },
+      { label: "Featured on homepage carousel", included: true },
       { label: "Shared on Sel-Fi social media channels", included: true },
       { label: "Priority in AI recommendations", included: true },
     ],
     badge: "Premium",
     sortBoost: 200,
     mapHighlight: true,
-    stripePriceId: null, // Set after Stripe setup: "price_yyyy"
+    stripePriceId: null, // → "price_premium_listing" after Stripe setup
   },
 };
+
+// Future pricing tiers (post-supply traction, Year 2+)
+// Residential base listing: $149 (benchmarked vs ForSaleByOwner.ca $149 FSBO tier)
+// Business base listing: $249 (higher deal sizes justify higher fee)
+// Keep free tier as permanent on-ramp for supply acquisition.
 
 export const PARTNER_PLANS = {
   free: {
@@ -74,11 +80,12 @@ export const PARTNER_PLANS = {
     description: "Be listed in the Sel-Fi partner directory.",
     features: [
       { label: "Directory listing with contact info", included: true },
-      { label: "Category tagging (lawyer, inspector, etc.)", included: true },
+      { label: "Category tagging", included: true },
       { label: "Receive referral inquiries", included: true },
       { label: "Priority placement", included: false },
       { label: "\"Recommended\" badge", included: false },
-      { label: "Extended profile with bio and credentials", included: false },
+      { label: "Extended profile with credentials", included: false },
+      { label: "Shown in listing sidebars", included: false },
     ],
     badge: null,
     sortBoost: 0,
@@ -87,20 +94,22 @@ export const PARTNER_PLANS = {
   premium: {
     id: "premium",
     name: "Premium Partner",
-    price: 29,
+    price: 99, // Adjusted from $29 per market research
     pricePer: "/ month",
-    description: "Priority placement and enhanced profile in the directory.",
+    description: "Priority placement, enhanced profile, and sidebar recommendations.",
     features: [
       { label: "Everything in Basic", included: true },
       { label: "\"Recommended\" badge on profile", included: true },
       { label: "Priority placement in directory", included: true },
       { label: "Extended profile: bio, credentials, testimonials", included: true },
       { label: "Shown in relevant listing sidebars", included: true },
+      { label: "Service area map with Mapbox", included: true },
       { label: "Monthly analytics on profile views", included: true },
+      { label: "Photo and availability indicator", included: true },
     ],
     badge: "Recommended",
     sortBoost: 100,
-    stripePriceId: null,
+    stripePriceId: null, // → "price_premium_partner" after Stripe setup
   },
 };
 
@@ -132,49 +141,54 @@ export const VERIFICATION_PRICING = {
       { label: "Income verification", included: true },
       { label: "Expedited review (1–2 business days)", included: true },
     ],
-    stripePriceId: null,
+    stripePriceId: null, // → "price_expedited_verification" after Stripe setup
   },
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
-/**
- * Sort listings with featured/premium boosted to top.
- * Preserves relative order within the same tier.
- */
 export function sortWithFeatured(listings) {
   return [...listings].sort((a, b) => {
     const boostA = getPlanBoost(a.featuredPlan);
     const boostB = getPlanBoost(b.featuredPlan);
-    return boostB - boostA; // Higher boost first
+    return boostB - boostA;
   });
 }
 
-/**
- * Check if a listing's featured status is still active.
- */
 export function isFeaturedActive(listing) {
   if (!listing.featuredUntil) return false;
   return new Date(listing.featuredUntil) > new Date();
 }
 
-/**
- * Get sort boost for a plan ID.
- */
 export function getPlanBoost(planId) {
   return LISTING_PLANS[planId]?.sortBoost || 0;
 }
 
-/**
- * Get badge label for a plan ID (or null for free).
- */
 export function getPlanBadge(planId) {
   return LISTING_PLANS[planId]?.badge || null;
 }
 
-/**
- * Filter only currently-featured listings (for homepage section).
- */
 export function getFeaturedListings(listings) {
   return listings.filter((l) => isFeaturedActive(l) && l.featuredPlan !== "free");
+}
+
+/**
+ * Get Stripe checkout URL. This is called from the frontend to redirect
+ * to Stripe Checkout. The actual session creation happens in a Supabase
+ * Edge Function (create-checkout-session).
+ */
+export async function createCheckoutSession({ planType, planId, userId, userEmail, listingId, returnUrl }) {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ planType, planId, userId, userEmail, listingId, returnUrl }),
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else throw new Error(data.error || "Failed to create checkout session");
+  } catch (err) {
+    console.error("Stripe checkout error:", err);
+    throw err;
+  }
 }
