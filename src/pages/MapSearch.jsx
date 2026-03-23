@@ -258,6 +258,7 @@ export default function MapSearch() {
   const [view, setView] = useState(saved?.view || (isMobile ? "map" : "split"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapReady, setMapReady] = useState(false);
+  const [mapError, setMapError] = useState(null);
   const [topBarH, setTopBarH] = useState(40);
 
   // Mobile card tray state
@@ -351,8 +352,17 @@ export default function MapSearch() {
   // ── Init Mapbox ──
   useEffect(() => {
     if (view === "list" || mapRef.current || !mapDivRef.current) return;
+
+    // Check for token — mapbox-gl v3 requires it even for non-Mapbox styles
+    if (!MAPBOX_TOKEN) {
+      setMapError("Map requires configuration. Set VITE_MAPBOX_TOKEN in environment variables.");
+      return;
+    }
+
     const initCenter = saved?.center ? [saved.center.lng, saved.center.lat] : [-78.93, 43.89];
     const initZoom = saved?.zoom ?? 10.5;
+
+    try {
     const map = new mapboxgl.Map({
       container: mapDivRef.current,
       style: getMapStyle(),
@@ -458,6 +468,10 @@ export default function MapSearch() {
       mapRef.current = null;
       setMapReady(false);
     };
+    } catch (err) {
+      console.error("Map init failed:", err);
+      setMapError("Map failed to load. Check your Mapbox configuration.");
+    }
   }, [view]);
 
   useEffect(() => {
@@ -838,6 +852,19 @@ export default function MapSearch() {
             position: "absolute", top: 0, right: 0, bottom: 0,
             left: view === "split" && !isMobile ? `${SPLIT_PANEL_W}px` : "0",
           }}>
+            {/* Map error/loading fallback */}
+            {mapError && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-gray-50">
+                <div className="text-center px-6 max-w-sm">
+                  <MapIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                  <p className="text-sm font-medium text-gray-600 mb-1">Map unavailable</p>
+                  <p className="text-xs text-gray-400 leading-relaxed">{mapError}</p>
+                  <button onClick={() => setView("list")} className="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                    Switch to List View
+                  </button>
+                </div>
+              </div>
+            )}
             {drawMode && (
               <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 10, pointerEvents: "none" }}
                 className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">

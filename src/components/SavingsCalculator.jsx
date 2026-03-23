@@ -48,18 +48,17 @@ function HomeSellerCalc({ accent, accentBg, ring }) {
 
       <div className="grid sm:grid-cols-2 gap-5">
         {[
-          { label: "Sale Price", value: fmt(price), min: 200000, max: 2000000, step: 25000, set: setPrice },
-          { label: `Down Payment — ${downPct}%`, value: "", min: 10, max: 50, step: 5, set: setDownPct, current: downPct },
-          { label: `VTB Rate — ${vtbRate}%`, value: "", min: 5, max: 12, step: 0.25, set: setVtbRate, current: vtbRate },
-          { label: `VTB Term — ${vtbYears} yrs`, value: "", min: 1, max: 10, step: 1, set: setVtbYears, current: vtbYears },
-        ].map(({ label, value, min, max, step, set, current }) => (
-          <div key={label}>
+          { id: "price", label: "Sale Price", disp: fmt(price), min: 200000, max: 2000000, step: 25000, set: setPrice, current: price },
+          { id: "down", label: "Down Payment", disp: `${downPct}%`, min: 10, max: 50, step: 5, set: setDownPct, current: downPct },
+          { id: "rate", label: "VTB Rate", disp: `${vtbRate}%`, min: 5, max: 12, step: 0.25, set: setVtbRate, current: vtbRate },
+          { id: "term", label: "VTB Term", disp: `${vtbYears} yrs`, min: 1, max: 10, step: 1, set: setVtbYears, current: vtbYears },
+        ].map(({ id, label, disp, min, max, step, set, current }) => (
+          <div key={id}>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {label} {value && <span className={`font-bold ${accent}`}>{value}</span>}
-              {current !== undefined && <span className={`font-bold ${accent}`}> {current}{label.includes("Rate") || label.includes("Payment") ? "%" : " yrs"}</span>}
+              {label} <span className={`font-bold ${accent}`}>{disp}</span>
             </label>
             <input type="range" min={min} max={max} step={step}
-              value={current !== undefined ? current : price}
+              value={current}
               onChange={(e) => set(Number(e.target.value))}
               className={`w-full ${ring}`} />
           </div>

@@ -196,6 +196,7 @@ export default function BusinessMapSearch() {
   const [view, setView] = useState(saved?.view || (isMobile ? "map" : "split"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mapReady, setMapReady] = useState(false);
+  const [mapError, setMapError] = useState(null);
   const [topBarH, setTopBarH] = useState(40);
   const [trayExpanded, setTrayExpanded] = useState(false);
 
@@ -268,8 +269,15 @@ export default function BusinessMapSearch() {
   // ── Init Mapbox ──
   useEffect(() => {
     if (view === "list" || mapRef.current || !mapDivRef.current) return;
+
+    if (!MAPBOX_TOKEN) {
+      setMapError("Map requires configuration. Set VITE_MAPBOX_TOKEN in environment variables.");
+      return;
+    }
+
     const initCenter = saved?.center ? [saved.center.lng, saved.center.lat] : [-78.93, 43.89];
     const initZoom = saved?.zoom ?? 9;
+    try {
     const map = new mapboxgl.Map({ container: mapDivRef.current, style: getMapStyle(), center: initCenter, zoom: initZoom, attributionControl: true });
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
@@ -305,6 +313,10 @@ export default function BusinessMapSearch() {
 
     mapRef.current = map;
     return () => { clearTimeout(boundsTimer.current); clearTimeout(idleTimer.current); map.remove(); mapRef.current = null; setMapReady(false); };
+    } catch (err) {
+      console.error("Map init failed:", err);
+      setMapError("Map failed to load. Check your Mapbox configuration.");
+    }
   }, [view]);
 
   useEffect(() => { if (mapRef.current) setTimeout(() => { mapRef.current?.resize(); handleMapMove(); }, 50); }, [view, mapReady, handleMapMove]);
@@ -419,6 +431,16 @@ export default function BusinessMapSearch() {
         {/* Map */}
         {(view === "map" || view === "split") && (
           <div ref={mapDivRef} style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: view === "split" && !isMobile ? `${SPLIT_PANEL_W}px` : "0" }}>
+            {mapError && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-gray-50">
+                <div className="text-center px-6 max-w-sm">
+                  <MapIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                  <p className="text-sm font-medium text-gray-600 mb-1">Map unavailable</p>
+                  <p className="text-xs text-gray-400 leading-relaxed">{mapError}</p>
+                  <button onClick={() => setView("list")} className="mt-4 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">Switch to List View</button>
+                </div>
+              </div>
+            )}
             {drawMode && (<div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", zIndex: 10, pointerEvents: "none" }} className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">Click to add points — double-click to close</div>)}
             {selected && !isMobile && (
               <div style={{ position: "absolute", top: 16, right: 16, zIndex: 10, width: "320px" }} className="bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-fade-in">
