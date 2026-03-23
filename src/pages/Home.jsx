@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Banknote, Landmark, CheckCircle, Scale, Wrench, Globe, RefreshCw, BarChart3, Building, HeartHandshake, Lock, FileText, PenLine, Home as HomeIcon, KeyRound, Hammer } from "lucide-react";
-
+import DealStructureExplorer from "../components/DealStructureExplorer";
+import { HOME_SCENARIOS } from "../data/homeDealScenarios";
 const ARTICLE_ICON_MAP = {
   home: HomeIcon, banknote: Banknote, landmark: Landmark, key: KeyRound,
   pen: PenLine, scale: Scale, hammer: Hammer, chart: BarChart3, search: Search,
@@ -114,69 +115,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── For Sellers: key benefits ── */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Sell Direct and Earn More</h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                When you list on Sel-Fi, you sell directly to the buyer and hold a registered mortgage
-                on the property. You set the interest rate, choose your buyer, and receive monthly
-                payments — income that would normally go to a bank. You may also save on agent commissions
-                by managing the listing yourself.
-              </p>
-              <div className="space-y-4">
-                {[
-                  { Icon: Banknote, title: "Save on agent commissions", body: "Sellers who list directly can save the listing-side commission — typically 2.5% + HST. Buyers can still use their own agent if they choose." },
-                  { Icon: Landmark, title: "Earn interest on the mortgage", body: "At 7% on a $480K VTB, a seller could earn approximately $150K in interest over 5 years. Actual returns depend on deal terms." },
-                  { Icon: CheckCircle, title: "Choose your buyer", body: "Review buyer profiles, see financial details they've chosen to share, and decide who you're comfortable working with." },
-                  { Icon: Scale, title: "Legal protection on title", body: "Your VTB mortgage is registered on title — the same legal framework as any bank mortgage. Power of Sale remedies apply if a buyer defaults." },
-                ].map(({ Icon, title, body }) => (
-                  <div key={title} className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm">{title}</p>
-                      <p className="text-gray-500 text-sm mt-0.5">{body}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => requireAuth("/list-home")}
-                className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">
-                List Your Home <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <p className="font-bold text-gray-900 text-lg mb-1">Seller on a $650,000 Home</p>
-              <p className="text-sm text-gray-500 mb-5">Sel-Fi vs. traditional agent sale</p>
-              <div className="space-y-3">
-                {[
-                  { label: "Listing agent commission (2.5%)", trad: "-$16,250", lm: "$0", win: true },
-                  { label: "Buyer's agent commission (2.5%)", trad: "-$16,250", lm: "$0", win: true },
-                  { label: "HST on commissions", trad: "-$4,225", lm: "$0", win: true },
-                  { label: "Interest income (7%, 5 yrs, 20% down)", trad: "$0", lm: "+$163K", win: true },
-                ].map(({ label, trad, lm, win }) => (
-                  <div key={label} className="grid grid-cols-3 gap-2 text-sm items-center">
-                    <span className="text-gray-600 col-span-1 text-xs">{label}</span>
-                    <span className="text-red-500 font-semibold text-center">{trad}</span>
-                    <span className={`font-bold text-center ${win ? "text-green-600" : "text-gray-700"}`}>{lm}</span>
-                  </div>
-                ))}
-                <div className="border-t border-gray-100 pt-3 grid grid-cols-3 gap-2 items-center">
-                  <span className="text-gray-900 font-bold text-xs">Total difference</span>
-                  <span className="text-center text-xs text-gray-400">Traditional</span>
-                  <span className="text-center font-extrabold text-xl text-green-600">+$199K</span>
-                </div>
-              </div>
-              <p className="text-xs text-gray-400 mt-3">*Estimates. Actual numbers vary by deal terms.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+{/* ── Deal Structure Explorer ── */}
+<DealStructureExplorer scenarios={HOME_SCENARIOS} isBusiness={false} />
+      
       {/* ── For Buyers ── */}
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-6">
