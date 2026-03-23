@@ -1,13 +1,15 @@
 // src/pages/business/BusinessProfiles.jsx
+// Auth-gated: requires sign-in to view buyer profiles.
 import React, { useState, useEffect } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, Users } from "lucide-react";
 import CommProfileCard from "../../components/business/CommProfileCard";
+import AuthGate from "../../components/AuthGate";
 import { getAllCommProfiles } from "../../lib/commercial-storage";
 import { PROPERTY_CATEGORIES, ZONING_TYPES, INTENDED_USES } from "../../data/commercial-seed";
 
 const RISK_LEVELS = ["Low", "Moderate", "High"];
 
-export default function BusinessProfiles() {
+function BusinessProfilesContent() {
   const [allProfiles, setAllProfiles]   = useState([]);
   const [minBudget, setMinBudget]       = useState("");
   const [maxBudget, setMaxBudget]       = useState("");
@@ -106,5 +108,17 @@ export default function BusinessProfiles() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BusinessProfiles() {
+  return (
+    <AuthGate
+      title="Sign in to browse buyer profiles"
+      message="Buyer profiles contain financial details and deal preferences. Create a free Sel-Fi account to view them and connect with interested buyers."
+      icon={Users}
+    >
+      <BusinessProfilesContent />
+    </AuthGate>
   );
 }

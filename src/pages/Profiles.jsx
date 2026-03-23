@@ -1,14 +1,19 @@
 // src/pages/Profiles.jsx
+// Auth-gated: requires sign-in to view buyer profiles.
+// Listings remain public; profiles require registration (Zillow pattern for agent access).
+
 import React, { useState, useEffect } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import ProfileCard from "../components/ProfileCard";
+import AuthGate from "../components/AuthGate";
 import { getAllProfiles } from "../lib/storage";
+import { Users } from "lucide-react";
 
 const DEAL_PREFS  = ["Seller-Finance", "Rent-to-Own", "Any"];
 const RISK_LEVELS = ["Low", "Moderate", "High"];
 const BADGES      = ["Verified", "Investor", "New", "Popular"];
 
-export default function Profiles() {
+function ProfilesContent() {
   const [allProfiles, setAllProfiles] = useState([]);
   const [minBudget, setMinBudget]           = useState("");
   const [maxBudget, setMaxBudget]           = useState("");
@@ -121,5 +126,17 @@ export default function Profiles() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Profiles() {
+  return (
+    <AuthGate
+      title="Sign in to browse buyer profiles"
+      message="Buyer profiles contain financial information and contact preferences. Create a free Sel-Fi account to view them and connect with buyers."
+      icon={Users}
+    >
+      <ProfilesContent />
+    </AuthGate>
   );
 }
