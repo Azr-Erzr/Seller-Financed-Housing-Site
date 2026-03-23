@@ -39,6 +39,7 @@ const NotFound          = lazy(() => import("./pages/NotFound"));
 const TermsOfUse        = lazy(() => import("./pages/TermsOfUse"));
 const PrivacyPolicy     = lazy(() => import("./pages/PrivacyPolicy"));
 const Accessibility     = lazy(() => import("./pages/Accessibility"));
+const Pricing           = lazy(() => import("./pages/Pricing"));
 
 // ── Lazy-loaded pages — Tools (Batch 11) ────────────────────────────
 const BuyerReadiness    = lazy(() => import("./pages/tools/BuyerReadiness"));
@@ -105,6 +106,7 @@ export default function App() {
                     <Route path="/terms"            element={<TermsOfUse/>}/>
                     <Route path="/privacy"          element={<PrivacyPolicy/>}/>
                     <Route path="/accessibility"    element={<Accessibility/>}/>
+                    <Route path="/pricing"          element={<Pricing/>}/>
 
                     {/* ── Tools ── */}
                     <Route path="/tools/buyer-readiness"    element={<BuyerReadiness/>}/>
