@@ -1,6 +1,6 @@
 // src/App.jsx
-// Mega-Batch B — Added CityPage and TopicCluster routes for SEO.
-// Builds on Mega-Batch A (FloatingProvider already present).
+// Mega-Batch C — Added /business/category/:slug route.
+// Builds on Mega-Batch A (FloatingProvider) + Mega-Batch B (CityPage, TopicCluster).
 
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -41,7 +41,7 @@ const PrivacyPolicy     = lazy(() => import("./pages/PrivacyPolicy"));
 const Accessibility     = lazy(() => import("./pages/Accessibility"));
 const Pricing           = lazy(() => import("./pages/Pricing"));
 
-// ── Lazy-loaded pages — Tools (Batch 11) ────────────────────────────
+// ── Lazy-loaded pages — Tools ───────────────────────────────────────
 const BuyerReadiness    = lazy(() => import("./pages/tools/BuyerReadiness"));
 const SellerAssessment  = lazy(() => import("./pages/tools/SellerAssessment"));
 const NewcomerGuide     = lazy(() => import("./pages/tools/NewcomerGuide"));
@@ -63,7 +63,9 @@ const BusinessCreateProfile   = lazy(() => import("./pages/business/BusinessCrea
 const BusinessMapSearch       = lazy(() => import("./pages/business/BusinessMapSearch"));
 const BusinessSaved           = lazy(() => import("./pages/business/BusinessSaved"));
 
-// ── Loading fallback ────────────────────────────────────────────────
+// ── Lazy-loaded pages — Business Category (Mega-Batch C) ────────────
+const CategoryPage            = lazy(() => import("./pages/business/CategoryPage"));
+
 function PageLoading() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
@@ -120,7 +122,7 @@ export default function App() {
                       <Route path="/tools/foreign-buyer-guide" element={<ForeignBuyerGuide/>}/>
                       <Route path="/tools/investor-onboarding" element={<InvestorOnboarding/>}/>
 
-                      {/* ── SEO Pages (Mega-Batch B) ── */}
+                      {/* ── SEO Pages ── */}
                       <Route path="/city/:slug"       element={<CityPage/>}/>
                       <Route path="/topics/:slug"     element={<TopicCluster/>}/>
 
@@ -134,6 +136,7 @@ export default function App() {
                       <Route path="/business/create-profile"   element={<BusinessCreateProfile/>}/>
                       <Route path="/business/map"              element={<BusinessMapSearch/>}/>
                       <Route path="/business/saved"            element={<BusinessSaved/>}/>
+                      <Route path="/business/category/:slug"   element={<CategoryPage/>}/>
 
                       {/* ── Catch-all ── */}
                       <Route path="*" element={<NotFound/>}/>
