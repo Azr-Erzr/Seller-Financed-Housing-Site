@@ -1,0 +1,171 @@
+/* src/accessibility.css
+ * Mega-Batch E (Batch 22b, 22c) — Accessibility and polish styles.
+ * Import this AFTER index.css in main.jsx:
+ *   import "./accessibility.css";
+ */
+
+/* ─────────────────────────────────────────────
+   Focus states — visible ring on keyboard navigation
+   Only shows on keyboard focus, not mouse clicks
+   ───────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Dark backgrounds need white focus ring */
+.bg-blue-600 *:focus-visible,
+.bg-emerald-600 *:focus-visible,
+.bg-blue-700 *:focus-visible,
+.bg-emerald-700 *:focus-visible,
+[class*="from-blue-"] *:focus-visible,
+[class*="from-emerald-"] *:focus-visible {
+  outline-color: white;
+}
+
+/* Remove default outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─────────────────────────────────────────────
+   Screen reader only — visually hidden but accessible
+   ───────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus,
+.sr-only:active,
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ─────────────────────────────────────────────
+   Reduced motion — respect user preference
+   ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse {
+    animation: none !important;
+    opacity: 0.7;
+  }
+
+  .animate-spin {
+    animation: none !important;
+  }
+
+  .animate-slide-up,
+  .animate-fade-in {
+    animation: none !important;
+  }
+
+  .map-card-tray {
+    transition: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   High contrast mode — improve readability
+   ───────────────────────────────────────────── */
+@media (prefers-contrast: high) {
+  /* Increase border visibility */
+  .border-gray-100 { border-color: #9ca3af; }
+  .border-gray-200 { border-color: #6b7280; }
+
+  /* Ensure text has sufficient contrast */
+  .text-gray-400 { color: #6b7280; }
+  .text-gray-300 { color: #9ca3af; }
+
+  /* Make pills more visible */
+  [class*="rounded-full"][class*="bg-"] {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Touch target sizing — minimum 44px on mobile
+   ───────────────────────────────────────────── */
+@media (pointer: coarse) {
+  /* Ensure interactive elements are large enough for touch */
+  button:not(.min-h-auto),
+  a:not(.min-h-auto),
+  [role="button"]:not(.min-h-auto) {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Increase spacing between tappable items in lists */
+  .space-y-1 > * + * { margin-top: 0.5rem; }
+  .space-y-1\.5 > * + * { margin-top: 0.625rem; }
+
+  /* Larger checkboxes and radio buttons */
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 20px;
+    min-height: 20px;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Safe areas — iOS notch, home indicator, Android
+   ───────────────────────────────────────────── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  /* Floating elements respect safe areas */
+  .fixed[class*="bottom-"] {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Full-height elements account for both notch and home indicator */
+  .min-h-screen {
+    min-height: calc(100vh - env(safe-area-inset-top, 0px));
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Print styles — basic cleanup for printing
+   ───────────────────────────────────────────── */
+@media print {
+  /* Hide interactive elements */
+  nav, footer, .fixed, button, [role="dialog"] {
+    display: none !important;
+  }
+
+  /* Remove backgrounds for ink saving */
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  /* Show URLs for links */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+}
