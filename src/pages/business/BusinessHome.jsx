@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Wheat, Hammer, Building2, Factory, Droplets, TreePine, Hotel, Star, DollarSign, BarChart3, Landmark, Zap, Sprout, Timer, HeartHandshake } from "lucide-react";
-
+import DealStructureExplorer from "../../components/DealStructureExplorer";
+import { BUSINESS_SCENARIOS } from "../../data/businessDealScenarios";
 const ARTICLE_ICON_MAP = {
   hammer: Hammer, chart: BarChart3, search: Search,
 };
@@ -122,72 +123,8 @@ export default function BusinessHome() {
         </div>
       </section>
 
-      {/* ── Vendor advantage ── */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Why Vendors Choose Seller Financing
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                Commercial VTB isn't new — it's how land, farms, and development parcels have always
-                transacted when institutional financing doesn't fit. Sel-Fi simply gives vendors and
-                buyers a structured marketplace to find each other directly.
-              </p>
-              <div className="space-y-4">
-                {[
-                  { Icon: DollarSign, title: "Save on broker commissions",      body: "Vendors who list directly may save the listing-side commission — typically 2–3% + HST. Buyers can still engage their own broker." },
-                  { Icon: BarChart3, title: "Capital gains deferral may apply", body: "The CRA capital gains reserve may allow spreading recognition over the payment term. Consult your accountant for your specific situation." },
-                  { Icon: Landmark, title: "Earn secured investment income",    body: "A VTB mortgage earns interest secured against property you know well. Rates and returns depend on deal structure." },
-                  { Icon: Zap, title: "Potentially faster closing",            body: "Without bank underwriting timelines, motivated parties can often close significantly faster than institutional deals." },
-                ].map(({ Icon, title, body }) => (
-                  <div key={title} className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm">{title}</p>
-                      <p className="text-gray-500 text-sm mt-0.5">{body}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => requireAuth("/business/list-property")}
-                className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors">
-                List a Property <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Quick deal comparison */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <p className="font-bold text-gray-900 text-lg mb-1">Vendor on a $2,000,000 Property</p>
-              <p className="text-sm text-gray-500 mb-5">Sel-Fi VTB vs. traditional brokered sale</p>
-              <div className="space-y-3 text-sm">
-                {[
-                  { l: "Vendor commission (3% + HST)",    t: "-$67,800", m: "$0",          win: true  },
-                  { l: "Bank approval delays",             t: "60–90 days", m: "0 days",   win: true  },
-                  { l: "Interest earned (8%, 3yr term)",   t: "$0",      m: "+$276,000",   win: true  },
-                  { l: "Capital gains recognition",        t: "Year 1",  m: "Spread 3 yrs",win: true  },
-                  { l: "Legal fees",                       t: "~$3,000", m: "~$3,000",     win: false },
-                ].map(({ l, t, m, win }) => (
-                  <div key={l} className="grid grid-cols-3 gap-2 items-center text-xs">
-                    <span className="text-gray-500 col-span-1">{l}</span>
-                    <span className="text-center text-gray-400 line-through">{t}</span>
-                    <span className={`text-center font-bold ${win ? "text-emerald-600" : "text-gray-600"}`}>{m}</span>
-                  </div>
-                ))}
-                <div className="border-t border-gray-100 pt-3 grid grid-cols-3 gap-2 items-center">
-                  <span className="font-bold text-gray-900 text-xs">Net advantage</span>
-                  <span className="text-center text-xs text-gray-400">Traditional</span>
-                  <span className="text-center font-extrabold text-lg text-emerald-700">+$343K</span>
-                </div>
-              </div>
-              <p className="text-xs text-gray-400 mt-3">*Estimates. 20yr amort, 3yr term, 25% down. Tax advice not included.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+   {/* ── Deal Structure Explorer ── */}
+<DealStructureExplorer scenarios={BUSINESS_SCENARIOS} isBusiness={true} />
 
       {/* ── For Buyers ── */}
       <section className="py-16">
