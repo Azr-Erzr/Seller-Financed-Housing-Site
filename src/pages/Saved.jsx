@@ -1,4 +1,5 @@
 // src/pages/Saved.jsx
+// Auth-gated: requires sign-in to view saved items.
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Bookmark, Home, Users, Trash2, ArrowRight } from "lucide-react";
@@ -6,6 +7,7 @@ import { getAllListings, getAllProfiles } from "../lib/storage";
 import ListingCard from "../components/ListingCard";
 import ProfileCard from "../components/ProfileCard";
 import { ListingRecommendations, BuyerRecommendations } from "../components/AIRecommendations";
+import AuthGate from "../components/AuthGate";
 
 const SAVED_LISTINGS_KEY = "selfi_saved_listings";
 const SAVED_PROFILES_KEY = "selfi_saved_profiles";
@@ -13,7 +15,7 @@ const SAVED_PROFILES_KEY = "selfi_saved_profiles";
 const readIds  = (key) => { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } };
 const writeIds = (key, ids) => { try { localStorage.setItem(key, JSON.stringify(ids)); } catch {} };
 
-export default function Saved() {
+function SavedContent() {
   const [tab,             setTab]             = useState("listings");
   const [savedListingIds, setSavedListingIds] = useState([]);
   const [savedProfileIds, setSavedProfileIds] = useState([]);
@@ -87,20 +89,8 @@ export default function Saved() {
           <div className="text-center py-16 text-gray-400">Loading your saved items...</div>
         ) : tab === "listings" ? (
           <>
-            {/* AI: Recommend more listings based on saved listings */}
-            <ListingRecommendations
-              savedListings={savedListings}
-              allListings={allListings}
-              isBusiness={false}
-            />
-
-            {/* AI: Recommend buyers who match saved listings (seller flow) */}
-            <BuyerRecommendations
-              savedListings={savedListings}
-              allProfiles={allProfiles}
-              isBusiness={false}
-            />
-
+            <ListingRecommendations savedListings={savedListings} allListings={allListings} isBusiness={false} />
+            <BuyerRecommendations savedListings={savedListings} allProfiles={allProfiles} isBusiness={false} />
             {savedListings.length === 0 ? (
               <Empty icon={<Home className="w-10 h-10 text-gray-300" />} title="No saved listings yet"
                 body="When you bookmark a listing, it'll appear here." linkTo="/listings" linkLabel="Browse Listings" color="blue" />
@@ -148,18 +138,17 @@ function Empty({ icon, title, body, linkTo, linkLabel, color }) {
       <div className="flex justify-center mb-4">{icon}</div>
       <p className="font-semibold text-gray-600 text-lg mb-2">{title}</p>
       <p className="text-sm mb-6 max-w-xs mx-auto">{body}</p>
-      <Link to={linkTo}
-        className={`inline-flex items-center gap-2 px-5 py-2.5 text-white font-medium rounded-lg transition-colors text-sm ${btnCls}`}>
+      <Link to={linkTo} className={`inline-flex items-center gap-2 px-5 py-2.5 text-white font-medium rounded-lg transition-colors text-sm ${btnCls}`}>
         {linkLabel} <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   );
 }
-export default function ProfileDetail() {
+
+export default function Saved() {
   return (
-    <AuthGate title="Sign in to view buyer details" icon={Users}
-      message="Buyer profiles contain financial information. Create a free account to view details and make contact.">
-      <ProfileDetailContent />
+    <AuthGate title="Sign in to see your saved items" message="Save listings and buyer profiles to review later. Create a free account to get started.">
+      <SavedContent />
     </AuthGate>
   );
 }

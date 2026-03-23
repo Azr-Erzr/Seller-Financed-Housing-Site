@@ -1,10 +1,12 @@
 // src/pages/ProfileDetail.jsx
+// Auth-gated: requires sign-in to view buyer profile details.
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProfileById, getAllListings, toggleSavedProfile, isProfileSaved } from "../lib/storage";
 import { useToast } from "../components/Toast";
 import ContactModal from "../components/ContactModal";
-import { MapPin, DollarSign, TrendingUp, Bookmark, BookmarkCheck, Send, ArrowLeft, Shield } from "lucide-react";
+import AuthGate from "../components/AuthGate";
+import { MapPin, DollarSign, TrendingUp, Bookmark, BookmarkCheck, Send, ArrowLeft, Shield, Users } from "lucide-react";
 import { VerificationDetailPanel, VerificationLevelBadge } from "../components/VerificationBadges";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
@@ -48,7 +50,7 @@ const getRisk = (risk) => {
   return "bg-red-100 text-red-700";
 };
 
-export default function ProfileDetail() {
+function ProfileDetailContent() {
   const { id } = useParams();
   const { toast } = useToast();
 
@@ -93,7 +95,6 @@ export default function ProfileDetail() {
           <ArrowLeft className="w-4 h-4" /> Back to Buyers
         </Link>
 
-        {/* Privacy notice for aliased profiles */}
         {isAliased && (
           <div className="bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 flex items-center gap-3">
             <Shield className="w-5 h-5 text-gray-500 shrink-0" />
@@ -103,7 +104,6 @@ export default function ProfileDetail() {
           </div>
         )}
 
-        {/* Hero */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
             <div className={`w-24 h-24 rounded-2xl text-white text-3xl font-extrabold flex items-center justify-center shrink-0 ${
@@ -147,10 +147,8 @@ export default function ProfileDetail() {
           )}
         </div>
 
-        {/* Verification Status */}
         <VerificationDetailPanel status={profile.verificationStatus} isBusiness={false} />
 
-        {/* Financial Profile */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <h2 className="font-semibold text-lg text-gray-900 mb-4">Financial Profile</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 mb-5">
@@ -165,59 +163,37 @@ export default function ProfileDetail() {
               <Stat label="Monthly Debt"   value={money(profile.monthlyDebt)} />
             )}
           </div>
-
-          {/* DTI bar */}
           {profile.monthlyIncome > 0 && (
-            <DTIBar
-              income={profile.monthlyIncome}
-              debt={profile.monthlyDebt || 0}
-              payment={profile.paymentBudget || 0}
-            />
+            <DTIBar income={profile.monthlyIncome} debt={profile.monthlyDebt || 0} payment={profile.paymentBudget || 0} />
           )}
         </div>
 
-        {/* CTAs */}
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => setContactOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
-          >
+          <button onClick={() => setContactOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors">
             <Send className="w-4 h-4" /> Invite to Deal
           </button>
-          <button
-            onClick={handleSave}
+          <button onClick={handleSave}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-colors ${
-              saved
-                ? "bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
+              saved ? "bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}>
             {saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
             {saved ? "Saved" : "Save Profile"}
           </button>
-          <Link to="/profiles" className="px-5 py-2.5 text-gray-500 hover:text-gray-700 font-medium transition-colors">
-            ← Back
-          </Link>
+          <Link to="/profiles" className="px-5 py-2.5 text-gray-500 hover:text-gray-700 font-medium transition-colors">← Back</Link>
         </div>
 
-        <ContactModal
-          open={contactOpen}
-          onClose={() => setContactOpen(false)}
-          recipientName={displayName}
-          recipientType="buyer"
-          refType="profile"
-          refId={profile.id}
-          refTitle={`Buyer Profile — ${displayName}`}
-          isAliased={isAliased}
-        />
+        <ContactModal open={contactOpen} onClose={() => setContactOpen(false)}
+          recipientName={displayName} recipientType="buyer" refType="profile"
+          refId={profile.id} refTitle={`Buyer Profile — ${displayName}`} isAliased={isAliased} />
       </div>
     </div>
   );
 }
+
 export default function ProfileDetail() {
   return (
-    <AuthGate title="Sign in to view buyer details" icon={Users}
-      message="Buyer profiles contain financial information. Create a free account to view details and make contact.">
+    <AuthGate title="Sign in to view buyer details" message="Buyer profiles contain financial details and deal preferences. Create a free account to view and connect." icon={Users}>
       <ProfileDetailContent />
     </AuthGate>
   );

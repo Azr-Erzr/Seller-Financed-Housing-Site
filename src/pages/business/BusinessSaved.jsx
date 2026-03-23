@@ -1,4 +1,5 @@
 // src/pages/business/BusinessSaved.jsx
+// Auth-gated: requires sign-in to view saved items.
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Bookmark, Building2, Users, Trash2, ArrowRight } from "lucide-react";
@@ -6,6 +7,7 @@ import { getAllCommListings, getAllCommProfiles } from "../../lib/commercial-sto
 import CommListingCard from "../../components/business/CommListingCard";
 import CommProfileCard from "../../components/business/CommProfileCard";
 import { ListingRecommendations, BuyerRecommendations } from "../../components/AIRecommendations";
+import AuthGate from "../../components/AuthGate";
 
 const SAVED_LISTINGS_KEY = "selfi_comm_saved_listings";
 const SAVED_PROFILES_KEY = "selfi_comm_saved_profiles";
@@ -13,7 +15,7 @@ const SAVED_PROFILES_KEY = "selfi_comm_saved_profiles";
 const readIds  = (key) => { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } };
 const writeIds = (key, ids) => { try { localStorage.setItem(key, JSON.stringify(ids)); } catch {} };
 
-export default function BusinessSaved() {
+function BusinessSavedContent() {
   const [tab,             setTab]             = useState("listings");
   const [savedListingIds, setSavedListingIds] = useState([]);
   const [savedProfileIds, setSavedProfileIds] = useState([]);
@@ -28,7 +30,6 @@ export default function BusinessSaved() {
     const pIds = readIds(SAVED_PROFILES_KEY);
     setSavedListingIds(lIds);
     setSavedProfileIds(pIds);
-
     Promise.all([getAllCommListings(), getAllCommProfiles()]).then(([allL, allP]) => {
       setAllListings(allL);
       setAllProfiles(allP);
@@ -57,8 +58,7 @@ export default function BusinessSaved() {
       className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
         tab === id ? "bg-emerald-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
       }`}>
-      {icon}
-      {label}
+      {icon}{label}
       {count > 0 && (
         <span className={`text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center ${
           tab === id ? "bg-white/20 text-white" : "bg-gray-200 text-gray-600"
@@ -70,7 +70,6 @@ export default function BusinessSaved() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
-
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center shrink-0">
             <Bookmark className="w-5 h-5 text-emerald-600" />
@@ -90,28 +89,11 @@ export default function BusinessSaved() {
           <div className="text-center py-16 text-gray-400">Loading your saved items...</div>
         ) : tab === "listings" ? (
           <>
-            {/* AI: Recommend more properties based on saved properties */}
-            <ListingRecommendations
-              savedListings={savedListings}
-              allListings={allListings}
-              isBusiness={true}
-            />
-
-            {/* AI: Recommend buyers who match saved properties (vendor flow) */}
-            <BuyerRecommendations
-              savedListings={savedListings}
-              allProfiles={allProfiles}
-              isBusiness={true}
-            />
-
+            <ListingRecommendations savedListings={savedListings} allListings={allListings} isBusiness={true} />
+            <BuyerRecommendations savedListings={savedListings} allProfiles={allProfiles} isBusiness={true} />
             {savedListings.length === 0 ? (
-              <EmptyBusiness
-                icon={<Building2 className="w-10 h-10 text-gray-300" />}
-                title="No saved properties yet"
-                body="When you bookmark a commercial property, it'll appear here."
-                linkTo="/business/listings"
-                linkLabel="Browse Properties"
-              />
+              <EmptyBusiness icon={<Building2 className="w-10 h-10 text-gray-300" />} title="No saved properties yet"
+                body="When you bookmark a commercial property, it'll appear here." linkTo="/business/listings" linkLabel="Browse Properties" />
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {savedListings.map((listing) => (
@@ -128,13 +110,8 @@ export default function BusinessSaved() {
           </>
         ) : (
           savedProfiles.length === 0 ? (
-            <EmptyBusiness
-              icon={<Users className="w-10 h-10 text-gray-300" />}
-              title="No saved buyer profiles"
-              body="When you bookmark a buyer, it'll appear here."
-              linkTo="/business/profiles"
-              linkLabel="Browse Buyers"
-            />
+            <EmptyBusiness icon={<Users className="w-10 h-10 text-gray-300" />} title="No saved buyer profiles"
+              body="When you bookmark a buyer, it'll appear here." linkTo="/business/profiles" linkLabel="Browse Buyers" />
           ) : (
             <div className="grid sm:grid-cols-2 gap-5">
               {savedProfiles.map((profile) => (
@@ -167,11 +144,11 @@ function EmptyBusiness({ icon, title, body, linkTo, linkLabel }) {
     </div>
   );
 }
-export default function ProfileDetail() {
+
+export default function BusinessSaved() {
   return (
-    <AuthGate title="Sign in to view buyer details" icon={Users}
-      message="Buyer profiles contain financial information. Create a free account to view details and make contact.">
-      <ProfileDetailContent />
+    <AuthGate title="Sign in to see your saved items" message="Save properties and buyer profiles to review later. Create a free account to get started.">
+      <BusinessSavedContent />
     </AuthGate>
   );
 }

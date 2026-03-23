@@ -1,4 +1,5 @@
 // src/components/Navbar.jsx
+// Updated: "Saved" button only visible when signed in (desktop + mobile).
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Home, Building2, User, BookOpen, LogOut, ChevronDown } from "lucide-react";
@@ -25,7 +26,7 @@ export default function Navbar() {
   const isBusiness = mode === MODES.business;
 
   const handleModeSwitch = (newMode) => {
-    if (modeLocked) return; // subdomain locks mode
+    if (modeLocked) return;
     setMode(newMode);
     navigate(newMode === MODES.business ? "/business" : "/");
   };
@@ -66,7 +67,6 @@ export default function Navbar() {
     ? "bg-amber-500 hover:bg-amber-600 text-white hover:text-white"
     : "bg-orange-500 hover:bg-orange-600 text-white hover:text-white";
 
-  // Shortened email for display
   const displayEmail = user?.email
     ? user.email.length > 20
       ? user.email.slice(0, 18) + "…"
@@ -86,7 +86,6 @@ export default function Navbar() {
             <span className="text-xl font-extrabold text-gray-900 tracking-tight hidden sm:block">Sel-Fi</span>
           </Link>
 
-          {/* Mode switcher — hidden when mode is locked by subdomain */}
           {!modeLocked && (
             <div className="flex items-center bg-gray-100 rounded-lg p-0.5 ml-1">
               <button onClick={() => handleModeSwitch(MODES.homes)}
@@ -112,10 +111,14 @@ export default function Navbar() {
 
         {/* Desktop right-side CTAs */}
         <div className="hidden md:flex items-center gap-2.5 ml-auto">
-          <Link to={isHomes?"/saved":"/business/saved"}
-            className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${outlineCta}`}>
-            Saved
-          </Link>
+
+          {/* Saved — only visible when signed in */}
+          {user && (
+            <Link to={isHomes?"/saved":"/business/saved"}
+              className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${outlineCta}`}>
+              Saved
+            </Link>
+          )}
 
           {/* Auth — signed in shows dropdown, signed out shows Sign In */}
           {user ? (
@@ -193,7 +196,6 @@ export default function Navbar() {
             </NavLink>
           ))}
           <div className="pt-4 flex flex-col gap-2">
-            {/* Mode switcher — mobile (hidden when locked) */}
             {!modeLocked && (
               <div className="flex items-center bg-gray-100 rounded-lg p-0.5 mb-2">
                 <button onClick={() => handleModeSwitch(MODES.homes)}
@@ -216,6 +218,10 @@ export default function Navbar() {
                 <Link to="/account" className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
                   My Account
                 </Link>
+                {/* My Saved — only when signed in */}
+                <Link to={isHomes?"/saved":"/business/saved"} className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+                  My Saved
+                </Link>
                 <button onClick={handleSignOut} className="w-full text-center px-4 py-2.5 border border-red-200 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
                   Sign Out
                 </button>
@@ -225,9 +231,6 @@ export default function Navbar() {
                 Sign In / Create Account
               </Link>
             )}
-            <Link to={isHomes?"/saved":"/business/saved"} className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
-              My Saved
-            </Link>
             <button onClick={() => requireAuth(isHomes?"/list-home":"/business/list-property")}
               className={`w-full text-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${primaryCta}`}>
               {isHomes ? "List a Home" : "List a Property"}
