@@ -1,6 +1,6 @@
 // src/App.jsx
-// Mega-Batch A — Added FloatingProvider for mobile collision management.
-// All page components lazy-loaded. Only Navbar, Footer, contexts eagerly loaded.
+// Mega-Batch B — Added CityPage and TopicCluster routes for SEO.
+// Builds on Mega-Batch A (FloatingProvider already present).
 
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -47,6 +47,10 @@ const SellerAssessment  = lazy(() => import("./pages/tools/SellerAssessment"));
 const NewcomerGuide     = lazy(() => import("./pages/tools/NewcomerGuide"));
 const ForeignBuyerGuide = lazy(() => import("./pages/tools/ForeignBuyerGuide"));
 const InvestorOnboarding= lazy(() => import("./pages/tools/InvestorOnboarding"));
+
+// ── Lazy-loaded pages — SEO (Mega-Batch B) ──────────────────────────
+const CityPage          = lazy(() => import("./pages/CityPage"));
+const TopicCluster      = lazy(() => import("./pages/TopicCluster"));
 
 // ── Lazy-loaded pages — Business ────────────────────────────────────
 const BusinessHome            = lazy(() => import("./pages/business/BusinessHome"));
@@ -115,6 +119,10 @@ export default function App() {
                       <Route path="/tools/newcomer-guide"     element={<NewcomerGuide/>}/>
                       <Route path="/tools/foreign-buyer-guide" element={<ForeignBuyerGuide/>}/>
                       <Route path="/tools/investor-onboarding" element={<InvestorOnboarding/>}/>
+
+                      {/* ── SEO Pages (Mega-Batch B) ── */}
+                      <Route path="/city/:slug"       element={<CityPage/>}/>
+                      <Route path="/topics/:slug"     element={<TopicCluster/>}/>
 
                       {/* ── Business ── */}
                       <Route path="/business" element={<ModeRedirect targetMode="business"><BusinessHome/></ModeRedirect>}/>

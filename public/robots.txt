@@ -1,10 +1,22 @@
-# Sel-Fi robots.txt
+# Sel-Fi robots.txt — Mega-Batch B
 User-agent: *
 Allow: /
+
+# Auth-gated pages (no public value)
 Disallow: /account
 Disallow: /list-home
 Disallow: /create-profile
 Disallow: /business/list-property
 Disallow: /business/create-profile
+Disallow: /saved
+Disallow: /business/saved
+
+# Filter state URLs (prevent crawl explosion — Batch 16d)
+Disallow: /listings?*
+Disallow: /business/listings?*
+Disallow: /profiles?*
+Disallow: /business/profiles?*
+Disallow: /map?*
+Disallow: /business/map?*
 
 Sitemap: https://sel-fi.ca/sitemap.xml
