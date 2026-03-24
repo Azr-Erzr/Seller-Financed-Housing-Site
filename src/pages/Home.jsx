@@ -117,7 +117,7 @@ export default function Home() {
       </section>
 
 {/* ── Deal Structure Explorer ── */}
-<DealStructureExplorer scenarios={HOME_SCENARIOS} isBusiness={false} />
+<DealStructureExplorer scenarios={HOME_SCENARIOS} isBusiness={false} sessionKey="homes-home" />
       
       {/* ── For Buyers ── */}
       <section className="py-16">
