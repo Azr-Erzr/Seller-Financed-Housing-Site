@@ -98,6 +98,8 @@ function listingToRow(l, userId) {
     docs_locked:          l.docsLocked ?? true,
     is_active:            true,
     owner_email:          l.ownerEmail || null,
+    brokerage_name:       l.brokerageName || null,
+    agent_entered:        l.agentEntered ?? false,
     ...(userId ? { user_id: userId } : {}),
   };
 }
@@ -133,6 +135,9 @@ function rowToListing(r) {
     docsLocked:           r.docs_locked,
     createdAt:            r.created_at,
     isDemo:               false,
+    brokerageName:        r.brokerage_name || null,
+    agentEntered:         r.agent_entered ?? false,
+    listingAgentId:       r.listing_agent_id || null,
   };
 }
 

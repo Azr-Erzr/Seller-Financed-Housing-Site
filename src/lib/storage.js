@@ -100,6 +100,8 @@ function listingToRow(l, userId) {
     badges:         l.badges || [],
     is_active:      true,
     owner_email:    l.ownerEmail || null,
+    brokerage_name: l.brokerageName || null,
+    agent_entered:  l.agentEntered ?? false,
     ...(userId ? { user_id: userId } : {}),
   };
 }
@@ -130,8 +132,11 @@ function rowToListing(r) {
     docsLocked:   r.docs_locked,
     videoUrl:     r.video_url,
     badges:       r.badges || [],
-    createdAt:    r.created_at,
-    isDemo:       false,
+    createdAt:     r.created_at,
+    isDemo:        false,
+    brokerageName: r.brokerage_name || null,
+    agentEntered:  r.agent_entered ?? false,
+    listingAgentId:r.listing_agent_id || null,
   };
 }
 
