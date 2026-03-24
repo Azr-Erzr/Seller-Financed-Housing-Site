@@ -6,7 +6,7 @@ import mapboxgl from "mapbox-gl";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllCommListings } from "../../lib/commercial-storage";
-import { MAPBOX_TOKEN, getMapStyle } from "../../lib/mapConfig";
+import { MAPBOX_TOKEN, getMapStyle, checkMapReady } from "../../lib/mapConfig";
 import { fmtCurrency, fmtPinPrice } from "../../lib/finance";
 import {
   SlidersHorizontal, X, Ruler, Building, Truck, LocateFixed,
@@ -270,14 +270,16 @@ export default function BusinessMapSearch() {
   useEffect(() => {
     if (view === "list" || mapRef.current || !mapDivRef.current) return;
 
-    if (!MAPBOX_TOKEN) {
-      setMapError("Map requires configuration. Set VITE_MAPBOX_TOKEN in environment variables.");
+    const check = checkMapReady();
+    if (!check.ok) {
+      console.error("[BusinessMapSearch]", check.message);
+      setMapError(check.message);
       return;
     }
 
+    try {
     const initCenter = saved?.center ? [saved.center.lng, saved.center.lat] : [-78.93, 43.89];
     const initZoom = saved?.zoom ?? 9;
-    try {
     const map = new mapboxgl.Map({ container: mapDivRef.current, style: getMapStyle(), center: initCenter, zoom: initZoom, attributionControl: true });
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
@@ -314,8 +316,8 @@ export default function BusinessMapSearch() {
     mapRef.current = map;
     return () => { clearTimeout(boundsTimer.current); clearTimeout(idleTimer.current); map.remove(); mapRef.current = null; setMapReady(false); };
     } catch (err) {
-      console.error("Map init failed:", err);
-      setMapError("Map failed to load. Check your Mapbox configuration.");
+      console.error("[BusinessMapSearch] Map init failed:", err);
+      setMapError(`Map failed to load: ${err.message || "Unknown error"}. Check browser console.`);
     }
   }, [view]);
 
@@ -436,8 +438,8 @@ export default function BusinessMapSearch() {
                 <div className="text-center px-6 max-w-sm">
                   <MapIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                   <p className="text-sm font-medium text-gray-600 mb-1">Map unavailable</p>
-                  <p className="text-xs text-gray-400 leading-relaxed">{mapError}</p>
-                  <button onClick={() => setView("list")} className="mt-4 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">Switch to List View</button>
+                  <p className="text-xs text-gray-400 leading-relaxed mb-4">{mapError}</p>
+                  <button onClick={() => setView("list")} className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">Switch to List View</button>
                 </div>
               </div>
             )}

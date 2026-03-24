@@ -6,7 +6,7 @@ import mapboxgl from "mapbox-gl";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllListings } from "../lib/storage";
-import { MAPBOX_TOKEN, getMapStyle } from "../lib/mapConfig";
+import { MAPBOX_TOKEN, getMapStyle, checkMapReady } from "../lib/mapConfig";
 import { fmtCurrency, fmtPinPrice } from "../lib/finance";
 import {
   SlidersHorizontal, X, Bed, Bath, Square, Car, LocateFixed,
@@ -353,16 +353,17 @@ export default function MapSearch() {
   useEffect(() => {
     if (view === "list" || mapRef.current || !mapDivRef.current) return;
 
-    // Check for token — mapbox-gl v3 requires it even for non-Mapbox styles
-    if (!MAPBOX_TOKEN) {
-      setMapError("Map requires configuration. Set VITE_MAPBOX_TOKEN in environment variables.");
+    // Pre-flight check
+    const check = checkMapReady();
+    if (!check.ok) {
+      console.error("[MapSearch]", check.message);
+      setMapError(check.message);
       return;
     }
 
+    try {
     const initCenter = saved?.center ? [saved.center.lng, saved.center.lat] : [-78.93, 43.89];
     const initZoom = saved?.zoom ?? 10.5;
-
-    try {
     const map = new mapboxgl.Map({
       container: mapDivRef.current,
       style: getMapStyle(),
@@ -469,8 +470,8 @@ export default function MapSearch() {
       setMapReady(false);
     };
     } catch (err) {
-      console.error("Map init failed:", err);
-      setMapError("Map failed to load. Check your Mapbox configuration.");
+      console.error("[MapSearch] Map init failed:", err);
+      setMapError(`Map failed to load: ${err.message || "Unknown error"}. Check browser console for details.`);
     }
   }, [view]);
 
@@ -852,14 +853,14 @@ export default function MapSearch() {
             position: "absolute", top: 0, right: 0, bottom: 0,
             left: view === "split" && !isMobile ? `${SPLIT_PANEL_W}px` : "0",
           }}>
-            {/* Map error/loading fallback */}
+            {/* Map error fallback */}
             {mapError && (
               <div className="absolute inset-0 z-20 flex items-center justify-center bg-gray-50">
                 <div className="text-center px-6 max-w-sm">
                   <MapIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
                   <p className="text-sm font-medium text-gray-600 mb-1">Map unavailable</p>
-                  <p className="text-xs text-gray-400 leading-relaxed">{mapError}</p>
-                  <button onClick={() => setView("list")} className="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                  <p className="text-xs text-gray-400 leading-relaxed mb-4">{mapError}</p>
+                  <button onClick={() => setView("list")} className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
                     Switch to List View
                   </button>
                 </div>

@@ -1,13 +1,26 @@
 // src/lib/mapConfig.js
-// Batch 14 — Centralized Mapbox configuration.
+// Centralized Mapbox configuration with diagnostics.
 // Token is read from VITE_MAPBOX_TOKEN env var (set in Cloudflare build vars).
+// IMPORTANT: Vite bakes VITE_* vars at BUILD time. Changing the var in Cloudflare
+// requires a full redeploy (push to GitHub or trigger manual deploy).
 
 export const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || "";
 
-// Mapbox Streets style — good typography, building footprints, terrain shading
+// ── Diagnostics (only in dev) ─────────────────────────────────────────
+if (import.meta.env.DEV) {
+  if (MAPBOX_TOKEN) {
+    console.log("[MapConfig] Token present:", MAPBOX_TOKEN.slice(0, 12) + "...");
+    console.log("[MapConfig] Token starts with pk.:", MAPBOX_TOKEN.startsWith("pk."));
+  } else {
+    console.warn("[MapConfig] VITE_MAPBOX_TOKEN is empty. Map will show error state.");
+    console.warn("[MapConfig] Set it in .env locally or in Cloudflare Pages env vars for production.");
+  }
+}
+
+// Mapbox Streets style
 export const MAPBOX_STYLE = "mapbox://styles/mapbox/streets-v12";
 
-// Fallback: CARTO Voyager tiles (used if no Mapbox token is set)
+// Fallback: CARTO Voyager tiles (free, no key needed)
 export const CARTO_STYLE = {
   version: 8,
   sources: {
@@ -26,11 +39,32 @@ export const CARTO_STYLE = {
   layers: [{ id: "carto", type: "raster", source: "carto" }],
 };
 
-// Returns the appropriate style + token for map initialization.
-// If Mapbox token exists, uses Mapbox Streets; otherwise falls back to CARTO.
+// Returns the appropriate style for map initialization.
 export function getMapStyle() {
   if (MAPBOX_TOKEN) return MAPBOX_STYLE;
   return CARTO_STYLE;
+}
+
+/**
+ * Check if the map can initialize.
+ * Returns { ok, reason } — used by MapSearch to show the right error.
+ */
+export function checkMapReady() {
+  if (!MAPBOX_TOKEN) {
+    return {
+      ok: false,
+      reason: "no-token",
+      message: "Mapbox token not configured. The map requires VITE_MAPBOX_TOKEN to be set in the build environment.",
+    };
+  }
+  if (!MAPBOX_TOKEN.startsWith("pk.")) {
+    return {
+      ok: false,
+      reason: "bad-token",
+      message: "Mapbox token appears invalid — it should start with 'pk.' (public token). Check your Mapbox account.",
+    };
+  }
+  return { ok: true };
 }
 
 // Geocoding — Mapbox Geocoding API v5
@@ -55,7 +89,7 @@ export async function geocodeAddress(query, options = {}) {
     return (data.features || []).map((f) => ({
       text: f.text,
       placeName: f.place_name,
-      center: f.center, // [lng, lat]
+      center: f.center,
       bbox: f.bbox || null,
     }));
   } catch {
