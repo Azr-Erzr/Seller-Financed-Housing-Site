@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Wheat, Hammer, Building2, Factory, Droplets, TreePine, Hotel, Star, DollarSign, BarChart3, Landmark, Zap, Sprout, Timer, HeartHandshake } from "lucide-react";
 import DealStructureExplorer from "../../components/DealStructureExplorer";
-import { BUSINESS_SCENARIOS } from "../../data/businessDealScenarios";
+import { BUSINESS_SCENARIOS, BUSINESS_NICHE_CHIPS } from "../../data/businessDealScenarios";
 import FadeIn from "../../components/FadeIn";
 const ARTICLE_ICON_MAP = {
   hammer: Hammer, chart: BarChart3, search: Search,
@@ -129,7 +129,7 @@ export default function BusinessHome() {
       </section>
 
    {/* ── Deal Structure Explorer ── */}
-<DealStructureExplorer scenarios={BUSINESS_SCENARIOS} isBusiness={true} />
+<DealStructureExplorer scenarios={BUSINESS_SCENARIOS} isBusiness={true} nicheChips={BUSINESS_NICHE_CHIPS} sessionKey="business-home" />
 
       {/* ── For Buyers ── */}
       <section className="py-16">
