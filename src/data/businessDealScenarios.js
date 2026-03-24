@@ -1,5 +1,6 @@
 // src/data/businessDealScenarios.js
-// Scenario definitions for the Business Deal Structure Explorer.
+// G6: Added Hybrid Financing + Off-Market / Confidential scenarios.
+// BUSINESS_NICHE_CHIPS used by DealStructureExplorer for the niche chip row.
 
 export const BUSINESS_SCENARIOS = [
   {
@@ -56,6 +57,37 @@ export const BUSINESS_SCENARIOS = [
     secondaryCta: { label: "Browse Private Commercial Listings", path: "/business/listings" },
   },
   {
+    id: "hybrid-financing",
+    label: "Hybrid Financing",
+    cardMode: "estimate",
+    headline: "Split the deal between institutional and vendor financing",
+    body: "Hybrid deals combine a conventional bank or credit union loan for the senior portion with a vendor take-back for the gap. This structure is common when a buyer can qualify for part of the financing but not all — and the vendor is willing to carry a junior position to close the deal faster.",
+    iconCards: [
+      { icon: "Sliders", title: "Bank covers the senior position", desc: "Institutional lender provides the primary mortgage, typically 60–70% of purchase price." },
+      { icon: "TrendingUp", title: "Vendor carries the gap", desc: "A second-position VTB bridges the remaining 10–20%, earning the vendor interest on that tranche." },
+      { icon: "Shield", title: "Vendor position is second-position", desc: "Your lawyer will structure the security carefully — second-position risk must be understood before proceeding." },
+      { icon: "HeartHandshake", title: "Closes deals that otherwise fall apart", desc: "Useful for buyers with strong income but limited liquidity, or assets with appraisal gaps." },
+    ],
+    estimateTitle: "Illustrative Hybrid Financing Example",
+    mathFn: "hybridFinanceEstimate",
+    defaults: { price: 1500000, bankPct: 65, vtbPct: 15, downPct: 20, vtbRatePct: 7, vtbTermYears: 5, commPct: 0.02, hstPct: 0.13 },
+    assumptions: ["$1,500,000 sale price", "65% bank mortgage", "15% vendor VTB", "20% down payment", "7% VTB rate", "5-year term"],
+    includedRows: [
+      { label: "Listing-side commission potentially avoided", key: "commissionSaved" },
+      { label: "Modeled VTB interest income over term", key: "interestIncome" },
+    ],
+    totalLabel: "Estimated Vendor Combined Upside",
+    totalKey: "grossUpside",
+    notIncluded: [
+      "Bank mortgage costs (handled by buyer)",
+      "Second-position risk not modeled",
+      "Legal / accounting fees",
+      "Taxes and carrying costs",
+    ],
+    primaryCta: { label: "List with Hybrid Structure", path: "/business/list-property" },
+    secondaryCta: { label: "Find a Real Estate Lawyer", path: "/partners" },
+  },
+  {
     id: "broker-assisted",
     label: "Broker-Assisted",
     cardMode: "workflow",
@@ -78,13 +110,36 @@ export const BUSINESS_SCENARIOS = [
     primaryCta: { label: "Find a Broker Partner", path: "/partners" },
     secondaryCta: { label: "I Already Have a Broker", path: "/partner-apply" },
   },
+  {
+    id: "off-market",
+    label: "Off-Market / Confidential",
+    cardMode: "workflow",
+    headline: "Reach qualified buyers without a public listing",
+    body: "Some vendors need confidentiality — active businesses, sensitive tenancies, or situations where public marketing would be disruptive. Sel-Fi supports confidential listings with NDA-gated access and buyer profile matching before any details are shared.",
+    iconCards: [
+      { icon: "Shield", title: "Listing details stay private", desc: "Address, financials, and identity are withheld until the buyer signs an NDA on-platform." },
+      { icon: "Users", title: "Reach screened buyers directly", desc: "Buyer profiles are visible to you — you choose who gets access to the full listing details." },
+      { icon: "FileText", title: "NDA-gated document sharing", desc: "Share financials, lease schedules, and environmental reports only after mutual NDA is executed." },
+      { icon: "Briefcase", title: "Suitable for operating businesses", desc: "Useful for business-with-property deals where staff or tenants shouldn't know the sale is in progress." },
+    ],
+    workflowTitle: "How Confidential Listings Work",
+    workflowSteps: [
+      "Vendor creates a listing with address and identity hidden",
+      "Listing appears publicly with limited teaser information",
+      "Interested buyers sign NDA on-platform to unlock full details",
+      "Vendor reviews buyer profiles and chooses who to engage",
+      "Deal proceeds privately between screened parties",
+    ],
+    primaryCta: { label: "Create a Confidential Listing", path: "/business/list-property" },
+    secondaryCta: { label: "Browse Available Properties", path: "/business/listings" },
+  },
 ];
 
-// Business niche chips — swap examples/copy inside selected structure
+// Business niche chips — displayed as a secondary filter row in DealStructureExplorer
 export const BUSINESS_NICHE_CHIPS = [
-  { id: "medical", label: "Medical" },
-  { id: "farm", label: "Farm" },
-  { id: "land", label: "Land" },
+  { id: "medical",     label: "Medical / Dental" },
+  { id: "farm",        label: "Farm & Agriculture" },
+  { id: "land",        label: "Vacant Land" },
   { id: "development", label: "Development" },
-  { id: "mixed-use", label: "Mixed-Use" },
+  { id: "mixed-use",   label: "Mixed-Use" },
 ];
