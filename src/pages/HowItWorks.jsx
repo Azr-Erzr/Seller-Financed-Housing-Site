@@ -5,6 +5,7 @@ import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
 import { ChevronDown, ChevronUp, FileText, Search, HeartHandshake, Scale, PenLine, DollarSign, UserCircle, Map, MailOpen, FileSearch, Home as HomeIcon, Landmark, ClipboardList } from "lucide-react";
 import { usePageMeta, PAGE_META } from "../hooks/usePageMeta";
+import FadeIn from "../components/FadeIn";
 
 function FAQ({ q, a }) {
   const [open, setOpen] = useState(false);
@@ -147,6 +148,7 @@ export default function HowItWorks() {
   const accent      = isBusiness ? "text-emerald-600" : "text-blue-600";
   const bg          = isBusiness ? "bg-emerald-600" : "bg-blue-600";
   const heroBg      = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-700 to-blue-900";
+  const meshColor   = isBusiness ? "radial-gradient(circle, #6ee7b7, transparent 70%)" : "radial-gradient(circle, #93c5fd, transparent 70%)";
   const heroCopy    = isBusiness
     ? "How Sel-Fi Business Works"
     : "How Sel-Fi Works";
@@ -158,8 +160,10 @@ export default function HowItWorks() {
     <div className="bg-white">
 
       {/* Hero */}
-      <section className={`bg-gradient-to-br ${heroBg} py-16`}>
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className={`relative bg-gradient-to-br ${heroBg} py-16 overflow-hidden`}>
+        <div aria-hidden="true" className="pointer-events-none absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-20"
+          style={{ background: meshColor }} />
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold mb-4" style={{color:"#fff"}}>{heroCopy}</h1>
           <p className="text-lg max-w-2xl mx-auto" style={{color:"#bfdbfe"}}>{heroSub}</p>
         </div>
@@ -168,6 +172,7 @@ export default function HowItWorks() {
       {/* Core concept */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
+          <FadeIn>
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">The Core Concept</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
@@ -195,28 +200,40 @@ export default function HowItWorks() {
               ))}
             </div>
           </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Seller steps */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">For Sellers</h2>
-          <p className="text-gray-500 mb-8">From listing to monthly payment — what the process looks like.</p>
-          <div className="space-y-6">
-            {SELLER_STEPS.map((step) => (
-              <div key={step.num} className="flex gap-5 items-start">
-                <div className={`shrink-0 w-10 h-10 ${bg} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
-                  {step.num}
-                </div>
-                <div className="bg-gray-50 rounded-xl p-5 flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <step.Icon className={`w-5 h-5 ${accent}`} />
-                    <h3 className="font-semibold text-gray-900">{step.title}</h3>
+          <FadeIn>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">For Sellers</h2>
+            <p className="text-gray-500 mb-8">From listing to monthly payment — what the process looks like.</p>
+          </FadeIn>
+          <div className="space-y-0">
+            {SELLER_STEPS.map((step, i) => (
+              <FadeIn key={step.num} delay={i * 60}>
+                <div className="flex gap-5 items-stretch">
+                  {/* Timeline spine */}
+                  <div className="flex flex-col items-center shrink-0">
+                    <div className={`w-10 h-10 ${bg} rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0`}>
+                      {step.num}
+                    </div>
+                    {i < SELLER_STEPS.length - 1 && (
+                      <div className={`w-0.5 flex-1 my-1 ${isBusiness ? "bg-emerald-100" : "bg-blue-100"}`} />
+                    )}
                   </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{step.body}</p>
+                  {/* Card */}
+                  <div className={`bg-gray-50 rounded-xl p-5 flex-1 ${i < SELLER_STEPS.length - 1 ? "mb-3" : ""}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <step.Icon className={`w-5 h-5 ${accent}`} />
+                      <h3 className="font-semibold text-gray-900">{step.title}</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 leading-relaxed">{step.body}</p>
+                  </div>
                 </div>
-              </div>
+              </FadeIn>
             ))}
           </div>
 
@@ -240,22 +257,31 @@ export default function HowItWorks() {
       {/* Buyer steps */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">For Buyers</h2>
-          <p className="text-gray-500 mb-8">How to find a seller-financed home and get to closing.</p>
-          <div className="space-y-6">
-            {BUYER_STEPS.map((step) => (
-              <div key={step.num} className="flex gap-5 items-start">
-                <div className="shrink-0 w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  {step.num}
-                </div>
-                <div className="bg-white rounded-xl p-5 flex-1 border border-gray-100 shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <step.Icon className="w-5 h-5 text-green-600" />
-                    <h3 className="font-semibold text-gray-900">{step.title}</h3>
+          <FadeIn>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">For Buyers</h2>
+            <p className="text-gray-500 mb-8">How to find a seller-financed home and get to closing.</p>
+          </FadeIn>
+          <div className="space-y-0">
+            {BUYER_STEPS.map((step, i) => (
+              <FadeIn key={step.num} delay={i * 60}>
+                <div className="flex gap-5 items-stretch">
+                  <div className="flex flex-col items-center shrink-0">
+                    <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      {step.num}
+                    </div>
+                    {i < BUYER_STEPS.length - 1 && (
+                      <div className="w-0.5 flex-1 my-1 bg-green-100" />
+                    )}
                   </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{step.body}</p>
+                  <div className={`bg-white rounded-xl p-5 flex-1 border border-gray-100 shadow-sm ${i < BUYER_STEPS.length - 1 ? "mb-3" : ""}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <step.Icon className="w-5 h-5 text-green-600" />
+                      <h3 className="font-semibold text-gray-900">{step.title}</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 leading-relaxed">{step.body}</p>
+                  </div>
                 </div>
-              </div>
+              </FadeIn>
             ))}
           </div>
         </div>
@@ -264,7 +290,9 @@ export default function HowItWorks() {
       {/* Legal explainer */}
       <section className="py-16 bg-amber-50">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"><Scale className="w-6 h-6 text-amber-600" /> The Legal Framework — What Both Sides Should Know</h2>
+          <FadeIn>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"><Scale className="w-6 h-6 text-amber-600" /> The Legal Framework — What Both Sides Should Know</h2>
+          </FadeIn>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
               {
@@ -296,7 +324,9 @@ export default function HowItWorks() {
       {/* Risk awareness */}
       <section className="py-16 bg-red-50">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"><ClipboardList className="w-6 h-6 text-red-500" /> What Both Sides Should Consider Carefully</h2>
+          <FadeIn>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2"><ClipboardList className="w-6 h-6 text-red-500" /> What Both Sides Should Consider Carefully</h2>
+          </FadeIn>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
               {
@@ -328,24 +358,30 @@ export default function HowItWorks() {
       {/* FAQs */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6 space-y-12">
+          <FadeIn>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">FAQ — For Sellers</h2>
             <div className="space-y-3">
               {SELLER_FAQS.map((faq) => <FAQ key={faq.q} q={faq.q} a={faq.a}/>)}
             </div>
           </div>
+          </FadeIn>
+          <FadeIn>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">FAQ — For Buyers</h2>
             <div className="space-y-3">
               {BUYER_FAQS.map((faq) => <FAQ key={faq.q} q={faq.q} a={faq.a}/>)}
             </div>
           </div>
+          </FadeIn>
+          <FadeIn>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">FAQ — For Realtors and Professionals</h2>
             <div className="space-y-3">
               {PARTNER_FAQS.map((faq) => <FAQ key={faq.q} q={faq.q} a={faq.a}/>)}
             </div>
           </div>
+          </FadeIn>
         </div>
       </section>
 

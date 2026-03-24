@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Banknote, Landmark, CheckCircle, Scale, Wrench, Globe, RefreshCw, BarChart3, Building, HeartHandshake, Lock, FileText, PenLine, Home as HomeIcon, KeyRound, Hammer } from "lucide-react";
 import DealStructureExplorer from "../components/DealStructureExplorer";
 import { HOME_SCENARIOS } from "../data/homeDealScenarios";
+import FadeIn from "../components/FadeIn";
 const ARTICLE_ICON_MAP = {
   home: HomeIcon, banknote: Banknote, landmark: Landmark, key: KeyRound,
   pen: PenLine, scale: Scale, hammer: Hammer, chart: BarChart3, search: Search,
@@ -121,6 +122,7 @@ export default function Home() {
       {/* ── For Buyers ── */}
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-6">
+          <FadeIn>
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">More Paths to Homeownership</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
@@ -128,20 +130,23 @@ export default function Home() {
               doesn't fit a standard mortgage formula, seller financing may create another path.
             </p>
           </div>
+          </FadeIn>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
               { Icon: Wrench, title: "Self-Employed", body: "Variable income can make bank qualification difficult. A seller can consider your full financial picture beyond a T4." },
               { Icon: Globe, title: "New to Canada", body: "While newcomer mortgage programs exist, some buyers still face documentation or credit history gaps. Seller financing can offer additional flexibility." },
               { Icon: RefreshCw, title: "Career Change", body: "A new role or industry switch can reset your qualification timeline at a bank. Sellers can evaluate your current situation directly." },
               { Icon: BarChart3, title: "Near the Threshold", body: "If you're close to qualifying but fall short on the stress test, a seller-financed structure may bridge that gap." },
-            ].map(({ Icon, title, body }) => (
-              <div key={title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+            ].map(({ Icon, title, body }, i) => (
+              <FadeIn key={title} delay={i * 70}>
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 h-full">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
                   <Icon className="w-5 h-5" />
                 </div>
                 <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{body}</p>
               </div>
+              </FadeIn>
             ))}
           </div>
           <div className="text-center">
@@ -179,17 +184,20 @@ export default function Home() {
       {/* ── How It Works ── */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6">
+          <FadeIn>
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">How It Works</h2>
             <p className="text-gray-500">Three steps to a deal — whether you're buying or selling.</p>
           </div>
+          </FadeIn>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { num: 1, Icon: FileText, title: "List or Create a Profile", body: "Sellers post their home with financing terms. Buyers create a profile with budget, income, and deal preferences. Both take about 5 minutes." },
               { num: 2, Icon: Search, title: "Match and Connect", body: "Sel-Fi scores compatibility across 5 financial dimensions. Browse matches, sign NDAs to share documents, and connect directly." },
               { num: 3, Icon: CheckCircle, title: "Negotiate and Close", body: "Agree on terms directly with the other party. A licensed real estate lawyer registers the mortgage and transfers title. Both sides are professionally represented." },
-            ].map(({ num, Icon, title, body }) => (
-              <div key={num} className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
+            ].map(({ num, Icon, title, body }, i) => (
+              <FadeIn key={num} delay={i * 80}>
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-7 h-7" />
                 </div>
@@ -197,6 +205,7 @@ export default function Home() {
                 <h3 className="font-semibold text-gray-900 text-lg mb-2">{title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{body}</p>
               </div>
+              </FadeIn>
             ))}
           </div>
           <div className="text-center mt-8">
@@ -267,6 +276,7 @@ export default function Home() {
       {/* ── Guide teasers ── */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6">
+          <FadeIn>
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-3xl font-bold text-gray-900">The Sel-Fi Guide</h2>
@@ -276,9 +286,11 @@ export default function Home() {
               All guides <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+          </FadeIn>
           <div className="grid sm:grid-cols-3 gap-5">
-            {ARTICLES.slice(0, 3).map((article) => (
-              <Link key={article.id} to={`/guide/${article.id}`} className="group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+            {ARTICLES.slice(0, 3).map((article, i) => (
+              <FadeIn key={article.id} delay={i * 70}>
+              <Link to={`/guide/${article.id}`} className="group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden h-full">
                 <div className={`h-16 bg-gradient-to-br ${article.heroColor} flex items-center justify-center`}>
                   {(() => { const I = ARTICLE_ICON_MAP[article.icon]; return I ? <I className="w-8 h-8 text-white/80" /> : null; })()}
                 </div>
@@ -288,14 +300,19 @@ export default function Home() {
                   <p className="text-xs text-gray-400 mt-1">{article.readTime}</p>
                 </div>
               </Link>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── Final CTA ── */}
-      <section className="bg-gradient-to-br from-blue-700 to-blue-900 py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+      <section className="relative bg-gradient-to-br from-blue-700 to-blue-900 py-16 overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-20"
+          style={{ background: "radial-gradient(circle, #93c5fd, transparent 70%)" }} />
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-56 h-56 rounded-full opacity-10"
+          style={{ background: "radial-gradient(circle, #3b82f6, transparent 70%)" }} />
+        <div className="relative max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-4" style={{color:"#fff"}}>
             Ready to Make Your Move?
           </h2>

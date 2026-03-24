@@ -5,6 +5,7 @@ import { useSite } from "../context/SiteContext";
 import { useRequireAuth } from "../context/AuthContext";
 import { usePageMeta, PAGE_META } from "../hooks/usePageMeta";
 import { ArrowRight, Shield, Scale, DollarSign, Users, Building2, Home, CheckCircle, XCircle, Zap, Landmark, ScrollText } from "lucide-react";
+import FadeIn from "../components/FadeIn";
 
 export default function About() {
   const { mode, MODES } = useSite();
@@ -15,17 +16,20 @@ export default function About() {
   if (isBusiness) {
     return (
       <div className="bg-white">
-        <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 py-16">
-          <div className="max-w-4xl mx-auto px-6 text-center">
+        <section className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 py-16 overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-20"
+            style={{ background: "radial-gradient(circle, #6ee7b7, transparent 70%)" }} />
+          <div className="relative max-w-4xl mx-auto px-6 text-center">
             <h1 className="text-4xl font-bold mb-4" style={{color:"#fff"}}>About Sel-Fi Business</h1>
             <p className="text-lg max-w-2xl mx-auto" style={{color:"#a7f3d0"}}>
               Canada's marketplace for direct seller-financed commercial land, farm, and development deals.
-              No intermediaries. No bank approval. Seller sets the terms.
+              Agent-optional. Bank-optional. Seller sets the terms.
             </p>
           </div>
         </section>
 
         <section className="py-16 max-w-4xl mx-auto px-6 space-y-12">
+          <FadeIn>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Do</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
@@ -34,12 +38,14 @@ export default function About() {
               the seller holds a registered mortgage on the property and receives monthly payments at a negotiated rate.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Buyers can also engage their own commercial real estate broker if they choose. The seller still saves
+              Buyers can also engage their own commercial real estate broker if they choose. The seller may still avoid
               their side of the commission — typically 2–3% of a multi-million-dollar transaction — and still earns
-              interest on the VTB they hold. Both sides win.
+              interest on the VTB they hold.
             </p>
           </div>
+          </FadeIn>
 
+          <FadeIn delay={80}>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Legal Protections for Sellers</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
@@ -54,19 +60,22 @@ export default function About() {
               consequences of default are real, enforceable, and well-established under Ontario law.
             </p>
           </div>
+          </FadeIn>
 
+          <FadeIn delay={120}>
           <div className="grid sm:grid-cols-2 gap-6">
-            <Link to="/business/listings" className="p-6 bg-emerald-50 rounded-xl border border-emerald-100 hover:border-emerald-300 transition-colors">
+            <Link to="/business/listings" className="p-6 bg-emerald-50 rounded-xl border border-emerald-100 hover:border-emerald-300 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
               <Building2 className="w-6 h-6 text-emerald-600 mb-3"/>
               <p className="font-semibold text-gray-900">Browse Commercial Properties</p>
               <p className="text-sm text-gray-500 mt-1">Vacant land, farms, development parcels, and commercial buildings</p>
             </Link>
-            <Link to="/partners?category=lawyer" className="p-6 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-300 transition-colors">
+            <Link to="/partners?category=lawyer" className="p-6 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-300 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
               <Scale className="w-6 h-6 text-amber-600 mb-3"/>
               <p className="font-semibold text-gray-900">Find a Real Estate Lawyer</p>
               <p className="text-sm text-gray-500 mt-1">Required for all VTB transactions — protect both sides</p>
             </Link>
           </div>
+          </FadeIn>
 
           <p className="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-6">
             Sel-Fi facilitates introductions between buyers and sellers. We are not a mortgage broker, real estate agent, or legal advisor.
@@ -82,14 +91,18 @@ export default function About() {
     <div className="bg-white">
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-700 to-blue-900 py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="relative bg-gradient-to-br from-blue-700 to-blue-900 py-16 overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-20"
+          style={{ background: "radial-gradient(circle, #93c5fd, transparent 70%)" }} />
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10"
+          style={{ background: "radial-gradient(circle, #3b82f6, transparent 70%)" }} />
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{color:"#fff"}}>
             About Sel-Fi
           </h1>
           <p className="text-lg max-w-2xl mx-auto" style={{color:"#bfdbfe"}}>
-            We built the platform that cuts banks and listing agents out of the residential real estate transaction —
-            and puts the money back where it belongs. In your pocket.
+            A marketplace for direct and flexible real estate transactions — agent-optional, bank-optional,
+            and backed by Ontario's established legal framework for seller financing.
           </p>
         </div>
       </section>
@@ -97,6 +110,7 @@ export default function About() {
       <div className="max-w-4xl mx-auto px-6 py-16 space-y-14">
 
         {/* Mission */}
+        <FadeIn>
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Why We Exist</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
@@ -117,8 +131,10 @@ export default function About() {
             The difference is the seller sets the terms — and keeps the interest income the bank would have taken.
           </p>
         </section>
+        </FadeIn>
 
         {/* For sellers */}
+        <FadeIn delay={60}>
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">For Sellers: You Are the Bank</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
@@ -165,8 +181,10 @@ export default function About() {
             the right setup for your specific situation.
           </p>
         </section>
+        </FadeIn>
 
         {/* Realtor angle */}
+        <FadeIn delay={60}>
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Realtors Are Welcome — on the Buy Side</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
@@ -199,8 +217,10 @@ export default function About() {
             your role on the buyer's side remains valuable and welcome.
           </p>
         </section>
+        </FadeIn>
 
         {/* For buyers */}
+        <FadeIn delay={60}>
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">For Buyers: When the Bank Said No</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
@@ -219,8 +239,10 @@ export default function About() {
             informal agreement — it is secured lending with the same legal weight as any bank mortgage.
           </p>
         </section>
+        </FadeIn>
 
-        {/* Team / values */}
+        {/* What we are */}
+        <FadeIn delay={60}>
         <section className="border-t border-gray-100 pt-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Are (and Are Not)</h2>
           <div className="grid sm:grid-cols-2 gap-5">
@@ -232,7 +254,7 @@ export default function About() {
               { Icon: XCircle, color: "text-red-500", title: "Not a real estate agent", body: "We are not licensed to represent buyers or sellers. All negotiations happen directly between parties." },
               { Icon: XCircle, color: "text-red-500", title: "Not a legal advisor", body: "We strongly recommend — and will repeatedly remind you — to engage a licensed Ontario real estate lawyer for every deal." },
             ].map(({ Icon, color, title, body }) => (
-              <div key={title} className="flex items-start gap-3">
+              <div key={title} className="flex items-start gap-3 p-4 rounded-xl border border-gray-100 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${color}`} />
                 <div>
                   <p className="font-semibold text-gray-900 text-sm">{title}</p>
@@ -242,19 +264,26 @@ export default function About() {
             ))}
           </div>
         </section>
+        </FadeIn>
 
         {/* CTA */}
-        <section className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-10 text-center">
-          <h2 className="text-2xl font-bold mb-3" style={{color:"#fff"}}>Ready to Make Your Move?</h2>
-          <p className="mb-6" style={{color:"#bfdbfe"}}>
-            Read our guides, browse listings, or list your home today.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/guide" className="px-6 py-2.5 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Read the Guide</Link>
-            <button onClick={() => requireAuth("/list-home")} className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</button>
-            <button onClick={() => requireAuth("/create-profile")} className="px-6 py-2.5 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">Create Buyer Profile</button>
+        <FadeIn delay={60}>
+        <section className="relative bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-10 text-center overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full opacity-20"
+            style={{ background: "radial-gradient(circle, #93c5fd, transparent 70%)" }} />
+          <div className="relative">
+            <h2 className="text-2xl font-bold mb-3" style={{color:"#fff"}}>Ready to Make Your Move?</h2>
+            <p className="mb-6" style={{color:"#bfdbfe"}}>
+              Read our guides, browse listings, or list your home today.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/guide" className="px-6 py-2.5 bg-white text-blue-700 font-semibold rounded-lg hover:bg-blue-50 transition-colors">Read the Guide</Link>
+              <button onClick={() => requireAuth("/list-home")} className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors">List Your Home</button>
+              <button onClick={() => requireAuth("/create-profile")} className="px-6 py-2.5 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">Create Buyer Profile</button>
+            </div>
           </div>
         </section>
+        </FadeIn>
 
         <p className="text-xs text-gray-400 leading-relaxed text-center">
           Sel-Fi facilitates introductions only. All financial, legal, and mortgage decisions should be made with
