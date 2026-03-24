@@ -51,7 +51,7 @@ export default function Footer() {
             <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
               {isBusiness
                 ? "Connecting commercial property owners and buyers for direct seller-financed deals. Vacant land, farms, development parcels, and commercial buildings."
-                : "Connecting property sellers and buyers for seller-financed and rent-to-own residential deals. No banks, no agents."
+                : "Connecting property sellers and buyers for seller-financed and rent-to-own residential deals. Agent-optional. Bank-optional."
               }
             </p>
             <p className="text-xs text-gray-400 mt-4">

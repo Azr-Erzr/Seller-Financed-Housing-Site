@@ -23,11 +23,10 @@ function HomeSellerCalc({ accent, accentBg, ring }) {
   const [vtbRate, setVtbRate] = useState(7);
   const [vtbYears, setVtbYears] = useState(5);
 
+  // Listing-side commission only — buyer-side is the buyer's arrangement
   const listingComm = price * 0.025;
-  const buyerComm = price * 0.025;
-  const totalComm = listingComm + buyerComm;
-  const hst = totalComm * 0.13;
-  const commSavings = totalComm + hst;
+  const hst = listingComm * 0.13;
+  const commSavings = listingComm + hst;
 
   const vtbPrincipal = price * (1 - downPct / 100);
   const monthly = monthlyPayment(vtbPrincipal, vtbRate / 100, 25);
@@ -68,30 +67,30 @@ function HomeSellerCalc({ accent, accentBg, ring }) {
       {/* Results — stacked on mobile, 3-col on desktop */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
-          <p className="text-xs text-orange-500 font-medium uppercase tracking-wide mb-1">Commission Saved</p>
+          <p className="text-xs text-orange-500 font-medium uppercase tracking-wide mb-1">Listing-Side Savings</p>
           <p className="text-xl sm:text-2xl font-extrabold text-orange-700">{fmt(commSavings)}</p>
-          <p className="text-xs text-orange-400 mt-1">vs. 5% + HST</p>
+          <p className="text-xs text-orange-400 mt-1">2.5% + HST · listing side only</p>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-          <p className="text-xs text-green-500 font-medium uppercase tracking-wide mb-1">Interest Earned</p>
+          <p className="text-xs text-green-500 font-medium uppercase tracking-wide mb-1">Modeled Interest</p>
           <p className="text-xl sm:text-2xl font-extrabold text-green-700">{fmt(totalInterest)}</p>
           <p className="text-xs text-green-400 mt-1">{vtbYears} yr{vtbYears > 1 ? "s" : ""} at {vtbRate}%</p>
         </div>
         <div className={`border rounded-xl p-4 text-center ${accentBg === "bg-blue-600" ? "bg-blue-50 border-blue-200" : "bg-emerald-50 border-emerald-200"}`}>
-          <p className={`text-xs font-medium uppercase tracking-wide mb-1 ${accent}`}>Total Advantage</p>
+          <p className={`text-xs font-medium uppercase tracking-wide mb-1 ${accent}`}>Combined Estimate</p>
           <p className={`text-xl sm:text-2xl font-extrabold ${accent}`}>{fmt(totalWin)}</p>
           <p className={`text-xs mt-1 ${accent} opacity-70`}>savings + interest</p>
         </div>
       </div>
 
-      {/* Breakdown — remains as-is, already responsive */}
+      {/* Breakdown */}
       <div className="bg-gray-50 rounded-xl p-4 text-sm space-y-2">
+        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Included in estimate</p>
         {[
-          { l: "Listing agent commission saved", v: fmt(listingComm), c: "text-green-600" },
-          { l: "Buyer's agent commission saved", v: fmt(buyerComm), c: "text-green-600" },
-          { l: "HST on commissions saved", v: fmt(hst), c: "text-green-600" },
-          { l: `Interest on ${fmt(vtbPrincipal)} VTB (${vtbYears} yrs)`, v: fmt(totalInterest), c: "text-blue-600" },
-          { l: "Monthly payment from buyer", v: `${fmt(monthly)}/mo`, c: "text-gray-700" },
+          { l: "Listing-side commission (2.5%)", v: fmt(listingComm), c: "text-green-600" },
+          { l: "HST on listing commission", v: fmt(hst), c: "text-green-600" },
+          { l: `Modeled interest on ${fmt(vtbPrincipal)} VTB (${vtbYears} yrs)`, v: fmt(totalInterest), c: "text-blue-600" },
+          { l: "Est. monthly payment from buyer", v: `${fmt(monthly)}/mo`, c: "text-gray-700" },
         ].map(({ l, v, c }) => (
           <div key={l} className="flex justify-between items-center gap-2">
             <span className="text-gray-500 text-xs sm:text-sm">{l}</span>
@@ -99,11 +98,12 @@ function HomeSellerCalc({ accent, accentBg, ring }) {
           </div>
         ))}
         <div className="border-t border-gray-200 pt-2 flex justify-between items-center">
-          <span className="font-semibold text-gray-800 text-sm">Total vs. traditional sale</span>
+          <span className="font-semibold text-gray-800 text-sm">Combined estimate</span>
           <span className={`font-extrabold text-lg sm:text-xl ${accent}`}>{fmt(totalWin)}</span>
         </div>
+        <p className="text-[10px] text-gray-400 pt-1 border-t border-gray-100">Not included: buyer-side commission · legal fees · taxes · closing costs</p>
       </div>
-      <p className="text-xs text-gray-400">*Estimates only. 25-year amortization assumed. Consult a real estate lawyer and accountant.</p>
+      <p className="text-xs text-gray-400">Illustrative only. 25-year amortization assumed. Consult a real estate lawyer and accountant.</p>
     </div>
   );
 }
@@ -162,12 +162,12 @@ function CommercialSellerCalc({ accent, ring }) {
           <p className="text-xs text-amber-400 mt-1">incl. HST on {commPct}%</p>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-          <p className="text-xs text-green-500 font-medium uppercase mb-1">Interest Earned</p>
+          <p className="text-xs text-green-500 font-medium uppercase mb-1">Modeled Interest</p>
           <p className="text-xl sm:text-2xl font-extrabold text-green-700">{fmt(totalInterest)}</p>
           <p className="text-xs text-green-400 mt-1">{vtbYears} yr balloon @ {vtbRate}%</p>
         </div>
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
-          <p className="text-xs text-emerald-500 font-medium uppercase mb-1">Total Advantage</p>
+          <p className="text-xs text-emerald-500 font-medium uppercase mb-1">Combined Estimate</p>
           <p className="text-xl sm:text-2xl font-extrabold text-emerald-700">{fmt(totalWin)}</p>
           <p className="text-xs text-emerald-400 mt-1">commission + interest</p>
         </div>
