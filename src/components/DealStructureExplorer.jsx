@@ -83,12 +83,12 @@ export default function DealStructureExplorer({ scenarios, isBusiness = false, s
         </div>
 
         {/* Selector pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
+        <div className="flex gap-2 mb-10 overflow-x-auto scrollbar-hide -mx-5 px-5 sm:mx-0 sm:px-0 sm:flex-wrap sm:justify-center sm:overflow-visible">
           {scenarios.map((s) => (
             <button
               key={s.id}
               onClick={() => setActiveId(s.id)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all shrink-0 ${
                 activeId === s.id ? pillActive : pillInactive
               }`}
             >
