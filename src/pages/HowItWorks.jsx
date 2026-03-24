@@ -89,7 +89,7 @@ const SELLER_FAQS = [
   },
   {
     q: "What if the buyer uses a realtor?",
-    a: `That's completely fine — and common. The buyer's realtor represents the buyer. Their commission is between the buyer and their agent; it does not come from you. You still save your listing agent commission (typically 2.5% + HST). You still earn interest on the VTB you hold. The buyer gets professional representation. Everyone wins.`,
+    a: `That's completely fine — and common. The buyer's realtor represents the buyer. Their commission is between the buyer and their agent; it does not come from you. You may still avoid your listing-side commission (typically 2.5% + HST). If you're holding a VTB, you continue earning interest on it. The buyer gets professional representation on their side — no conflict, no problem.`,
   },
   {
     q: "Do I need to own my home free and clear?",
@@ -131,7 +131,7 @@ const BUYER_FAQS = [
 const PARTNER_FAQS = [
   {
     q: "I'm a realtor. Can I work with Sel-Fi buyers?",
-    a: `Absolutely. Sel-Fi supports buyer-side realtor representation. Your buyer finds a seller-financed home on Sel-Fi, you represent them, and you earn a buyer-side commission negotiated with your client. The seller saves their listing commission. You still get paid. Contact us to discuss how to refer your buyer clients to our platform.`,
+    a: `Yes. Sel-Fi supports buyer-side realtor representation. Your buyer finds a seller-financed home on Sel-Fi, you represent them, and you earn a buyer-side commission negotiated with your client. The seller may still avoid their listing-side commission. Contact us to discuss how to refer your buyer clients to our platform.`,
   },
   {
     q: "I'm a real estate lawyer. How do I get listed?",
@@ -225,13 +225,13 @@ export default function HowItWorks() {
             <h3 className="font-semibold text-gray-900 mb-2">Selling to a Buyer Who Uses a Realtor</h3>
             <p className="text-sm text-gray-600 leading-relaxed mb-3">
               If the buyer wants to use a buyer's agent, that's perfectly fine. The buyer's realtor represents the
-              buyer — their commission comes from the buyer's side of the negotiation, not from you. You still save
-              your listing commission. You still earn interest on the VTB. The buyer gets professional guidance.
-              No conflict, no problem.
+              buyer — their commission comes from the buyer's side of the negotiation, not from you. You may still
+              avoid your listing-side commission by marketing the property directly. If you're holding a VTB, you
+              continue earning interest on it. No conflict, no problem.
             </p>
             <p className="text-xs text-gray-400">
               Sel-Fi does not prohibit buyer-agent representation. The seller has chosen to list directly —
-              your role on the buyer's side remains valuable and welcome.
+              buyer-side representation remains welcome and compatible.
             </p>
           </div>
         </div>

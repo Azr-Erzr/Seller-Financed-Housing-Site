@@ -100,9 +100,9 @@ export default function About() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Why We Exist</h2>
           <p className="text-gray-600 leading-relaxed mb-4">
-            In a traditional real estate sale, a $600,000 home comes with roughly $33,900 in commission costs —
-            paid by the seller, split between two agents, neither of whom owns the property or took the financial risk.
-            The seller gets a cheque for less than they should have received. The buyer qualifies at a bank's rules or
+            In a traditional real estate sale, a $600,000 home can come with roughly $33,900 in commission costs —
+            typically paid by the seller, split between two agents, neither of whom owns the property or took the financial risk.
+            The seller gets a cheque for less than they might have received. The buyer qualifies at a bank's rules or
             doesn't buy at all.
           </p>
           <p className="text-gray-600 leading-relaxed mb-4">

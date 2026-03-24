@@ -101,7 +101,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
-              { stat: "$30K–$45K", label: "Typical commission savings" },
+              { stat: "$30K–$45K", label: "Potential listing-side savings" },
               { stat: "5–12%",     label: "Interest earned by sellers" },
               { stat: "100%",      label: "Seller sets the terms" },
               { stat: "Flexible",  label: "Bank-optional structures" },
@@ -300,7 +300,7 @@ export default function Home() {
             Ready to Make Your Move?
           </h2>
           <p className="mb-8" style={{color:"#bfdbfe"}}>
-            Whether you're selling and want to keep your commission, or buying and exploring
+            Whether you're selling and want to avoid listing-side commission, or buying and exploring
             flexible financing options — Sel-Fi is the place to start.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
