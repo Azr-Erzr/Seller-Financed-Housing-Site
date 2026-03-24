@@ -9,6 +9,7 @@ import { useToast } from "./Toast";
 import { useSite } from "../context/SiteContext";
 import { useAuth } from "../context/AuthContext";
 import BottomSheet from "./BottomSheet";
+import { useFloating } from "./FloatingActionManager";
 
 const BUYER_TEMPLATES = [
   "Hi, I'm interested in your listing. Could we schedule a call to discuss terms?",
@@ -37,6 +38,7 @@ export default function ContactModal({
   const { toast } = useToast();
   const { mode, MODES } = useSite();
   const { user } = useAuth();
+  const { registerBlocker, unregisterBlocker } = useFloating();
   const isBusiness = mode === MODES.business;
 
   const [senderName, setSenderName] = useState("");
@@ -44,8 +46,15 @@ export default function ContactModal({
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [showTemplates, setShowTemplates] = useState(false); // collapsed by default on mobile
+  const [showTemplates, setShowTemplates] = useState(false);
   const [agreedToConfidentiality, setAgreedToConfidentiality] = useState(false);
+
+  // Hide chat button when modal is open — prevents overlap on mobile
+  useEffect(() => {
+    if (open) registerBlocker("contactModal");
+    else unregisterBlocker("contactModal");
+    return () => unregisterBlocker("contactModal");
+  }, [open, registerBlocker, unregisterBlocker]);
 
   useEffect(() => {
     if (user?.email && !senderEmail) setSenderEmail(user.email);
@@ -192,8 +201,11 @@ export default function ContactModal({
             </label>
           )}
 
-          {/* Send — sticky at bottom on mobile */}
-          <div className="flex gap-2 pt-1 sticky bottom-0 bg-white pb-1">
+          {/* Send — sticky at bottom on mobile with iOS safe-area padding */}
+          <div
+            className="flex gap-2 pt-1 sticky bottom-0 bg-white"
+            style={{ paddingBottom: "max(4px, env(safe-area-inset-bottom, 4px))" }}
+          >
             <button onClick={handleSend} disabled={sending || !canSend}
               className={`flex-1 flex items-center justify-center gap-2 py-3 font-semibold text-sm rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${primaryBtn}`}>
               <Send className="w-4 h-4" />
