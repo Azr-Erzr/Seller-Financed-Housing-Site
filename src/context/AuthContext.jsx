@@ -20,10 +20,22 @@ export function AuthProvider({ children }) {
   const [user,    setUser]    = useState(null);
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState(null); // 'buyer' | 'seller' | 'professional'
 
   // Auth modal state
   const [authModalOpen,    setAuthModalOpen]    = useState(false);
   const [authRedirectPath, setAuthRedirectPath] = useState(null);
+
+  // Fetch role from user_roles table
+  const fetchRole = useCallback(async (uid) => {
+    if (!supabase || !uid) return;
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", uid)
+      .maybeSingle();
+    setUserRole(data?.role ?? "buyer");
+  }, []);
 
   useEffect(() => {
     if (!supabase) { setLoading(false); return; }
@@ -31,6 +43,7 @@ export function AuthProvider({ children }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) fetchRole(session.user.id);
       setLoading(false);
     });
 
@@ -38,16 +51,19 @@ export function AuthProvider({ children }) {
       (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        if (session?.user) fetchRole(session.user.id);
+        else setUserRole(null);
       }
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchRole]);
 
   const signOut = async () => {
     if (supabase) await supabase.auth.signOut();
     setUser(null);
     setSession(null);
+    setUserRole(null);
   };
 
   // ── Email + Password registration ─────────────────────────────────
@@ -112,6 +128,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={{
       user, session, loading, signOut,
+      userRole, isPro: userRole === "professional",
       signUpWithPassword, signInWithPassword, signInWithEmail, resetPassword,
       authModalOpen, authRedirectPath, openAuthModal, closeAuthModal,
     }}>
