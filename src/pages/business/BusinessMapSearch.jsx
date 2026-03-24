@@ -433,6 +433,16 @@ export default function BusinessMapSearch() {
         {/* Map */}
         {(view === "map" || view === "split") && (
           <div ref={mapDivRef} style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: view === "split" && !isMobile ? `${SPLIT_PANEL_W}px` : "0" }}>
+            {/* Map loading spinner */}
+            {!mapReady && !mapError && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-gray-50">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-8 h-8 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                  <p className="text-xs text-gray-400">Loading map…</p>
+                </div>
+              </div>
+            )}
+
             {mapError && (
               <div className="absolute inset-0 z-20 flex items-center justify-center bg-gray-50">
                 <div className="text-center px-6 max-w-sm">
