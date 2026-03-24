@@ -97,6 +97,20 @@ async function uploadAvatar(file) {
   return urlData.publicUrl;
 }
 
+// Upload a verification document to Supabase Storage.
+// Returns the storage path on success, null on failure.
+// Files go to verification-docs bucket (private — not public URL).
+async function uploadVerificationDoc(file, tier, userId) {
+  if (!supabase || !file) return null;
+  const ext  = file.name.split(".").pop().toLowerCase();
+  const path = `${userId}/${tier}-${Date.now()}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from("verification-docs")
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+  if (error || !data) return null;
+  return data.path;
+}
+
 export default function CreateProfile() {
   const { toast } = useToast();
   const { user, loading: authLoading, openAuthModal } = useAuth();
@@ -161,6 +175,17 @@ export default function CreateProfile() {
     setSubmitting(true);
     try {
       const avatarUrl = await uploadAvatar(avatarFile);
+
+      // Upload verification documents to Supabase Storage (verification-docs bucket).
+      // Store the path so admins can review. Mark tier "pending" only if upload succeeded.
+      const verificationStatus = { identity: "none", funds: "none", income: "none" };
+      for (const tier of TIER_ORDER) {
+        const file = verifyFiles[tier];
+        if (!file) continue;
+        const path = await uploadVerificationDoc(file, tier, user?.id || "anon");
+        verificationStatus[tier] = path ? "pending" : "none";
+        if (!path) toast.error(`Could not upload ${tier} document — please try again.`);
+      }
       const primaryPref = form.dealPreferences[0] || "seller-finance";
       const dealLabel = DEAL_OPTIONS.find((d) => d.value === primaryPref)?.label || "Seller-Finance";
       const profile = {
@@ -179,11 +204,7 @@ export default function CreateProfile() {
         show_income:    form.showIncome,
         use_alias:      form.useAlias,
         alias:          form.useAlias ? generateAlias("buyer") : null,
-        verificationStatus: {
-          identity: verifyFiles.identity ? "pending" : "none",
-          funds:    verifyFiles.funds    ? "pending" : "none",
-          income:   verifyFiles.income   ? "pending" : "none",
-        },
+        verificationStatus,
       };
       const saved = await saveProfile(profile);
       if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Your buyer profile is now live!"); }
