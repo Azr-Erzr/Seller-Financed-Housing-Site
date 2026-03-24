@@ -66,6 +66,10 @@ const BusinessSaved           = lazy(() => import("./pages/business/BusinessSave
 // ── Lazy-loaded pages — Business Category (Mega-Batch C) ────────────
 const CategoryPage            = lazy(() => import("./pages/business/CategoryPage"));
 
+// ── Lazy-loaded pages — Pro Dashboard (G4) ──────────────────────────
+const ProRegister             = lazy(() => import("./pages/pro/ProRegister"));
+const ProDashboard            = lazy(() => import("./pages/pro/ProDashboard"));
+
 function PageLoading() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
@@ -137,6 +141,10 @@ export default function App() {
                       <Route path="/business/map"              element={<BusinessMapSearch/>}/>
                       <Route path="/business/saved"            element={<BusinessSaved/>}/>
                       <Route path="/business/category/:slug"   element={<CategoryPage/>}/>
+
+                      {/* ── Pro Dashboard (G4) ── */}
+                      <Route path="/pro/register"  element={<ProRegister/>}/>
+                      <Route path="/pro/dashboard" element={<ProDashboard/>}/>
 
                       {/* ── Catch-all ── */}
                       <Route path="*" element={<NotFound/>}/>
