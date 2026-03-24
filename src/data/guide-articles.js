@@ -347,11 +347,233 @@ A site that appears to have road frontage on a map may only have access via an u
     ],
     cta: { label: "Find a Commercial Real Estate Lawyer", href: "/partners?category=lawyer" },
   },
-];
+  {
+    id: "selling-inherited-property-ontario",
+    mode: "homes",
+    category: "For Sellers",
+    categoryColor: "bg-orange-100 text-orange-700",
+    title: "Selling an Inherited Property in Ontario: What to Know",
+    subtitle: "Estate sales, probate, and why seller financing can simplify an inherited home sale.",
+    readTime: "6 min read",
+    icon: "key",
+    heroColor: "from-amber-600 to-amber-800",
+    summary: "Inheriting a property in Ontario brings legal, tax, and practical decisions that most people aren't prepared for. If the estate has been probated and you're ready to sell, seller financing can offer flexibility that a traditional sale doesn't — particularly around closing timelines and capital gains.",
+    sections: [
+      {
+        heading: "Probate and Legal Authority to Sell",
+        body: `Before you can sell an inherited property in Ontario, you need legal authority to act on behalf of the estate. If the deceased had a will, the named executor typically applies for a Certificate of Appointment of Estate Trustee (commonly called probate) through the Ontario Superior Court of Justice. This certificate confirms your authority to deal with estate assets, including real estate.
 
-export const ARTICLES_HOMES    = ARTICLES.filter((a) => a.mode === "homes");
-export const ARTICLES_BUSINESS = ARTICLES.filter((a) => a.mode === "business");
+If probate hasn't been completed, you cannot transfer title. Work with an estate lawyer first — this is not optional. A real estate lawyer handling the sale will require confirmation of authority before proceeding.`,
+      },
+      {
+        heading: "Capital Gains on an Inherited Property",
+        body: `When someone dies in Ontario, their estate is deemed to have disposed of all capital property at fair market value at the date of death. For the heir who inherits the property, the cost basis (adjusted cost base, or ACB) is reset to that fair market value — not the original purchase price.
+
+This means if your parent bought the home for $200,000 in 1995 and it was worth $700,000 at the time of death, your ACB is $700,000. If you sell it two years later for $750,000, your capital gain is only $50,000 — not $550,000.
+
+The principal residence exemption may also apply if the deceased used the property as their primary residence. Consult an accountant before selling to understand the tax position of the estate and any distributions to heirs.`,
+      },
+      {
+        heading: "Why Seller Financing Can Work Well for Estate Sales",
+        body: `Estate sales often involve beneficiaries in different locations, disagreements between heirs, or properties that need work before they'd attract full market value from conventional buyers. Seller financing can help in several ways:
+
+It removes the bank from the equation. A conventional buyer who needs institutional financing introduces delays and uncertainty. A seller-financed deal can close faster and on a timeline that works for the estate.
+
+It may help with capital gains exposure. If the estate has a meaningful gain on the property, a VTB structure may allow the gain to be spread over the payment term rather than recognized all at once in the year of sale — potentially reducing the immediate tax burden. This requires advice from a CPA familiar with estate tax in Ontario.
+
+Always involve an estate lawyer and a real estate lawyer. The estate is the seller, not an individual — and the paperwork must reflect that.`,
+      },
+      {
+        heading: "What Buyers of Inherited Properties Should Know",
+        body: `Buyers purchasing an inherited property should verify that the seller (the estate trustee) has proper legal authority. Ask to see the Certificate of Appointment or confirmation from the estate lawyer. Title insurance is particularly valuable in estate sales — it protects against claims arising from estate administration errors.
+
+Inherited properties may be sold "as is" — the estate may have no knowledge of defects or may be unwilling to provide representations and warranties. Factor this into your due diligence and inspection process.`,
+      },
+    ],
+    disclaimer: `This article is for general educational purposes only. Estate and tax law is complex and situation-specific. Consult a licensed Ontario real estate lawyer and a CPA before making any decisions about an inherited property.`,
+    cta: { label: "Find a Real Estate Lawyer", href: "/partners?category=lawyer" },
+  },
+
+  {
+    id: "vtb-mortgage-as-investment",
+    mode: "homes",
+    category: "For Sellers",
+    categoryColor: "bg-orange-100 text-orange-700",
+    title: "Your VTB as an Investment: Returns, Risk, and Structuring",
+    subtitle: "When you carry a mortgage, you become a lender. Here's how to think about it like one.",
+    readTime: "7 min read",
+    icon: "chart",
+    heroColor: "from-green-600 to-green-800",
+    summary: "A Vendor Take-Back mortgage isn't just a way to sell your home — it's a secured investment. When you hold a VTB, you earn interest on capital that would otherwise sit idle in your bank account. Understanding the investment lens changes how you structure and evaluate deals.",
+    sections: [
+      {
+        heading: "The Investment Basics",
+        body: `When you carry a VTB mortgage, you are lending money secured against real property. Your return is the interest rate you negotiate. Your security is the registered mortgage charge on the buyer's title.
+
+A VTB at 7% on $400,000 financed generates approximately $28,000 in interest annually — income that a bank would otherwise capture. Over a 5-year term, the modeled interest income on a 25-year amortization is typically $120,000–$140,000 depending on rate and structure.
+
+Compare this to: a GIC at 4–5%, a bond, or cash sitting in a savings account. The VTB offers a higher yield, secured against a hard asset you know the value of.`,
+      },
+      {
+        heading: "Position, Priority, and Risk",
+        body: `Like any investment, a VTB carries risk. The key risk variable is your mortgage position:
+
+First-position VTB: You are the only lender. In a default, you have first claim on the property's value. This is the strongest position and the lowest risk.
+
+Second-position VTB: The buyer has a conventional bank mortgage in first position. Your VTB is second — meaning the bank gets paid first in a default. This is riskier, and you should price it accordingly (higher rate, larger margin between combined debt and property value).
+
+Your lawyer will structure the mortgage to reflect your position. As a general rule, combined debt (first + second mortgage) should not exceed 80% of the property's value at time of sale, giving you a meaningful equity cushion.`,
+      },
+      {
+        heading: "How to Evaluate a Buyer",
+        body: `As the lender, you get to decide who you lend to. Treat this like a bank would — but with judgment, not just formula:
+
+Down payment: A meaningful down payment (15–25%) signals commitment and reduces your exposure. The buyer has more to lose if they walk away.
+
+Income stability: Ask for recent pay stubs, CRA Notices of Assessment (2 years), or proof of business income. Calculate their debt-to-income ratio against your payment. If the monthly payment exceeds 35–40% of their gross income, proceed with caution.
+
+References and conversation: This is an advantage you have over a bank. Talk to the person. Get a sense of their situation. Ask why they're not using conventional financing and whether the reason is structural (self-employment, newcomer status) or a red flag (poor payment history, excessive debt).
+
+Sel-Fi buyer profiles include calculated DTI ratios, declared income, and deal preferences — giving you a starting point before you ever speak to them.`,
+      },
+      {
+        heading: "Structuring the Term and Balloon",
+        body: `Most VTBs in Ontario are structured with a shorter term (1–5 years) but a longer amortization (20–25 years). This means:
+
+Monthly payments are calculated on a 25-year amortization — keeping them affordable for the buyer.
+The full outstanding balance becomes due at the end of the term (the balloon payment).
+The buyer typically plans to refinance with a bank at term end, once they've built credit history, documented income, or resolved whatever made conventional financing unavailable initially.
+
+This gives you liquidity: you get the full balance back in 1–5 years, plus interest throughout. If the buyer cannot refinance at term end, you have options — extend the term, find a new buyer (through power of sale), or renegotiate.
+
+Always define the balloon clearly in your agreement. Your lawyer will include this in the promissory note.`,
+      },
+    ],
+    disclaimer: `Interest income from a VTB is taxable. Capital gains treatment and reserve provisions under the Income Tax Act are complex and situation-specific. Always consult a licensed Ontario real estate lawyer and a CPA before structuring any VTB arrangement.`,
+    cta: { label: "List Your Home with Seller Financing", href: "/list-home" },
+  },
+
+  {
+    id: "co-purchase-guide-ontario",
+    mode: "homes",
+    category: "For Buyers",
+    categoryColor: "bg-purple-100 text-purple-700",
+    title: "Co-Purchasing a Home in Ontario: What You Need to Know",
+    subtitle: "Buying with a friend, partner, or family member? The legal and financial picture is more complex than most people realize.",
+    readTime: "6 min read",
+    icon: "scale",
+    heroColor: "from-purple-600 to-purple-800",
+    summary: "Co-purchasing — buying a home with someone other than a spouse — is increasingly common in Ontario. Whether it's siblings splitting an inherited property, friends pooling resources, or investors partnering on a rental, the legal structure you choose matters enormously. Seller financing can work for co-purchases, but the documentation must be right.",
+    sections: [
+      {
+        heading: "How Co-Ownership Works Legally",
+        body: `In Ontario, property can be co-owned in two main ways:
+
+Joint tenancy: Both owners hold equal, undivided shares. If one owner dies, their interest automatically passes to the surviving owner (the right of survivorship) — it bypasses the will. Common for spouses.
+
+Tenancy in common: Each owner holds a defined percentage share (not necessarily equal). On death, each person's share passes according to their will. Common for non-spouses, investors, and unequal-contribution scenarios.
+
+Your ownership structure determines what happens if one co-owner wants to sell, passes away, or encounters financial difficulty. Your real estate lawyer will register the title in whichever form you choose.`,
+      },
+      {
+        heading: "The Co-Ownership Agreement",
+        body: `A co-ownership agreement (sometimes called a co-habitation agreement or joint ownership agreement for non-spouses) is a private contract that governs your relationship as co-owners. It should cover:
+
+• What percentage each owner holds
+• How carrying costs (mortgage, taxes, insurance, maintenance) are split
+• What happens if one owner wants to sell and the other doesn't
+• Buyout mechanisms — who can buy whom out and at what price
+• What happens if one owner defaults on their share of the mortgage
+• Rights of first refusal before selling to a third party
+• What happens if one owner dies
+
+This document is not optional. Without it, disputes between co-owners become expensive litigation. Your real estate lawyer should draft it alongside your purchase documents.`,
+      },
+      {
+        heading: "How Seller Financing Fits Into Co-Purchases",
+        body: `Seller financing can work for co-purchases — the seller lends to two (or more) buyers who hold the property jointly. Both buyers are jointly and severally liable for the mortgage, meaning the seller can pursue either one for the full amount in a default.
+
+From the seller's perspective, this is actually a stronger security position in some ways — two incomes supporting one mortgage. The seller should still review both buyers' financial profiles and ensure the combined financial picture justifies the loan.
+
+The VTB mortgage documentation must name all co-owners correctly and reflect the ownership structure. If buyers hold as tenants in common with unequal shares, the promissory note and mortgage terms need to reflect that. Your lawyer handles this.`,
+      },
+      {
+        heading: "Tax Implications of Co-Ownership",
+        body: `Each co-owner's principal residence exemption applies to their proportionate share. If the property is your primary residence, your share of any gain is sheltered. If it's not your primary residence (for example, you live elsewhere and co-own as an investment), you may owe capital gains tax on your share of the gain when it's sold.
+
+Co-owners with unequal financial contributions should track this carefully — the CRA expects capital gains to be reported according to the actual ownership percentage on title.
+
+Rental income from a co-owned property is reported proportionally by each owner. If the property has rental units, each co-owner reports their share of rental income and expenses on their personal tax return.`,
+      },
+    ],
+    disclaimer: `Co-ownership law and tax treatment in Ontario are complex and depend heavily on your specific arrangement. Always consult a licensed Ontario real estate lawyer to draft your co-ownership agreement and a CPA for tax planning before purchasing.`,
+    cta: { label: "Browse Seller-Financed Listings", href: "/listings" },
+  },
+
+  {
+    id: "cottage-second-home-seller-financing",
+    mode: "homes",
+    category: "For Sellers",
+    categoryColor: "bg-orange-100 text-orange-700",
+    title: "Selling a Cottage or Second Home in Ontario with Seller Financing",
+    subtitle: "Recreational properties, family cottages, and second homes are ideal candidates for a VTB sale.",
+    readTime: "5 min read",
+    icon: "home",
+    heroColor: "from-teal-600 to-teal-800",
+    summary: "Cottages and recreational properties in Ontario often don't fit conventional lending criteria — seasonal use, well and septic systems, older structures, and remote locations can all complicate institutional financing. Seller financing removes those barriers and can give you significantly more control over the sale.",
+    sections: [
+      {
+        heading: "Why Cottages Are Hard to Finance Conventionally",
+        body: `Banks and institutional lenders apply strict criteria to cottage and recreational property mortgages that they don't apply to urban residential properties:
+
+Year-round access is often required. A cottage accessible only by water or seasonal road may be ineligible for many lender programs.
+
+Building standards matter. An older cottage without proper permits, a non-code compliant septic system, or an aging structure may not meet lending requirements for a conventional mortgage.
+
+Location and appraisal complexity. Remote or unusual properties are harder to appraise comparably, which can lead to appraisal shortfalls that kill deals or reduce loan amounts.
+
+These are exactly the situations where seller financing creates a path forward — because the seller knows the property, understands its condition, and can make their own judgment about whether a buyer can sustain the payments.`,
+      },
+      {
+        heading: "Capital Gains on a Cottage Sale",
+        body: `Unlike a principal residence, a cottage or second home is generally not eligible for the principal residence exemption (unless it was designated as your principal residence for some years). This means the gain is subject to capital gains tax.
+
+The gain is calculated as the sale price minus your adjusted cost base (ACB) — which includes the original purchase price plus any capital improvements you made over the years. Keep records of capital improvements (dock repairs, additions, major renovations) — they reduce your taxable gain.
+
+A VTB structure may allow you to spread the capital gain over the payment term using the capital gains reserve provision under the Income Tax Act. Rather than recognizing the entire gain in the year of sale, you recognize it as you receive payments. This can be a meaningful tax planning tool for cottage owners with large unrealized gains — but it requires advice from a CPA who understands the provision.`,
+      },
+      {
+        heading: "Structuring a Cottage VTB",
+        body: `For cottages and recreational properties, a few structural considerations stand out:
+
+Down payment: A higher down payment (25–35%) is reasonable for a seasonal or non-standard property — it reflects the liquidity premium and potential difficulty of selling in a default scenario.
+
+Term length: Many sellers prefer shorter terms (2–3 years) for cottages — enough time for the buyer to arrange conventional financing if they want it, but not a decades-long commitment on a non-primary-residence asset.
+
+Property condition: Disclose everything. A VTB seller who withholds information about a failing septic system or unpermitted addition faces the same legal exposure as any seller in Ontario. Your real estate lawyer will ensure your disclosure is complete.
+
+Access and seasonal limitations: Be clear in the agreement about what the buyer is buying. If the property is seasonal, accessible only by water, or has shared road arrangements, document all of it.`,
+      },
+      {
+        heading: "Finding the Right Buyer",
+        body: `Cottage buyers on Sel-Fi tend to be experienced buyers who already know the area, understand seasonal property ownership, and are looking for flexibility — not necessarily buyers who couldn't qualify at a bank. Many are:
+
+Cash-rich but income-constrained. A retired couple with assets but limited T4 income may not qualify at a bank but could easily sustain a cottage VTB from savings and pension income.
+
+Moving quickly on a specific opportunity. A buyer who finds the perfect property and wants to close before the season ends may prefer a direct VTB over a bank's 60-day approval process.
+
+Buying as a family arrangement. Multigenerational purchases, sibling buyouts of family cottages, or parent-to-child sales all benefit from the flexibility of a private arrangement.`,
+      },
+    ],
+    disclaimer: `Capital gains tax treatment, principal residence designation, and cottage sale structures are complex. This article is educational only. Consult a licensed Ontario real estate lawyer and a CPA before listing or selling any recreational property.`,
+    cta: { label: "List Your Cottage or Second Home", href: "/list-home" },
+  },
+
+];
 
 export function getArticleById(id) {
   return ARTICLES.find((a) => a.id === id) || null;
 }
+
+export const ARTICLES_HOMES    = ARTICLES.filter((a) => a.mode === "homes");
+export const ARTICLES_BUSINESS = ARTICLES.filter((a) => a.mode === "business");
