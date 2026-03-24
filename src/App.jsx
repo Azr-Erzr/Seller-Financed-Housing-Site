@@ -16,59 +16,59 @@ import ScrollToTop from "./components/ScrollToTop";
 import ChatAgentGlobal from "./components/ChatAgentGlobal";
 
 // ── Lazy-loaded pages — Homes ───────────────────────────────────────
-const Home              = lazy(() => import("./pages/Home"));
-const Listings          = lazy(() => import("./pages/Listings"));
-const Profiles          = lazy(() => import("./pages/Profiles"));
-const ListingDetail     = lazy(() => import("./pages/ListingDetail"));
-const ProfileDetail     = lazy(() => import("./pages/ProfileDetail"));
-const ListHome          = lazy(() => import("./pages/ListHome"));
-const CreateProfile     = lazy(() => import("./pages/CreateProfile"));
-const About             = lazy(() => import("./pages/About"));
-const HowItWorks        = lazy(() => import("./pages/HowItWorks"));
-const Partners          = lazy(() => import("./pages/Partners"));
-const PartnerDetail     = lazy(() => import("./pages/PartnerDetail"));
-const PartnerApply      = lazy(() => import("./pages/PartnerApply"));
-const MapSearch         = lazy(() => import("./pages/MapSearch"));
-const Saved             = lazy(() => import("./pages/Saved"));
-const Account           = lazy(() => import("./pages/Account"));
-const Guide             = lazy(() => import("./pages/Guide"));
-const GuideArticle      = lazy(() => import("./pages/GuideArticle"));
-const NotFound          = lazy(() => import("./pages/NotFound"));
+const Home              = lazy(() => import("./pages/Home.jsx"));
+const Listings          = lazy(() => import("./pages/Listings.jsx"));
+const Profiles          = lazy(() => import("./pages/Profiles.jsx"));
+const ListingDetail     = lazy(() => import("./pages/ListingDetail.jsx"));
+const ProfileDetail     = lazy(() => import("./pages/ProfileDetail.jsx"));
+const ListHome          = lazy(() => import("./pages/ListHome.jsx"));
+const CreateProfile     = lazy(() => import("./pages/CreateProfile.jsx"));
+const About             = lazy(() => import("./pages/About.jsx"));
+const HowItWorks        = lazy(() => import("./pages/HowItWorks.jsx"));
+const Partners          = lazy(() => import("./pages/Partners.jsx"));
+const PartnerDetail     = lazy(() => import("./pages/PartnerDetail.jsx"));
+const PartnerApply      = lazy(() => import("./pages/PartnerApply.jsx"));
+const MapSearch         = lazy(() => import("./pages/MapSearch.jsx"));
+const Saved             = lazy(() => import("./pages/Saved.jsx"));
+const Account           = lazy(() => import("./pages/Account.jsx"));
+const Guide             = lazy(() => import("./pages/Guide.jsx"));
+const GuideArticle      = lazy(() => import("./pages/GuideArticle.jsx"));
+const NotFound          = lazy(() => import("./pages/NotFound.jsx"));
 
 // ── Lazy-loaded pages — Legal ───────────────────────────────────────
-const TermsOfUse        = lazy(() => import("./pages/TermsOfUse"));
-const PrivacyPolicy     = lazy(() => import("./pages/PrivacyPolicy"));
-const Accessibility     = lazy(() => import("./pages/Accessibility"));
-const Pricing           = lazy(() => import("./pages/Pricing"));
+const TermsOfUse        = lazy(() => import("./pages/TermsOfUse.jsx"));
+const PrivacyPolicy     = lazy(() => import("./pages/PrivacyPolicy.jsx"));
+const Accessibility     = lazy(() => import("./pages/Accessibility.jsx"));
+const Pricing           = lazy(() => import("./pages/Pricing.jsx"));
 
 // ── Lazy-loaded pages — Tools ───────────────────────────────────────
-const BuyerReadiness    = lazy(() => import("./pages/tools/BuyerReadiness"));
-const SellerAssessment  = lazy(() => import("./pages/tools/SellerAssessment"));
-const NewcomerGuide     = lazy(() => import("./pages/tools/NewcomerGuide"));
-const ForeignBuyerGuide = lazy(() => import("./pages/tools/ForeignBuyerGuide"));
-const InvestorOnboarding= lazy(() => import("./pages/tools/InvestorOnboarding"));
+const BuyerReadiness    = lazy(() => import("./pages/tools/BuyerReadiness.jsx"));
+const SellerAssessment  = lazy(() => import("./pages/tools/SellerAssessment.jsx"));
+const NewcomerGuide     = lazy(() => import("./pages/tools/NewcomerGuide.jsx"));
+const ForeignBuyerGuide = lazy(() => import("./pages/tools/ForeignBuyerGuide.jsx"));
+const InvestorOnboarding= lazy(() => import("./pages/tools/InvestorOnboarding.jsx"));
 
 // ── Lazy-loaded pages — SEO (Mega-Batch B) ──────────────────────────
-const CityPage          = lazy(() => import("./pages/CityPage"));
-const TopicCluster      = lazy(() => import("./pages/TopicCluster"));
+const CityPage          = lazy(() => import("./pages/CityPage.jsx"));
+const TopicCluster      = lazy(() => import("./pages/TopicCluster.jsx"));
 
 // ── Lazy-loaded pages — Business ────────────────────────────────────
-const BusinessHome            = lazy(() => import("./pages/business/BusinessHome"));
-const BusinessListings        = lazy(() => import("./pages/business/BusinessListings"));
-const BusinessProfiles        = lazy(() => import("./pages/business/BusinessProfiles"));
-const BusinessListingDetail   = lazy(() => import("./pages/business/BusinessListingDetail"));
-const BusinessProfileDetail   = lazy(() => import("./pages/business/BusinessProfileDetail"));
-const BusinessListHome        = lazy(() => import("./pages/business/BusinessListHome"));
-const BusinessCreateProfile   = lazy(() => import("./pages/business/BusinessCreateProfile"));
-const BusinessMapSearch       = lazy(() => import("./pages/business/BusinessMapSearch"));
-const BusinessSaved           = lazy(() => import("./pages/business/BusinessSaved"));
+const BusinessHome            = lazy(() => import("./pages/business/BusinessHome.jsx"));
+const BusinessListings        = lazy(() => import("./pages/business/BusinessListings.jsx"));
+const BusinessProfiles        = lazy(() => import("./pages/business/BusinessProfiles.jsx"));
+const BusinessListingDetail   = lazy(() => import("./pages/business/BusinessListingDetail.jsx"));
+const BusinessProfileDetail   = lazy(() => import("./pages/business/BusinessProfileDetail.jsx"));
+const BusinessListHome        = lazy(() => import("./pages/business/BusinessListHome.jsx"));
+const BusinessCreateProfile   = lazy(() => import("./pages/business/BusinessCreateProfile.jsx"));
+const BusinessMapSearch       = lazy(() => import("./pages/business/BusinessMapSearch.jsx"));
+const BusinessSaved           = lazy(() => import("./pages/business/BusinessSaved.jsx"));
 
 // ── Lazy-loaded pages — Business Category (Mega-Batch C) ────────────
-const CategoryPage            = lazy(() => import("./pages/business/CategoryPage"));
+const CategoryPage            = lazy(() => import("./pages/business/CategoryPage.jsx"));
 
 // ── Lazy-loaded pages — Pro Dashboard (G4) ──────────────────────────
-const ProRegister             = lazy(() => import("./pages/pro/ProRegister"));
-const ProDashboard            = lazy(() => import("./pages/pro/ProDashboard"));
+const ProRegister             = lazy(() => import("./pages/pro/ProRegister.jsx"));
+const ProDashboard            = lazy(() => import("./pages/pro/ProDashboard.jsx"));
 
 function PageLoading() {
   return (
