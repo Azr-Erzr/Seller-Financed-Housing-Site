@@ -59,7 +59,19 @@ export default function Pricing() {
   const { mode, MODES } = useSite();
   const isBusiness = mode === MODES.business;
   const requireAuth = useRequireAuth();
-  usePageMeta("Pricing — Sel-Fi", "Sel-Fi listing plans, partner profiles, and verification pricing. Flat fees — no commissions.");
+  usePageMeta("Pricing — Sel-Fi", "Sel-Fi listing plans, partner profiles, and verification pricing. Flat fees — no commissions.", {
+    canonical: "/pricing",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Why flat fees instead of commissions?", "acceptedAnswer": { "@type": "Answer", "text": "Sel-Fi is a marketplace, not a brokerage. We connect parties — we don't broker deals. Flat fees keep our business model clearly separated from the transaction, which is both simpler for you and keeps us on the right side of Ontario's mortgage brokerage regulations." } },
+        { "@type": "Question", "name": "When will paid plans be available?", "acceptedAnswer": { "@type": "Answer", "text": "Featured and Premium listing plans, Premium partner profiles, and Expedited verification are coming soon. Free tiers are available now. We'll email registered users when paid plans launch." } },
+        { "@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": { "@type": "Answer", "text": "Featured and Premium listings are 30-day periods — no recurring commitment unless you renew. Partner Premium is month-to-month and can be cancelled anytime." } },
+        { "@type": "Question", "name": "Is verification really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Standard verification (Identity, Funds, Income) is free and always will be. Expedited verification is a paid convenience for buyers who want faster review." } },
+      ],
+    },
+  });
 
   const accent = isBusiness ? "emerald" : "blue";
   const heroBg = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-600 to-blue-800";

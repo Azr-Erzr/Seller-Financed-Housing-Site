@@ -144,7 +144,30 @@ export default function HowItWorks() {
   const { mode, MODES } = useSite();
   const requireAuth = useRequireAuth();
   const isBusiness = mode === MODES.business;
-  usePageMeta(PAGE_META.howItWorks.title, PAGE_META.howItWorks.desc);
+  usePageMeta(PAGE_META.howItWorks.title, PAGE_META.howItWorks.desc, {
+    canonical: "/how-it-works",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        ...SELLER_FAQS.map(({ q, a }) => ({
+          "@type": "Question",
+          "name": q,
+          "acceptedAnswer": { "@type": "Answer", "text": a },
+        })),
+        ...BUYER_FAQS.map(({ q, a }) => ({
+          "@type": "Question",
+          "name": q,
+          "acceptedAnswer": { "@type": "Answer", "text": a },
+        })),
+        ...PARTNER_FAQS.map(({ q, a }) => ({
+          "@type": "Question",
+          "name": q,
+          "acceptedAnswer": { "@type": "Answer", "text": a },
+        })),
+      ],
+    },
+  });
   const accent      = isBusiness ? "text-emerald-600" : "text-blue-600";
   const bg          = isBusiness ? "bg-emerald-600" : "bg-blue-600";
   const heroBg      = isBusiness ? "from-emerald-700 to-emerald-900" : "from-blue-700 to-blue-900";

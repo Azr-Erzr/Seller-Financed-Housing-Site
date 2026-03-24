@@ -3,6 +3,7 @@ import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { getArticleById, ARTICLES } from "../data/guide-articles";
 import { useSite } from "../context/SiteContext";
+import { usePageMeta } from "../hooks/usePageMeta";
 import { ArrowLeft, ArrowRight, Clock, BookOpen } from "lucide-react";
 
 export default function GuideArticle() {
@@ -33,6 +34,28 @@ export default function GuideArticle() {
   const accentText = isBusiness ? "text-emerald-600" : "text-blue-600";
   const accentBg   = isBusiness ? "bg-emerald-600" : "bg-blue-600";
   const accentHover= isBusiness ? "hover:bg-emerald-700" : "hover:bg-blue-700";
+
+  // Article structured data + page meta
+  usePageMeta(
+    `${article.title} — Sel-Fi Guide`,
+    article.summary?.slice(0, 160) || "",
+    {
+      canonical: `/guide/${article.id}`,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": article.title,
+        "description": article.summary || "",
+        "author": { "@type": "Organization", "name": "Sel-Fi" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Sel-Fi",
+          "url": "https://sel-fi.ca",
+        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://sel-fi.ca/guide/${article.id}` },
+      },
+    }
+  );
 
   return (
     <div className="bg-white">

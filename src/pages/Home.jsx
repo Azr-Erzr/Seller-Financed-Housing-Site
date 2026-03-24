@@ -25,7 +25,18 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const requireAuth = useRequireAuth();
-  usePageMeta(PAGE_META.home.title, PAGE_META.home.desc);
+  usePageMeta(PAGE_META.home.title, PAGE_META.home.desc, {
+    canonical: "/",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Sel-Fi",
+      "url": "https://sel-fi.ca",
+      "description": "Sel-Fi is a marketplace for direct and flexible real estate transactions in Ontario, Canada — seller-financed, rent-to-own, and private sale.",
+      "areaServed": { "@type": "AdministrativeArea", "name": "Ontario, Canada" },
+      "sameAs": ["https://sel-fi.com"],
+    },
+  });
 
   useEffect(() => {
     Promise.all([
