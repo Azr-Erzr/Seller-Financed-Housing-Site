@@ -63,7 +63,7 @@ const TABS = [
   { id: "land",        label: "Land & Site" },
   { id: "building",    label: "Building" },
   { id: "financing",   label: "Financing" },
-  { id: "savings",     label: "Vendor Savings" },
+  { id: "savings",     label: "Potential Savings" },
   { id: "similar",     label: "Similar" },
 ];
 
@@ -318,12 +318,12 @@ export default function BusinessListingDetail() {
 
               {/* VENDOR SAVINGS */}
               <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl border border-emerald-100 p-6">
-                <SectionHeader title="Vendor Savings on This Property" id="savings" />
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+                <SectionHeader title="Potential Vendor-Side Savings" id="savings" />
+                <p className="text-xs text-gray-400 mb-4">Assumptions: 2–3% listing-side commission + 13% HST on a {money(listing.price)} sale.</p>
+                <div className="grid grid-cols-2 gap-4 mb-4">
                   {[
-                    { label: "Commission Saved (2%)", value: money(commLow), color: "text-red-500" },
-                    { label: "Commission Saved (3%)", value: money(commHigh), color: "text-red-500" },
-                    { label: "Total with HST", value: `${money(totalSavedLow)}–${money(totalSavedHigh)}`, color: "text-green-700" },
+                    { label: "At 2% commission", value: money(commLow), color: "text-emerald-700" },
+                    { label: "At 3% commission", value: money(commHigh), color: "text-emerald-700" },
                   ].map(({ label, value, color }) => (
                     <div key={label} className="bg-white rounded-xl p-4 text-center shadow-sm">
                       <p className="text-xs text-gray-400 mb-1">{label}</p>
@@ -331,17 +331,25 @@ export default function BusinessListingDetail() {
                     </div>
                   ))}
                 </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm mb-4">
+                  <p className="text-xs text-gray-400 mb-1">Estimated listing-side savings (incl. HST)</p>
+                  <p className="text-2xl font-extrabold text-emerald-700">{money(totalSavedLow)}–{money(totalSavedHigh)}</p>
+                </div>
                 {hasFinancing && (
-                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                  <div className="bg-white rounded-xl p-4 shadow-sm mb-3">
                     <p className="text-sm text-gray-600">
-                      <strong className="text-emerald-700">Plus interest income:</strong>{" "}
+                      <strong className="text-emerald-700">Plus potential interest income:</strong>{" "}
                       At {(calcRate*100).toFixed(1)}% on a {money(listing.price - calcDown)} VTB over {calcTerm} years,
-                      the vendor collects approximately <strong className="text-emerald-700">{money(payment*calcTerm*12-(listing.price-calcDown))}</strong> in interest.
-                      CRA may allow spreading capital gains over the payment term (max 5 years).
+                      the vendor may collect approximately <strong className="text-emerald-700">{money(payment*calcTerm*12-(listing.price-calcDown))}</strong> in interest.
+                      CRA may allow spreading capital gains over the payment term (max 5 years — confirm with your accountant).
                     </p>
                   </div>
                 )}
-                <p className="text-xs text-gray-400 mt-3">Estimates based on typical 2–3% commercial commission + 13% HST. Always consult a real estate lawyer and accountant.</p>
+                <div className="border-t border-emerald-100 pt-3">
+                  <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Not included in estimate</p>
+                  <p className="text-xs text-gray-400 leading-relaxed">Buyer-side broker (buyer's arrangement) · Legal fees · Taxes · Closing costs</p>
+                </div>
+                <p className="text-xs text-gray-400 mt-3">Illustrative only. Actual savings depend on negotiated terms. Consult a real estate lawyer and accountant.</p>
               </div>
 
               {/* FINANCING CALCULATOR */}
@@ -433,7 +441,7 @@ export default function BusinessListingDetail() {
             <div className="lg:w-80 shrink-0 space-y-5">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-36">
                 <p className="font-bold text-gray-900 text-lg mb-1">Interested in this property?</p>
-                <p className="text-sm text-gray-500 mb-5">Contact the vendor directly — no agents, no commissions.</p>
+                <p className="text-sm text-gray-500 mb-5">Contact the vendor directly. Agent-optional, bank-optional.</p>
                 <button onClick={() => setContactOpen(true)}
                   className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 font-semibold transition-colors mb-3">
                   <Phone className="w-4 h-4" /> Contact Vendor
@@ -475,9 +483,9 @@ export default function BusinessListingDetail() {
               )}
 
               <div className="bg-emerald-50 rounded-2xl border border-emerald-100 p-6 text-center">
-                <p className="text-xs text-emerald-500 font-medium uppercase tracking-wide mb-1">Commission Saved</p>
+                <p className="text-xs text-emerald-500 font-medium uppercase tracking-wide mb-1">Potential Listing-Side Savings</p>
                 <p className="text-3xl font-extrabold text-emerald-700">{money(totalSavedLow)}–{money(totalSavedHigh)}</p>
-                <p className="text-xs text-emerald-500 mt-1">vs. traditional 2–3% + HST agent sale</p>
+                <p className="text-xs text-emerald-500 mt-1">listing-side only · 2–3% + HST · illustrative</p>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4">
