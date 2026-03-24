@@ -2,7 +2,7 @@
 // Updated: "Saved" button only visible when signed in (desktop + mobile).
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Home, Building2, User, BookOpen, LogOut, ChevronDown } from "lucide-react";
+import { Menu, X, Home, Building2, User, BookOpen, LogOut, ChevronDown, Briefcase } from "lucide-react";
 import { useSite } from "../context/SiteContext";
 import { useAuth, useRequireAuth } from "../context/AuthContext";
 
@@ -10,7 +10,7 @@ export default function Navbar() {
   const loc       = useLocation();
   const navigate  = useNavigate();
   const { mode, setMode, config, MODES, modeLocked } = useSite();
-  const { user, signOut } = useAuth();
+  const { user, signOut, isPro } = useAuth();
   const requireAuth = useRequireAuth();
 
   const [mobileOpen,  setMobileOpen]  = useState(false);
@@ -152,6 +152,12 @@ export default function Navbar() {
                         className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                         <BookOpen className="w-4 h-4 text-gray-400"/> My Saved
                       </Link>
+                      {isPro && (
+                        <Link to="/pro/dashboard" onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <Briefcase className="w-4 h-4 text-gray-400"/> Pro Dashboard
+                        </Link>
+                      )}
                     </div>
                     <div className="border-t border-gray-50 py-1">
                       <button onClick={handleSignOut}
@@ -222,6 +228,11 @@ export default function Navbar() {
                 <Link to={isHomes?"/saved":"/business/saved"} className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
                   My Saved
                 </Link>
+                {isPro && (
+                  <Link to="/pro/dashboard" className="w-full text-center px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors flex items-center justify-center gap-2">
+                    <Briefcase className="w-4 h-4"/> Pro Dashboard
+                  </Link>
+                )}
                 <button onClick={handleSignOut} className="w-full text-center px-4 py-2.5 border border-red-200 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
                   Sign Out
                 </button>
