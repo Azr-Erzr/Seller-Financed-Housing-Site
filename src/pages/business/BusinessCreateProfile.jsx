@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { saveCommProfile } from "../../lib/commercial-storage";
+import { supabase } from "../../lib/supabase";
 import { useToast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { generateAlias } from "../../lib/alias";
@@ -10,6 +11,18 @@ import { VERIFICATION_TIERS, TIER_ORDER } from "../../lib/verification-tiers";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS, INTENDED_USES,
 } from "../../data/commercial-seed";
+
+// Upload a verification document to Supabase Storage (private bucket).
+async function uploadVerificationDoc(file, tier, userId) {
+  if (!supabase || !file) return null;
+  const ext  = file.name.split(".").pop().toLowerCase();
+  const path = `${userId}/${tier}-${Date.now()}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from("verification-docs")
+    .upload(path, file, { cacheControl: "3600", upsert: false });
+  if (error || !data) return null;
+  return data.path;
+}
 
 const inputCls = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition bg-white text-gray-900 placeholder-gray-400";
 
@@ -123,6 +136,16 @@ export default function BusinessCreateProfile() {
     }
     setSubmitting(true);
     try {
+      // Upload verification documents to Supabase Storage (verification-docs bucket).
+      const verificationStatus = { identity: "none", funds: "none", income: "none" };
+      for (const tier of TIER_ORDER) {
+        const file = verifyFiles[tier];
+        if (!file) continue;
+        const path = await uploadVerificationDoc(file, tier, user?.id || "anon");
+        verificationStatus[tier] = path ? "pending" : "none";
+        if (!path) toast.error(`Could not upload ${tier} document — please try again.`);
+      }
+
       const profile = {
         ...form,
         budget:         Number(form.budget),
@@ -140,11 +163,7 @@ export default function BusinessCreateProfile() {
         avatar:         "",
         use_alias:      form.useAlias,
         alias:          form.useAlias ? generateAlias("buyer") : null,
-        verificationStatus: {
-          identity: verifyFiles.identity ? "pending" : "none",
-          funds:    verifyFiles.funds    ? "pending" : "none",
-          income:   verifyFiles.income   ? "pending" : "none",
-        },
+        verificationStatus,
       };
       const saved = await saveCommProfile(profile);
       if (saved) { setNewId(saved.id); setSubmitted(true); toast.success("Buyer profile live on Sel-Fi Business!"); }
