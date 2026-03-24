@@ -78,7 +78,7 @@ const TABS = [
 function TabNav({ activeTab, onTabClick }) {
   const scrollRef = useRef(null);
   return (
-    <div className="bg-white border-b border-gray-200 sticky top-[73px] z-30">
+    <div className="bg-white border-b border-gray-200 sticky top-16 sm:top-[73px] z-30">
       <div className="max-w-6xl mx-auto px-6">
         <div ref={scrollRef} className="flex items-center gap-0 overflow-x-auto scrollbar-hide">
           {TABS.map((tab) => (
@@ -113,6 +113,7 @@ export default function ListingDetail() {
   const [calcDown, setCalcDown] = useState(0);
   const [calcRate, setCalcRate] = useState(0.07);
   const [calcTerm, setCalcTerm] = useState(25);
+  const [showAmort, setShowAmort] = useState(false);
 
   useEffect(() => {
     getListingById(id).then((l) => {
@@ -398,29 +399,55 @@ export default function ListingDetail() {
                     </div>
                   </div>
                   {amort.length > 0 && (
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b text-gray-400 text-xs uppercase">
-                            <th className="pb-2 text-left">Month</th>
-                            <th className="pb-2 text-left">Payment</th>
-                            <th className="pb-2 text-left">Principal</th>
-                            <th className="pb-2 text-left">Interest</th>
-                            <th className="pb-2 text-left">Balance</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {amort.map((row) => (
-                            <tr key={row.month} className="border-b border-gray-50 hover:bg-gray-50">
-                              <td className="py-2 text-gray-500">{row.month}</td>
-                              <td className="py-2 font-medium">{money(row.payment)}</td>
-                              <td className="py-2 text-green-600">{money(row.principal)}</td>
-                              <td className="py-2 text-orange-500">{money(row.interest)}</td>
-                              <td className="py-2 text-gray-700">{money(row.balance)}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                    <div className="mt-4">
+                      <button
+                        onClick={() => setShowAmort((v) => !v)}
+                        className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors mb-3"
+                      >
+                        <span>Amortization Schedule</span>
+                        <span className="text-xs text-gray-400">{showAmort ? "Hide" : "Show"}</span>
+                      </button>
+                      {showAmort && (
+                        <>
+                          {/* Desktop table */}
+                          <div className="hidden sm:block overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="border-b text-gray-400 text-xs uppercase">
+                                  <th className="pb-2 text-left">Month</th>
+                                  <th className="pb-2 text-left">Payment</th>
+                                  <th className="pb-2 text-left">Principal</th>
+                                  <th className="pb-2 text-left">Interest</th>
+                                  <th className="pb-2 text-left">Balance</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {amort.map((row) => (
+                                  <tr key={row.month} className="border-b border-gray-50 hover:bg-gray-50">
+                                    <td className="py-2 text-gray-500">{row.month}</td>
+                                    <td className="py-2 font-medium">{money(row.payment)}</td>
+                                    <td className="py-2 text-green-600">{money(row.principal)}</td>
+                                    <td className="py-2 text-orange-500">{money(row.interest)}</td>
+                                    <td className="py-2 text-gray-700">{money(row.balance)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          {/* Mobile stacked cards */}
+                          <div className="sm:hidden space-y-2">
+                            {amort.map((row) => (
+                              <div key={row.month} className="bg-gray-50 rounded-xl px-4 py-3 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+                                <span className="col-span-2 text-[10px] font-semibold text-gray-400 uppercase">Month {row.month}</span>
+                                <div><span className="text-gray-400">Payment </span><span className="font-semibold text-gray-800">{money(row.payment)}</span></div>
+                                <div><span className="text-gray-400">Balance </span><span className="font-semibold text-gray-700">{money(row.balance)}</span></div>
+                                <div><span className="text-gray-400">Principal </span><span className="text-green-600 font-medium">{money(row.principal)}</span></div>
+                                <div><span className="text-gray-400">Interest </span><span className="text-orange-500 font-medium">{money(row.interest)}</span></div>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
