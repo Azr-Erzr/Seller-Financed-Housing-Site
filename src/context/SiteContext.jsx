@@ -47,7 +47,7 @@ export const SITE_CONFIG = {
     badgeBg:        "bg-emerald-600",
     btnPrimary:     "bg-emerald-600 hover:bg-emerald-700 text-white",
     btnAccent:      "bg-amber-500 hover:bg-amber-600 text-white",
-    subbanner:      "Commercial & land deals — direct seller financing, no agents required",
+    subbanner:      "Commercial & land deals — direct seller financing, agent-optional",
     subbannerBg:    "bg-emerald-50 border-emerald-100 text-emerald-700",
     logoGradient:   "from-emerald-600 to-emerald-800",
   },
