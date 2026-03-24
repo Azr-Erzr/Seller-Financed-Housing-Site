@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Search, ArrowRight, Wheat, Hammer, Building2, Factory, Droplets, TreePine, Hotel, Star, DollarSign, BarChart3, Landmark, Zap, Sprout, Timer, HeartHandshake } from "lucide-react";
 import DealStructureExplorer from "../../components/DealStructureExplorer";
 import { BUSINESS_SCENARIOS } from "../../data/businessDealScenarios";
+import FadeIn from "../../components/FadeIn";
 const ARTICLE_ICON_MAP = {
   hammer: Hammer, chart: BarChart3, search: Search,
 };
@@ -48,8 +49,12 @@ export default function BusinessHome() {
     <div className="bg-white">
 
       {/* ── Hero ── */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 pt-16 pb-20">
-        <div className="max-w-5xl mx-auto px-6 text-center">
+      <section className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 pt-16 pb-20 overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-20"
+          style={{ background: "radial-gradient(circle, #6ee7b7, transparent 70%)" }} />
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10"
+          style={{ background: "radial-gradient(circle, #10b981, transparent 70%)" }} />
+        <div className="relative max-w-5xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 text-emerald-100 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
             <Hammer className="w-4 h-4" /> Sel-Fi Business
           </div>
@@ -129,6 +134,7 @@ export default function BusinessHome() {
       {/* ── For Buyers ── */}
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-6">
+          <FadeIn>
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
               For Commercial Buyers and Investors
@@ -139,20 +145,23 @@ export default function BusinessHome() {
               timelines, and deal structures.
             </p>
           </div>
+          </FadeIn>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
               { Icon: Wheat, title: "Farm & Agricultural Land", body: "Bank financing for raw agricultural land can be difficult without production history. Vendors familiar with the land may offer more workable terms." },
               { Icon: Hammer, title: "Development Parcels", body: "Pre-zoning or rezoning-dependent parcels are often challenging to finance through institutions. VTB can bridge that gap." },
               { Icon: Timer, title: "Time-Sensitive Deals", body: "Commercial bank approvals often take 60–90 days. Motivated parties using VTB can sometimes close significantly faster." },
               { Icon: HeartHandshake, title: "Flexible Structures", body: "Balloon terms, interest-only periods, and negotiated rates — structures that can be tailored to both sides' needs." },
-            ].map(({ Icon, title, body }) => (
-              <div key={title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+            ].map(({ Icon, title, body }, i) => (
+              <FadeIn key={title} delay={i * 70}>
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 h-full">
                 <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
                   <Icon className="w-5 h-5" />
                 </div>
                 <p className="font-semibold text-gray-900 text-sm mb-1">{title}</p>
                 <p className="text-xs text-gray-500 leading-relaxed">{body}</p>
               </div>
+              </FadeIn>
             ))}
           </div>
           <div className="text-center">
@@ -252,8 +261,12 @@ export default function BusinessHome() {
       </section>
 
       {/* ── Final CTA ── */}
-      <section className="bg-gradient-to-br from-emerald-700 to-emerald-900 py-16">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+      <section className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 py-16 overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-20"
+          style={{ background: "radial-gradient(circle, #6ee7b7, transparent 70%)" }} />
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 w-56 h-56 rounded-full opacity-10"
+          style={{ background: "radial-gradient(circle, #10b981, transparent 70%)" }} />
+        <div className="relative max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-4" style={{color:"#fff"}}>Ready to Make Your Move?</h2>
           <p className="mb-8" style={{color:"#a7f3d0"}}>
             List a commercial property, create a buyer profile, or connect with a commercial real estate lawyer.
