@@ -7,6 +7,7 @@ import { useToast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { Building2, CheckCircle, Eye, EyeOff, Ruler, Building, Truck, Check } from "lucide-react";
 import AddressAutocomplete from "../../components/AddressAutocomplete";
+import ListingUpgrade from "../../components/ListingUpgrade";
 import {
   PROPERTY_CATEGORIES, ZONING_TYPES, UTILITY_OPTIONS,
   PERMITTED_USES, ROAD_ACCESS, ENVIRONMENTAL_STATUS,
@@ -168,13 +169,18 @@ export default function BusinessListHome() {
   };
 
   if (submitted) return (
-    <div className="max-w-lg mx-auto py-20 px-6 text-center">
-      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><CheckCircle className="w-8 h-8 text-green-600" /></div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Property Listed!</h1>
-      <p className="text-gray-500 mb-8">Your property is live on Sel-Fi Business.</p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link to={`/business/listings/${newId}`} className="px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700">View Listing</Link>
-        <Link to="/business/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Browse All</Link>
+    <div className="max-w-3xl mx-auto py-16 px-6">
+      <div className="text-center mb-10">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><CheckCircle className="w-8 h-8 text-green-600" /></div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Property Listed!</h1>
+        <p className="text-gray-500 mb-6">Your property is live on Sel-Fi Business.</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+          <Link to={`/business/listings/${newId}`} className="px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700">View Listing</Link>
+          <Link to="/business/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Browse All</Link>
+        </div>
+      </div>
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <ListingUpgrade listingId={newId} onClose={null} />
       </div>
     </div>
   );
