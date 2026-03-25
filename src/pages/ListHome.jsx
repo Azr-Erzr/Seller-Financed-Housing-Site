@@ -6,8 +6,9 @@ import { saveListing } from "../lib/storage";
 import { supabase } from "../lib/supabase";
 import { useToast } from "../components/Toast";
 import { useAuth } from "../context/AuthContext";
-import { Home, CheckCircle, Upload, X, ImageIcon, Star, Wand2, GripVertical, Video, Eye, EyeOff, Bed, Bath, Square, Car, Check, AlertTriangle } from "lucide-react";
+import { Home, CheckCircle, Upload, X, ImageIcon, Star, Wand2, GripVertical, Video, Eye, EyeOff, Bed, Bath, Square, Car, Check, AlertTriangle, Sparkles } from "lucide-react";
 import AddressAutocomplete from "../components/AddressAutocomplete";
+import ListingUpgrade from "../components/ListingUpgrade";
 
 const DEAL_TYPES = [
   { value: "seller-finance", label: "Seller-Finance", desc: "You hold the mortgage directly" },
@@ -316,13 +317,22 @@ export default function ListHome() {
   };
 
   if (submitted) return (
-    <div className="max-w-lg mx-auto py-20 px-6 text-center">
-      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><CheckCircle className="w-8 h-8 text-green-600"/></div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Listing Submitted!</h1>
-      <p className="text-gray-500 mb-8">Your home is live on Sel-Fi. Buyers whose profile matches your terms will be able to find it.</p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link to={`/listings/${newId}`} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">View My Listing</Link>
-        <Link to="/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Browse All</Link>
+    <div className="max-w-3xl mx-auto py-16 px-6">
+      {/* Success header */}
+      <div className="text-center mb-10">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-green-600"/>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Listing Live!</h1>
+        <p className="text-gray-500 mb-6">Your home is on Sel-Fi. Buyers whose profile matches your terms can now find it.</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+          <Link to={`/listings/${newId}`} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">View My Listing</Link>
+          <Link to="/listings" className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Browse All</Link>
+        </div>
+      </div>
+      {/* Upgrade upsell */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <ListingUpgrade listingId={newId} onClose={null} />
       </div>
     </div>
   );

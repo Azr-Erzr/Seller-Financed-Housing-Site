@@ -7,8 +7,9 @@ import { supabase } from "../lib/supabase";
 import {
   Mail, CheckCircle, Shield, Eye, EyeOff, ArrowRight, User, Bell,
   Trash2, ToggleLeft, ToggleRight, LogOut, Lock, UserPlus, LogIn,
-  KeyRound, AlertTriangle,
+  KeyRound, AlertTriangle, Home, Building2, Sparkles, ExternalLink,
 } from "lucide-react";
+import ListingUpgrade from "../components/ListingUpgrade";
 
 const TABS = { signIn: "signIn", register: "register" };
 
@@ -44,6 +45,12 @@ export default function Account() {
   const [searches, setSearches] = useState([]);
   const [loadingSearches, setLoadingSearches] = useState(false);
 
+  // My Listings
+  const [myListings, setMyListings] = useState([]);
+  const [loadingListings, setLoadingListings] = useState(false);
+  const [upgradeListingId, setUpgradeListingId] = useState(null);
+  const [accountSection, setAccountSection] = useState("overview"); // "overview" | "listings" | "searches"
+
   // MFA state
   const [mfaEnrolled, setMfaEnrolled] = useState(false);
   const [mfaLoading, setMfaLoading] = useState(false);
@@ -52,6 +59,7 @@ export default function Account() {
     if (user) {
       loadSavedSearches();
       checkMfaStatus();
+      loadMyListings();
     }
   }, [user]);
 
@@ -65,6 +73,20 @@ export default function Account() {
       .order("created_at", { ascending: false });
     setSearches(data || []);
     setLoadingSearches(false);
+  };
+
+  const loadMyListings = async () => {
+    if (!supabase || !user) return;
+    setLoadingListings(true);
+    const [{ data: homes }, { data: commercial }] = await Promise.all([
+      supabase.from("listings").select("id, title, city, price, is_active, featured_plan, featured_until, created_at, deal_type").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("commercial_listings").select("id, title, city, price, is_active, featured_plan, featured_until, created_at, deal_type").eq("user_id", user.id).order("created_at", { ascending: false }),
+    ]);
+    setMyListings([
+      ...(homes || []).map((l) => ({ ...l, mode: "homes" })),
+      ...(commercial || []).map((l) => ({ ...l, mode: "business" })),
+    ]);
+    setLoadingListings(false);
   };
 
   const checkMfaStatus = async () => {
@@ -210,7 +232,102 @@ export default function Account() {
             </div>
           )}
 
-          {/* Quick links */}
+          {/* Section tabs */}
+          <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+            {[
+              { id: "overview", label: "Overview" },
+              { id: "listings", label: `My Listings${myListings.length > 0 ? ` (${myListings.length})` : ""}` },
+              { id: "searches", label: `Saved Searches${searches.length > 0 ? ` (${searches.length})` : ""}` },
+            ].map(({ id, label }) => (
+              <button key={id} onClick={() => setAccountSection(id)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                  accountSection === id ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"
+                }`}>
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* ── My Listings ── */}
+          {accountSection === "listings" && (
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                  {isBusiness ? <Building2 className={`w-4 h-4 ${accentText}`} /> : <Home className={`w-4 h-4 ${accentText}`} />}
+                  My Listings
+                </h3>
+                <Link to={isBusiness ? "/business/list-property" : "/list-home"}
+                  className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors ${isBusiness ? "bg-emerald-600 hover:bg-emerald-700" : "bg-blue-600 hover:bg-blue-700"} text-white`}>
+                  + New Listing
+                </Link>
+              </div>
+
+              {loadingListings ? (
+                <div className="flex justify-center py-8"><div className={`w-6 h-6 border-2 border-t-transparent rounded-full animate-spin ${isBusiness ? "border-emerald-600" : "border-blue-600"}`} /></div>
+              ) : myListings.length === 0 ? (
+                <div className="text-center py-10">
+                  <p className="text-sm text-gray-500 mb-3">You haven't listed any properties yet.</p>
+                  <Link to={isBusiness ? "/business/list-property" : "/list-home"}
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors ${isBusiness ? "bg-emerald-600 hover:bg-emerald-700" : "bg-blue-600 hover:bg-blue-700"}`}>
+                    List your first {isBusiness ? "property" : "home"}
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {myListings.map((listing) => {
+                    const isActive = listing.is_active;
+                    const plan = listing.featured_plan || "free";
+                    const isFeatured = plan !== "free" && listing.featured_until && new Date(listing.featured_until) > new Date();
+                    const detailUrl = listing.mode === "business" ? `/business/listings/${listing.id}` : `/listings/${listing.id}`;
+                    return (
+                      <div key={listing.id} className="flex items-center justify-between gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isActive ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-500"}`}>
+                              {isActive ? "Active" : "Inactive"}
+                            </span>
+                            {isFeatured && (
+                              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 flex items-center gap-0.5">
+                                <Sparkles className="w-2.5 h-2.5" /> {plan.charAt(0).toUpperCase() + plan.slice(1)}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm font-semibold text-gray-900 truncate">{listing.title}</p>
+                          <p className="text-xs text-gray-400">{listing.city} · ${listing.price?.toLocaleString()}</p>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {!isFeatured && (
+                            <button onClick={() => setUpgradeListingId(listing.id)}
+                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors">
+                              <Sparkles className="w-3 h-3" /> Boost
+                            </button>
+                          )}
+                          <Link to={detailUrl} className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <ExternalLink className="w-3 h-3" /> View
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Upgrade modal ── */}
+          {upgradeListingId && (
+            <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+                <button onClick={() => setUpgradeListingId(null)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">
+                  <span className="text-gray-500 text-lg leading-none">×</span>
+                </button>
+                <ListingUpgrade listingId={upgradeListingId} onClose={() => setUpgradeListingId(null)} />
+              </div>
+            </div>
+          )}
+
+          {/* Quick links — only in overview */}
+          {accountSection === "overview" && (
           <div className="grid sm:grid-cols-2 gap-4">
             {[
               { to: isBusiness?"/business/saved":"/saved",                label:"My Saved",        sub:"Bookmarked listings & profiles" },
@@ -227,8 +344,10 @@ export default function Account() {
               </Link>
             ))}
           </div>
+          )}
 
-          {/* Saved searches */}
+          {/* Saved searches — shown in searches tab or overview */}
+          {(accountSection === "searches" || accountSection === "overview") && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
@@ -300,6 +419,7 @@ export default function Account() {
               </div>
             )}
           </div>
+          )}
         </div>
       </div>
     );

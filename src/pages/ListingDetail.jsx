@@ -9,7 +9,7 @@
 //   - Days on market, price/sqft in highlights strip
 
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { getListingById, getAllListings, toggleSavedListing, isListingSaved } from "../lib/storage";
 import { monthlyPayment, amortizationPreview, ltv } from "../lib/finance";
 import { useToast } from "../components/Toast";
@@ -18,10 +18,12 @@ import ContactModal from "../components/ContactModal";
 import ListingCard from "../components/ListingCard";
 import { DetailSkeleton } from "../components/LoadingSkeleton";
 import ChatAgent from "../components/ChatAgent";
+import ListingUpgrade from "../components/ListingUpgrade";
 import {
   MapPin, Bed, Bath, Square, Car, Calendar, Ruler, Home, Bookmark,
   BookmarkCheck, Phone, ArrowLeft, Flame, Snowflake, Droplets, Trees,
-  Building, Shield, Clock, DollarSign, ChevronDown, Check, FileText
+  Building, Shield, Clock, DollarSign, ChevronDown, Check, FileText,
+  Sparkles, X as XIcon
 } from "lucide-react";
 
 const money = (n) => n ? `$${Number(n).toLocaleString("en-CA")}` : "—";
@@ -114,6 +116,11 @@ export default function ListingDetail() {
   const [calcRate, setCalcRate] = useState(0.07);
   const [calcTerm, setCalcTerm] = useState(25);
   const [showAmort, setShowAmort] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  const location = useLocation();
+  const justUpgraded = new URLSearchParams(location.search).get("upgraded") === "true";
+  const [upgradeBanner, setUpgradeBanner] = useState(justUpgraded);
 
   useEffect(() => {
     getListingById(id).then((l) => {
@@ -165,6 +172,31 @@ export default function ListingDetail() {
 
   return (
     <>
+      {/* Upgrade success banner */}
+      {upgradeBanner && (
+        <div className="bg-green-600 text-white px-5 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <Sparkles className="w-4 h-4 shrink-0" />
+            Your listing has been upgraded — it now has priority placement and a featured badge.
+          </div>
+          <button onClick={() => setUpgradeBanner(false)} className="shrink-0 hover:opacity-70 transition-opacity">
+            <XIcon className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Upgrade modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+            <button onClick={() => setShowUpgradeModal(false)} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+              <XIcon className="w-4 h-4 text-gray-500" />
+            </button>
+            <ListingUpgrade listingId={listing.id} onClose={() => setShowUpgradeModal(false)} />
+          </div>
+        </div>
+      )}
+
       {/* Tab nav */}
       <TabNav activeTab={activeTab} onTabClick={scrollToSection} />
 
@@ -487,6 +519,11 @@ export default function ListingDetail() {
                   }`}>
                   {saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
                   {saved ? "Saved" : "Save Listing"}
+                </button>
+
+                <button onClick={() => setShowUpgradeModal(true)}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors mb-3">
+                  <Sparkles className="w-3.5 h-3.5" /> Boost this listing
                 </button>
 
                 <div className="pt-3 border-t border-gray-100">
